@@ -1,0 +1,44 @@
+name: pertypeople
+version: 1.0.0+1
+publish_to: none
+description: A new Flutter project.
+environment: 
+  sdk: '>=2.17.0 <3.0.0'
+
+dependencies: 
+  cupertino_icons: ^1.0.2
+  get: 4.6.5
+  flutter: 
+    sdk: flutter
+  adobe_xd: ^2.0.1
+  flutter_otp_text_field: ^1.0.1
+  firebase_core: ^1.17.1
+  google_sign_in: ^5.3.3
+  flutter_facebook_auth: ^4.3.4+2
+  http: ^0.13.4
+  get_storage: ^2.0.3
+  group_button: ^5.0.1
+  google_maps_flutter: ^2.1.8
+  image_picker: ^0.8.5+3
+  geolocator: ^9.0.0
+  google_place: ^0.4.7
+  provider: ^6.0.3
+  geocoder2: ^1.1.2
+  image_crop: ^0.4.0
+  custom_searchable_dropdown: ^2.1.1
+  share_plus: ^4.0.10
+  url_launcher: ^6.1.5
+
+dev_dependencies: 
+  flutter_lints: ^2.0.0
+  lints: 2.0.0
+  flutter_test: 
+    sdk: flutter
+
+flutter: 
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/dancecouple.png
+    
+
