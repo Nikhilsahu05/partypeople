@@ -28,6 +28,8 @@ import '../modules/splashscreenThree/bindings/splashscreen_three_binding.dart';
 import '../modules/splashscreenThree/views/splashscreen_three_view.dart';
 import '../modules/splashscreenTwo/bindings/splashscreen_two_binding.dart';
 import '../modules/splashscreenTwo/views/splashscreen_two_view.dart';
+import '../modules/subscription/bindings/subscription_binding.dart';
+import '../modules/subscription/views/subscription_view.dart';
 import '../modules/viewEvent/bindings/view_event_binding.dart';
 import '../modules/viewEvent/views/view_event_view.dart';
 
@@ -113,6 +115,11 @@ class AppPages {
       name: _Paths.CITY_WISE_PARTY,
       page: () => const CityWisePartyView(),
       binding: CityWisePartyBinding(),
+    ),
+    GetPage(
+      name: _Paths.SUBSCRIPTION,
+      page: () => const SubscriptionView(),
+      binding: SubscriptionBinding(),
     ),
   ];
 }

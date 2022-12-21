@@ -86,7 +86,7 @@ class DashbordView extends GetView<DashbordController> {
                     height: 20,
                   ),
                   Container(
-                    height: 120,
+                    height: 100,
                     width: Get.width,
                     child: Obx(() => ListView.builder(
                         scrollDirection: Axis.horizontal,
@@ -101,28 +101,31 @@ class DashbordView extends GetView<DashbordController> {
                                 //     arguments: controller.getCitys[index].id);
                               },
                               child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Image.asset(
                                     'assets/cityPic.png',
-                                    height: 80,
                                   ),
                                   Text(
                                     controller.getCitys[index].name
                                         .toString()
                                         .toUpperCase(),
                                     style: TextStyle(
-                                      fontFamily: 'Oswald',
-                                      fontSize: 14,
+                                      fontFamily: 'Malgun Gothic',
+                                      fontSize: 10,
                                       color: Color.fromARGB(255, 255, 255, 255),
                                       height: 1.25,
                                     ),
                                     textHeightBehavior: TextHeightBehavior(
                                         applyHeightToFirstAscent: false),
-                                    softWrap: false,
+                                    softWrap: true,
                                   ),
                                 ],
                               ));
                         })),
+                  ),
+                  SizedBox(
+                    height: 20,
                   ),
                   Text(
                     'People nearby ',
@@ -138,7 +141,7 @@ class DashbordView extends GetView<DashbordController> {
                     height: 20,
                   ),
                   Container(
-                    height: 80,
+                    height: 90,
                     width: Get.width,
                     decoration: BoxDecoration(
                       color: Color.fromARGB(126, 167, 46, 46),
@@ -154,33 +157,39 @@ class DashbordView extends GetView<DashbordController> {
                             padding: const EdgeInsets.all(8.0),
                             child: GestureDetector(
                                 onTap: () {},
-                                child: Column(
-                                  children: [
-                                    //  controller.nearByUser[index]['profile_picture'] != ''? Image.network(
-                                    //     'https://manage.partypeople.in/v1/${controller.nearByUser[index]['profile_picture']}',
-                                    //     height: 80,
-                                    //   ):Container(),
-                                    Icon(
-                                      Icons.person,
-                                      size: 40,
-                                      color: Colors.white,
-                                    ),
-                                    Text(
-                                      controller.nearByUser[index]['first_name']
-                                          .toString()
-                                          .toUpperCase(),
-                                      style: TextStyle(
-                                        fontFamily: 'Oswald',
-                                        fontSize: 14,
-                                        color:
-                                            Color.fromARGB(255, 255, 255, 255),
-                                        height: 1.25,
+                                child: Container(
+                                  height: 100,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      // controller.nearByUser[index]
+                                      //             ['profile_picture'] !=
+                                      //         ''
+                                      //     ? Image.network(
+                                      //         'https://manage.partypeople.in/v1/${controller.nearByUser[index]['profile_picture']}',
+                                      //         height: 80,
+                                      //       )
+                                      //     : Container(),
+                                      Image.asset('assets/Image.png'),
+                                      Text(
+                                        controller.nearByUser[index]
+                                                ['first_name']
+                                            .toString()
+                                            .toUpperCase(),
+                                        style: TextStyle(
+                                          fontFamily: 'Malgun Gothic',
+                                          fontSize: 10,
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          height: 1.25,
+                                        ),
+                                        textHeightBehavior: TextHeightBehavior(
+                                            applyHeightToFirstAscent: false),
+                                        softWrap: true,
                                       ),
-                                      textHeightBehavior: TextHeightBehavior(
-                                          applyHeightToFirstAscent: false),
-                                      softWrap: false,
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 )),
                           );
                         })),
@@ -376,6 +385,7 @@ class DashbordView extends GetView<DashbordController> {
         child: Padding(
           padding: const EdgeInsets.only(left: 10.0),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
                 height: 40,
@@ -401,6 +411,29 @@ class DashbordView extends GetView<DashbordController> {
                   onPressed: () {},
                   icon: Icon(
                     Icons.search,
+                    color: Color(0xff7D7373),
+                  ),
+                  label: Text(
+                    "".tr,
+                    style: TextStyle(color: Colors.white, fontSize: 10),
+                  )),
+              SizedBox(
+                width: 10,
+              ),
+              TextButton.icon(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.chat,
+                    color: Color(0xff7D7373),
+                  ),
+                  label: Text(
+                    "".tr,
+                    style: TextStyle(color: Colors.white, fontSize: 10),
+                  )),
+              TextButton.icon(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.account_circle_outlined,
                     color: Color(0xff7D7373),
                   ),
                   label: Text(

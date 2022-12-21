@@ -18,6 +18,7 @@ abstract class Routes {
   static const VIEW_EVENT = _Paths.VIEW_EVENT;
   static const ADD_PROFILE = _Paths.ADD_PROFILE;
   static const CITY_WISE_PARTY = _Paths.CITY_WISE_PARTY;
+  static const SUBSCRIPTION = _Paths.SUBSCRIPTION;
 }
 
 abstract class _Paths {
@@ -37,4 +38,5 @@ abstract class _Paths {
   static const VIEW_EVENT = '/view-event';
   static const ADD_PROFILE = '/add-profile';
   static const CITY_WISE_PARTY = '/city-wise-party';
+  static const SUBSCRIPTION = '/subscription';
 }

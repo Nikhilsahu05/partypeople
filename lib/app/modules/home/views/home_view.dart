@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -10,15 +11,15 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: GestureDetector(
-          onHorizontalDragUpdate: (details) {
-            if (details.delta.dx > 10) {
-              // Get.toNamed('/splashscreen-two');
-            } else if (details.delta.dx < -10) {
-              Get.toNamed('/splashscreen-two');
-            }
-          },
-          child: Stack(
-              children: [
+      onHorizontalDragUpdate: (details) {
+        if (details.delta.dx > 10) {
+          // Get.toNamed('/splashscreen-two');
+        } else if (details.delta.dx < -10) {
+          Get.toNamed('/splashscreen-two');
+        }
+      },
+      child: Stack(
+        children: [
           Container(
               decoration: BoxDecoration(
                 gradient: RadialGradient(
@@ -77,18 +78,23 @@ class HomeView extends GetView<HomeController> {
           Positioned(
             bottom: 45,
             right: 20,
-            child: Text(
-              'Skip\n ',
-              style: TextStyle(
-                fontFamily: 'MalgunGothic',
-                fontSize: 12,
-                color: const Color(0xffffffff),
-                letterSpacing: -0.24,
-                height: 1.6666666666666667,
+            child: GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.LOGIN);
+              },
+              child: Text(
+                'Skip\n ',
+                style: TextStyle(
+                  fontFamily: 'MalgunGothic',
+                  fontSize: 12,
+                  color: const Color(0xffffffff),
+                  letterSpacing: -0.24,
+                  height: 1.6666666666666667,
+                ),
+                textHeightBehavior:
+                    TextHeightBehavior(applyHeightToFirstAscent: false),
+                softWrap: false,
               ),
-              textHeightBehavior:
-                  TextHeightBehavior(applyHeightToFirstAscent: false),
-              softWrap: false,
             ),
           ),
           Positioned(
@@ -128,8 +134,8 @@ class HomeView extends GetView<HomeController> {
                   )
                 ],
               ))
-              ],
-            ),
-        ));
+        ],
+      ),
+    ));
   }
 }

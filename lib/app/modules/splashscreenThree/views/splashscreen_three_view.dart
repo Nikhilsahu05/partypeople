@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../../routes/app_pages.dart';
 import '../controllers/splashscreen_three_controller.dart';
 
 class SplashscreenThreeView extends GetView<SplashscreenThreeController> {
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: GestureDetector(
@@ -77,18 +78,23 @@ class SplashscreenThreeView extends GetView<SplashscreenThreeController> {
           Positioned(
             bottom: 45,
             right: 20,
-            child: Text(
-              'Skip\n ',
-              style: TextStyle(
-                fontFamily: 'MalgunGothic',
-                fontSize: 12,
-                color: const Color(0xffffffff),
-                letterSpacing: -0.24,
-                height: 1.6666666666666667,
+            child: GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.LOGIN);
+              },
+              child: Text(
+                'Skip\n ',
+                style: TextStyle(
+                  fontFamily: 'MalgunGothic',
+                  fontSize: 12,
+                  color: const Color(0xffffffff),
+                  letterSpacing: -0.24,
+                  height: 1.6666666666666667,
+                ),
+                textHeightBehavior:
+                    TextHeightBehavior(applyHeightToFirstAscent: false),
+                softWrap: false,
               ),
-              textHeightBehavior:
-                  TextHeightBehavior(applyHeightToFirstAscent: false),
-              softWrap: false,
             ),
           ),
           Positioned(
@@ -96,7 +102,6 @@ class SplashscreenThreeView extends GetView<SplashscreenThreeController> {
               left: 20,
               child: Row(
                 children: [
-                 
                   Container(
                     height: 9,
                     width: 15,
@@ -108,7 +113,7 @@ class SplashscreenThreeView extends GetView<SplashscreenThreeController> {
                   SizedBox(
                     width: 5,
                   ),
-                   Container(
+                  Container(
                     height: 9,
                     width: 15,
                     decoration: BoxDecoration(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../../routes/app_pages.dart';
 import '../controllers/splashscreen_two_controller.dart';
 
 class SplashscreenTwoView extends GetView<SplashscreenTwoController> {
@@ -15,7 +16,6 @@ class SplashscreenTwoView extends GetView<SplashscreenTwoController> {
           Get.back();
         } else if (details.delta.dx < -10) {
           Get.toNamed("/splashscreen-three");
-         
         }
       },
       child: Stack(
@@ -78,18 +78,23 @@ class SplashscreenTwoView extends GetView<SplashscreenTwoController> {
           Positioned(
             bottom: 45,
             right: 20,
-            child: Text(
-              'Skip\n ',
-              style: TextStyle(
-                fontFamily: 'MalgunGothic',
-                fontSize: 12,
-                color: const Color(0xffffffff),
-                letterSpacing: -0.24,
-                height: 1.6666666666666667,
+            child: GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.LOGIN);
+              },
+              child: Text(
+                'Skip\n ',
+                style: TextStyle(
+                  fontFamily: 'MalgunGothic',
+                  fontSize: 12,
+                  color: const Color(0xffffffff),
+                  letterSpacing: -0.24,
+                  height: 1.6666666666666667,
+                ),
+                textHeightBehavior:
+                    TextHeightBehavior(applyHeightToFirstAscent: false),
+                softWrap: false,
               ),
-              textHeightBehavior:
-                  TextHeightBehavior(applyHeightToFirstAscent: false),
-              softWrap: false,
             ),
           ),
           Positioned(
@@ -97,7 +102,6 @@ class SplashscreenTwoView extends GetView<SplashscreenTwoController> {
               left: 20,
               child: Row(
                 children: [
-                 
                   Container(
                     height: 9,
                     width: 15,
@@ -109,7 +113,7 @@ class SplashscreenTwoView extends GetView<SplashscreenTwoController> {
                   SizedBox(
                     width: 5,
                   ),
-                   Container(
+                  Container(
                     height: 9,
                     width: 33,
                     decoration: BoxDecoration(

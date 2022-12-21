@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../routes/app_pages.dart';
 import '../controllers/view_event_controller.dart';
 
 class ViewEventView extends GetView<ViewEventController> {
@@ -85,7 +86,8 @@ class ViewEventView extends GetView<ViewEventController> {
                   right: 10,
                   child: GestureDetector(
                     onTap: () {
-                      controller.joinParty(controller.event!.id);
+                      Get.toNamed(Routes.SUBSCRIPTION);
+                      // controller.joinParty(controller.event!.id);
                     },
                     child: Container(
                       width: 126,

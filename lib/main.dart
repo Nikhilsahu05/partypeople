@@ -21,11 +21,16 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      builder: (context, child) =>
-          MediaQuery(data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true,), child: child!),
+      builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            alwaysUse24HourFormat: true,
+          ),
+          child: child!),
       title: "Application",
-     initialRoute: GetStorage().read('token') != null?Routes.DASHBORD: AppPages.INITIAL,
-     // initialRoute: Routes.DASHBORD,
+      initialRoute: GetStorage().read('token') != null
+          ? Routes.DASHBORD
+          : AppPages.INITIAL,
+      //initialRoute: Routes.SUBSCRIPTION,
       getPages: AppPages.routes,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
