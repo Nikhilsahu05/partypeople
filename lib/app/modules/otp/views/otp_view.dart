@@ -9,7 +9,7 @@ import '../controllers/otp_controller.dart';
 class OtpView extends GetView<OtpController> {
   @override
   Widget build(BuildContext context) {
-    var phoneNumber = Get.arguments;
+    // var phoneNumber = Get.arguments;
     return Scaffold(
         body: Container(
       decoration: BoxDecoration(
@@ -80,7 +80,7 @@ class OtpView extends GetView<OtpController> {
                             text: 'Enter the 4-digit code sent to you \nat ',
                           ),
                           TextSpan(
-                            text: phoneNumber,
+                            text: controller.mob.value,
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
                             ),

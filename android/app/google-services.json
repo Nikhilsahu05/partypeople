@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "1080765497603-etnskrucvss44m8li03hd28flkvdh9na.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "coom.perty.pertypeople",
+            "certificate_hash": "e021581422da2f37d0d8f3e4e9ff175893c74069"
+          }
+        },
+        {
           "client_id": "1080765497603-t2o1use6trep5s9tnjlkl0sonndb5hj0.apps.googleusercontent.com",
           "client_type": 3
         }

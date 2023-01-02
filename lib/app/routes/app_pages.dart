@@ -14,8 +14,12 @@ import '../modules/cityList/bindings/city_list_binding.dart';
 import '../modules/cityList/views/city_list_view.dart';
 import '../modules/cityWiseParty/bindings/city_wise_party_binding.dart';
 import '../modules/cityWiseParty/views/city_wise_party_view.dart';
+import '../modules/cust_profile/bindings/cust_profile_binding.dart';
+import '../modules/cust_profile/views/cust_profile_view.dart';
 import '../modules/dashbord/bindings/dashbord_binding.dart';
 import '../modules/dashbord/views/dashbord_view.dart';
+import '../modules/drawer/bindings/drawer_binding.dart';
+import '../modules/drawer/views/drawer_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
@@ -120,6 +124,16 @@ class AppPages {
       name: _Paths.SUBSCRIPTION,
       page: () => const SubscriptionView(),
       binding: SubscriptionBinding(),
+    ),
+    GetPage(
+      name: _Paths.DRAWER,
+      page: () => const DrawerView(),
+      binding: DrawerBinding(),
+    ),
+    GetPage(
+      name: _Paths.CUST_PROFILE,
+      page: () => const CustProfileView(),
+      binding: CustProfileBinding(),
     ),
   ];
 }

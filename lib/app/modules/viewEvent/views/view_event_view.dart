@@ -193,7 +193,7 @@ class ViewEventView extends GetView<ViewEventController> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            '${controller.event.fullName}',
+                            '${ ""}',
                             style: TextStyle(
                               fontFamily: 'Segoe UI',
                               fontSize: 14,

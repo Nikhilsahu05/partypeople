@@ -76,6 +76,9 @@ class _GooglePlacesAutocompleteView
   Widget build(BuildContext context) {
     final applicationBloc = Provider.of<ApplicationBloc>(context);
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Select Location'),
+      ),
         body: (applicationBloc.currentLocation == null)
             ? Center(
                 child: CircularProgressIndicator(),
@@ -299,26 +302,26 @@ class _GooglePlacesAutocompleteView
           '${center.latitude} ${center.longitude}';
     }
     AddIndividualEventController.latLng = center;
-    // var addressData = '';
-    // var location = Geocoder2.getDataFromCoordinates(
-    //     latitude: center.latitude,
-    //     longitude: center.longitude,
-    //     googleMapApiKey: 'AIzaSyAtcMBkZAsqimEm7BOvZ-sHvfYXXMfffT0');
-    // location.then((value) {
-    //   addressData = value.address;
-    //  // AddIndividualEventController.address = value.address;
-    //   print(value.address);
-    //   print(value.address);
-    // }).catchError((error) {
-    //   addressData =
-    //       address == '' ? '${center.latitude} ${center.longitude}' : address;
-    //   print(addressData);
-    //   if(AddIndividualEventController.address.isEmpty){
-    //     AddIndividualEventController.address =  '${center.latitude} ${center.longitude}';
-    //   }
+    var addressData = '';
+    var location = Geocoder2.getDataFromCoordinates(
+        latitude: center.latitude,
+        longitude: center.longitude,
+        googleMapApiKey: 'AIzaSyBiKaMXUcVCWkOnZDX9UTd8-BIDH5uTlfE');
+    location.then((value) {
+      addressData = value.address;
+      AddIndividualEventController.address = value.address;
+      print(value.address);
+      print(value.address);
+    }).catchError((error) {
+      addressData =
+          address == '' ? '${center.latitude} ${center.longitude}' : address;
+      print(addressData);
+      if(AddIndividualEventController.address.isEmpty){
+        AddIndividualEventController.address =  '${center.latitude} ${center.longitude}';
+      }
 
-    //   print(error);
-    // });
+      print(error);
+    });
 
     Get.back();
   }

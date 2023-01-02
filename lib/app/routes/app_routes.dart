@@ -19,6 +19,8 @@ abstract class Routes {
   static const ADD_PROFILE = _Paths.ADD_PROFILE;
   static const CITY_WISE_PARTY = _Paths.CITY_WISE_PARTY;
   static const SUBSCRIPTION = _Paths.SUBSCRIPTION;
+  static const DRAWER = _Paths.DRAWER;
+  static const CUST_PROFILE = _Paths.CUST_PROFILE;
 }
 
 abstract class _Paths {
@@ -39,4 +41,6 @@ abstract class _Paths {
   static const ADD_PROFILE = '/add-profile';
   static const CITY_WISE_PARTY = '/city-wise-party';
   static const SUBSCRIPTION = '/subscription';
+  static const DRAWER = '/drawer';
+  static const CUST_PROFILE = '/cust-profile';
 }

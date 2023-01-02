@@ -1,4 +1,5 @@
 import 'package:adobe_xd/adobe_xd.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -72,7 +73,7 @@ class LoginView extends GetView<LoginController> {
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(10),
                           ],
-                          // controller: controller.phoneNumberController,
+                          controller: controller.mobileNumber,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             prefixIcon: Icon(
@@ -113,8 +114,9 @@ class LoginView extends GetView<LoginController> {
                         ],
                       ),
                       child: TextButton(
-                        onPressed: () {
-                          Get.toNamed("/otp");
+                        onPressed: () async {
+                          Get.toNamed("/otp",
+                              arguments: controller.mobileNumber.text);
                         },
                         child: Text(
                           'GET OTP',

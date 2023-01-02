@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -11,6 +12,9 @@ class LoginController extends GetxController {
   //TODO: Implement LoginController
   static var token = "";
   final count = 0.obs;
+
+  TextEditingController mobileNumber = TextEditingController();
+
   @override
   void onInit() {
     super.onInit();
@@ -44,6 +48,7 @@ class LoginController extends GetxController {
       if (a == true) {
         var url =
             Uri.parse('https://manage.partypeople.in/v1/account/social_signup');
+        // print(_googleSignIn.currentUser?.photoUrl.toString());
         var responce = await http.post(url, body: {
           'social_id': _googleSignIn.currentUser?.id.toString(),
           'type': 'google',
