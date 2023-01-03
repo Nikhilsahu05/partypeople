@@ -1,7 +1,9 @@
+import 'package:custom_searchable_dropdown/custom_searchable_dropdown.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../addProfile/controllers/add_profile_controller.dart';
 import '../controllers/cust_profile_controller.dart';
 
 class CustProfileView extends GetView<CustProfileController> {
@@ -130,86 +132,296 @@ class CustProfileView extends GetView<CustProfileController> {
 
               Container(
                 padding: EdgeInsets.only(top: 10),
-                height: Get.height - 300,
+                height: Get.height - 380,
                 color: Colors.white,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Column(
+                  child: ListView(
+                    shrinkWrap: true,
                     children: [
+                      Text(
+                        'Full Name',
+                        style: TextStyle(
+                          fontFamily: 'MalgunGothicBold',
+                          fontSize: 14,
+                          color: const Color(0xff272727),
+                          letterSpacing: -0.28,
+                          height: 1.0714285714285714,
+                        ),
+                        textHeightBehavior:
+                            TextHeightBehavior(applyHeightToFirstAscent: false),
+                        softWrap: false,
+                      ),
+                      SizedBox(height: 10),
                       TextField(
+                        controller: controller.name.value,
+                        onChanged: (value) {
+                          if (value.isNotEmpty) {
+                            controller.isNameEmpty.value = false;
+                          } else {
+                            controller.isNameEmpty.value = true;
+                          }
+                        },
+                        keyboardType: TextInputType.name,
+                        textCapitalization: TextCapitalization.words,
                         decoration: InputDecoration(
+                          // focusedBorder: InputBorder(borderSide: BorderSide(color: Color(0xff393862))),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          labelText: 'Name',
+                              borderRadius: BorderRadius.circular(10)),
+                          focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          errorText: controller.isNameEmpty.value
+                              ? 'Name Can\'t Be Empty'
+                              : null,
+                          //labelText: 'Password',
                         ),
                       ),
-                      //textfield for email
                       SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
-                      TextField(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          labelText: 'Email',
+                      Text(
+                        'Date of Birth',
+                        style: TextStyle(
+                          fontFamily: 'MalgunGothicBold',
+                          fontSize: 14,
+                          color: const Color(0xff272727),
+                          letterSpacing: -0.28,
+                          height: 1.0714285714285714,
                         ),
+                        textHeightBehavior:
+                            TextHeightBehavior(applyHeightToFirstAscent: false),
+                        softWrap: false,
                       ),
-                      //radio button for gender
+                      SizedBox(height: 10),
+                      Obx(() => TextField(
+                            controller: controller.startDateController.value,
+                            onTap: (() => controller.getStartDate(context)),
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color(0xff393862), width: 0.3),
+                                  borderRadius: BorderRadius.circular(10)),
+                              //labelText: 'Password',
+                            ),
+                          )),
                       SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
-                      Row(
-                        children: [
-                          Radio(
-                            value: "male",
-                            groupValue: "",
-                            onChanged: (value) {},
-                          ),
-                          Text("Male"),
-                          Radio(
-                            value: "female",
-                            groupValue: "_gender",
-                            onChanged: (value) {},
-                          ),
-                          Text("Female"),
-                        ],
+                      Text(
+                        'Gender',
+                        style: TextStyle(
+                          fontFamily: 'MalgunGothicBold',
+                          fontSize: 14,
+                          color: const Color(0xff272727),
+                          letterSpacing: -0.28,
+                          height: 1.0714285714285714,
+                        ),
+                        textHeightBehavior:
+                            TextHeightBehavior(applyHeightToFirstAscent: false),
+                        softWrap: false,
                       ),
+                      SizedBox(height: 10),
+                      Obx(() => controller.genderStatusChange.value != null
+                          ? Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Row(
+                                  children: [
+                                    SizedBox(width: 10),
+                                    Text('Male'),
+                                    Radio<SingingCharacter>(
+                                      value: SingingCharacter.male,
+                                      groupValue: controller.gender,
+                                      onChanged: (SingingCharacter? value) {
+                                        controller.gender = value!;
+                                        // controller.partyStatus.text = 'Full';
+                                        controller.genderStatusChange.value =
+                                            'male';
+                                        // print(controller.partyStatus.text);
+                                      },
+                                    ),
+                                    SizedBox(width: 20),
+                                    Text('Female'),
+                                    Radio<SingingCharacter>(
+                                      value: SingingCharacter.female,
+                                      groupValue: controller.gender,
+                                      onChanged: (SingingCharacter? value) {
+                                        controller.gender = value!;
+                                        controller.genderStatusChange.value =
+                                            'female';
+                                        // controller.partyStatus.text = "Awaited";
+                                        // print(controller.partyStatus.text);
+                                      },
+                                    ),
+                                    SizedBox(width: 20),
+                                    Text('Other'),
+                                    Radio<SingingCharacter>(
+                                      value: SingingCharacter.other,
+                                      groupValue: controller.gender,
+                                      onChanged: (SingingCharacter? value) {
+                                        controller.gender = value!;
+                                        controller.genderStatusChange.value =
+                                            '0ther';
+                                        // controller.partyStatus.text = "Awaited";
+                                        // print(controller.partyStatus.text);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            )
+                          : Container()),
                       SizedBox(
-                        height: 40,
+                        height: 20,
                       ),
-                      Container(
-                        height: 59,
-                        width: 311,
+                      Text(
+                        'City',
+                        style: TextStyle(
+                          fontFamily: 'MalgunGothicBold',
+                          fontSize: 14,
+                          color: const Color(0xff272727),
+                          letterSpacing: -0.28,
+                          height: 1.0714285714285714,
+                        ),
+                        textHeightBehavior:
+                            TextHeightBehavior(applyHeightToFirstAscent: false),
+                        softWrap: false,
+                      ),
+                      SizedBox(height: 10),
+                      CustomSearchableDropDown(
+                        // backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                        items: controller.cityList,
+                        label: 'Select City',
                         decoration: BoxDecoration(
-                          color: const Color(0xffffa914),
-                          borderRadius: BorderRadius.circular(11.0),
-                          border: Border.all(
-                              width: 1.0, color: const Color(0xffffffff)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0x66d7924d),
-                              offset: Offset(0, 13),
-                              blurRadius: 34,
-                            ),
-                          ],
+                          borderRadius: BorderRadius.circular(10),
+                          border:
+                              Border.all(color: Color(0xff393862), width: 0.2),
                         ),
-                        child: Center(
-                          child: Text(
-                            'SAVE PROFILE',
-                            style: TextStyle(
-                              fontFamily: 'Malgun Gothic',
-                              fontSize: 26,
-                              color: const Color(0xffffffff),
-                              letterSpacing: -0.52,
-                              fontWeight: FontWeight.w700,
-                              height: 0.5769230769230769,
+
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.all(0.0),
+                          child: Icon(Icons.search),
+                        ),
+                        dropDownMenuItems:
+                            controller.cityList.map((e) => e['name']).toList(),
+                        onChanged: (value) {
+                          if (value != null) {
+                            controller.city.value = value['name'];
+                            controller.cityID = value['id'];
+                          } else {
+                            controller.city.value = "";
+                          }
+                        },
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        'Email',
+                        style: TextStyle(
+                          fontFamily: 'MalgunGothicBold',
+                          fontSize: 14,
+                          color: const Color(0xff272727),
+                          letterSpacing: -0.28,
+                          height: 1.0714285714285714,
+                        ),
+                        textHeightBehavior:
+                            TextHeightBehavior(applyHeightToFirstAscent: false),
+                        softWrap: false,
+                      ),
+                      SizedBox(height: 10),
+                      Obx(() => TextField(
+                            controller: controller.email.value,
+                            onChanged: (value) {
+                              if (value.isNotEmpty) {
+                                controller.isEmailEmpty.value = false;
+                              } else {
+                                controller.isEmailEmpty.value = true;
+                              }
+                            },
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                              errorText: controller.isEmailEmpty.value
+                                  ? 'Email Can\'t Be Empty'
+                                  : null,
+                              // focusedBorder: InputBorder(borderSide: BorderSide(color: Color(0xff393862))),
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color(0xff393862), width: 0.3),
+                                  borderRadius: BorderRadius.circular(10)),
+                              //labelText: 'Password',
                             ),
-                            textHeightBehavior: TextHeightBehavior(
-                                applyHeightToFirstAscent: false),
-                            textAlign: TextAlign.center,
-                            softWrap: false,
+                          )),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Text(
+                        'Mobile',
+                        style: TextStyle(
+                          fontFamily: 'MalgunGothicBold',
+                          fontSize: 14,
+                          color: const Color(0xff272727),
+                          letterSpacing: -0.28,
+                          height: 1.0714285714285714,
+                        ),
+                        textHeightBehavior:
+                            TextHeightBehavior(applyHeightToFirstAscent: false),
+                        softWrap: false,
+                      ),
+                      SizedBox(height: 10),
+                      Obx(() => TextField(
+                            maxLength: 10,
+                            controller: controller.mob.value,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              // focusedBorder: InputBorder(borderSide: BorderSide(color: Color(0xff393862))),
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color(0xff393862), width: 0.3),
+                                  borderRadius: BorderRadius.circular(10)),
+                              //labelText: 'Password',
+                            ),
+                          )),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          controller.updateProfile();
+                        },
+                        child: Container(
+                          height: 59,
+                          width: 311,
+                          decoration: BoxDecoration(
+                            color: const Color(0xffffa914),
+                            borderRadius: BorderRadius.circular(11.0),
+                            border: Border.all(
+                                width: 1.0, color: const Color(0xffffffff)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0x66d7924d),
+                                offset: Offset(0, 13),
+                                blurRadius: 34,
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: Text(
+                              'SAVE PROFILE',
+                              style: TextStyle(
+                                fontFamily: 'Malgun Gothic',
+                                fontSize: 26,
+                                color: const Color(0xffffffff),
+                                letterSpacing: -0.52,
+                                fontWeight: FontWeight.w700,
+                                height: 0.5769230769230769,
+                              ),
+                              textHeightBehavior: TextHeightBehavior(
+                                  applyHeightToFirstAscent: false),
+                              textAlign: TextAlign.center,
+                              softWrap: false,
+                            ),
                           ),
                         ),
                       )

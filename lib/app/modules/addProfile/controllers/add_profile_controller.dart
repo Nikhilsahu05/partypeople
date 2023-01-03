@@ -72,10 +72,14 @@ class AddProfileController extends GetxController {
   void onInit() {
     super.onInit();
     var data = Get.arguments;
-    name.value.text = data['full_name'];
-    email.value.text = data['email'];
-    // uniqueId.value = data['uniqueId'];
-    profilePic.value = data['profile_picture'];
+    try {
+      name.value.text = data['full_name'] ?? '';
+      email.value.text = data['email'] ?? '';
+      // uniqueId.value = data['uniqueId'];
+      profilePic.value = data['profile_picture'] ?? '';
+    } catch (e) {
+      print(e);
+    }
     //city.value = data['city'];
   }
 

@@ -49,7 +49,7 @@ class OtpController extends GetxController {
         PhoneAuthProvider.credential(verificationId: verfd, smsCode: smsCode);
     auth.signInWithCredential(credential).then((value) {
       if (value.user != null) {
-        Get.offAllNamed(Routes.ADD_PROFILE);
+        Get.offAllNamed(Routes.CUST_PROFILE);
       }
       else{
         Get.snackbar("Error", "Invalid OTP");
