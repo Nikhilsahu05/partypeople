@@ -101,7 +101,7 @@ class OtpView extends GetView<OtpController> {
                   height: 50,
                 ),
                 OtpTextField(
-                  numberOfFields: 4,
+                  numberOfFields: 6,
 
                   enabledBorderColor: Color(0xffFFA914),
                   //set to true to show as box or false to show as dash
@@ -113,7 +113,7 @@ class OtpView extends GetView<OtpController> {
                   },
                   //runs when every textfield is filled
                   onSubmit: (String verificationCode) {
-                    // controller.verifyOtp(phoneNumber,verificationCode);
+                     controller.verifyOtp(verificationCode);
                   }, // end onSubmit
                 ),
                 SizedBox(

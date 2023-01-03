@@ -9,6 +9,7 @@ class OtpController extends GetxController {
   final count = 0.obs;
   FirebaseAuth auth = FirebaseAuth.instance;
   var mob = "".obs;
+  var verfd = "";
   @override
   Future<void> onInit() async {
     super.onInit();
@@ -35,11 +36,25 @@ class OtpController extends GetxController {
       verificationCompleted: (PhoneAuthCredential phoneAuthCredential) {},
       codeSent: (String verificationId, int? forceResendingToken) {
         print(verificationId);
+        verfd = verificationId;
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         print(verificationId);
       },
     );
+  }
+
+  void verifyOtp(String smsCode) {
+    PhoneAuthCredential credential =
+        PhoneAuthProvider.credential(verificationId: verfd, smsCode: smsCode);
+    auth.signInWithCredential(credential).then((value) {
+      if (value.user != null) {
+        Get.offAllNamed(Routes.ADD_PROFILE);
+      }
+      else{
+        Get.snackbar("Error", "Invalid OTP");
+      }
+    });
   }
 
   @override
