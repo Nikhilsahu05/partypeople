@@ -28,6 +28,8 @@ import '../modules/organizationProfile/bindings/organization_profile_binding.dar
 import '../modules/organizationProfile/views/organization_profile_view.dart';
 import '../modules/otp/bindings/otp_binding.dart';
 import '../modules/otp/views/otp_view.dart';
+import '../modules/profile/bindings/profile_binding.dart';
+import '../modules/profile/views/profile_view.dart';
 import '../modules/splashscreenThree/bindings/splashscreen_three_binding.dart';
 import '../modules/splashscreenThree/views/splashscreen_three_view.dart';
 import '../modules/splashscreenTwo/bindings/splashscreen_two_binding.dart';
@@ -134,6 +136,11 @@ class AppPages {
       name: _Paths.CUST_PROFILE,
       page: () => const CustProfileView(),
       binding: CustProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFILE,
+      page: () => const ProfileView(),
+      binding: ProfileBinding(),
     ),
   ];
 }

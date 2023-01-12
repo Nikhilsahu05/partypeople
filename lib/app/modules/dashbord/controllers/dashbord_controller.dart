@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
@@ -17,6 +18,7 @@ class DashbordController extends GetxController {
   List<Datum>? tommarowPertyOrgination = [];
   var getCitys = [].obs;
   var nearByUser = [].obs;
+  var data;
 
   var isindividualSelected = true.obs;
   final count = 0.obs;
@@ -31,7 +33,8 @@ class DashbordController extends GetxController {
     getTommarowIndPrty();
     getAllCitys();
     nearByUsers();
-
+    getProfile();
+    data = Get.arguments;
     // getToommarowPerty();
   }
 
@@ -43,6 +46,29 @@ class DashbordController extends GetxController {
   @override
   void onClose() {}
   void increment() => count.value++;
+
+  void getProfile() async {
+    var headers = {
+      'x-access-token': GetStorage().read('token').toString(),
+      'Cookie': 'ci_session=7b585fc89d2d80b7dc4f04611db79a7f621ad8ce'
+    };
+
+    var response = await Dio().get(
+        'https://manage.partypeople.in/v1/account/get_profile',
+        options: Options(headers: headers));
+
+    if (response.statusCode == 200) {
+      var dataString = response.data;
+      var data = dataString;
+
+      if (data['status'] == 1) {
+        GetStorage().write('profile_picture', data['data']['profile_picture']);
+        GetStorage().write('full_name', data['data']['full_name']);
+      } else {
+        //print(response.reasonPhrase);
+      }
+    }
+  }
 
   getUserIndData() async {
     var headers = {
@@ -116,14 +142,18 @@ class DashbordController extends GetxController {
     }
   }
 
-  void nearByUsers() async {
+  void nearByUsers({String city = ''}) async {
     var headers = {
       'x-access-token': GetStorage().read("token").toString(),
       'Cookie': 'ci_session=de6d713b333931d25740c249fd67250a24b581f2'
     };
     var request = http.Request('POST',
         Uri.parse('https://manage.partypeople.in/v1/home/near_by_users'));
-    request.bodyFields = {};
+    city.isEmpty
+        ? request.bodyFields = {}
+        : request.bodyFields = {'city_id': city};
+
+    //request.bodyFields = {};
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
@@ -136,15 +166,23 @@ class DashbordController extends GetxController {
     }
   }
 
-  void getTodayOrgParty() async {
+  void getTodayOrgParty({String city = ''}) async {
     var headers = {
       'x-access-token': GetStorage().read("token").toString(),
       'Content-Type': 'application/x-www-form-urlencoded',
       // 'Cookie': 'ci_session=471ced3dc462db89e201c3312b0bb0c0f9da11ec'
     };
+
     var request = http.Request('POST',
         Uri.parse('https://manage.partypeople.in/v1/home/get_today_party'));
-    request.bodyFields = {'offset': '0', 'organisation_id': '1'};
+    city.isEmpty
+        ? request.bodyFields = {'offset': '0', 'organisation_id': '1'}
+        : request.bodyFields = {
+            'offset': '0',
+            'organisation_id': '1',
+            'city_id': city
+          };
+    //request.bodyFields = {'offset': '0', 'organisation_id': '1'};
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
@@ -165,7 +203,7 @@ class DashbordController extends GetxController {
     }
   }
 
-  void getTodayIndParty() async {
+  void getTodayIndParty({String city = ''}) async {
     var headers = {
       'x-access-token': GetStorage().read("token").toString(),
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -173,7 +211,8 @@ class DashbordController extends GetxController {
     };
     var request = http.Request('POST',
         Uri.parse('https://manage.partypeople.in/v1/home/get_today_party'));
-    request.bodyFields = {'offset': '0', 'organisation_id': '0'};
+    city.isEmpty? request.bodyFields = {'offset': '0', 'organisation_id': '0'}: request.bodyFields = {'offset': '0', 'organisation_id': '0', 'city_id': city};
+    //request.bodyFields = {'offset': '0', 'organisation_id': '0'};
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
@@ -193,13 +232,20 @@ class DashbordController extends GetxController {
     }
   }
 
-  void getTommarowOrgPrty() async {
+  void getTommarowOrgPrty({String city = ''}) async {
     var headers = {
       'x-access-token': GetStorage().read("token").toString(),
     };
     var request = http.Request('POST',
         Uri.parse('https://manage.partypeople.in/v1/home/get_tomorrow_party'));
-    request.bodyFields = {'offset': '0', 'organisation': '1'};
+    city.isEmpty
+        ? request.bodyFields = {'offset': '0', 'organisation': '1'}
+        : request.bodyFields = {
+            'offset': '0',
+            'organisation': '1',
+            'city_id': city
+          };
+    // request.bodyFields = {'offset': '0', 'organisation': '1'};
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
@@ -217,13 +263,20 @@ class DashbordController extends GetxController {
     }
   }
 
-  void getTommarowIndPrty() async {
+  void getTommarowIndPrty({String city = ''}) async {
     var headers = {
       'x-access-token': GetStorage().read("token").toString(),
     };
     var request = http.Request('POST',
         Uri.parse('https://manage.partypeople.in/v1/home/get_tomorrow_party'));
-    request.bodyFields = {'offset': '0', 'organisation': '0'};
+    city.isEmpty
+        ? request.bodyFields = {'offset': '0', 'organisation': '0'}
+        : request.bodyFields = {
+            'offset': '0',
+            'organisation': '0',
+            'city_id': city
+          };
+    // request.bodyFields = {'offset': '0', 'organisation': '0'};
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();

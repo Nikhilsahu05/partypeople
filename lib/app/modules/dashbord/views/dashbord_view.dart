@@ -38,13 +38,13 @@ class DashbordView extends GetView<DashbordController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        height: 70,
+                        height: 30,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Container(
-                            width: 250,
+                            width: 160,
                             height: 43,
                             decoration: BoxDecoration(
                               color: const Color(0xffffffff),
@@ -64,8 +64,8 @@ class DashbordView extends GetView<DashbordController> {
                               // Get.offAllNamed(Routes.HOME);
                             },
                             child: Container(
-                              height: 43,
-                              width: 52,
+                              height: 40,
+                              width: 42,
                               decoration: BoxDecoration(
                                 color: const Color(0xffffa914),
                                 borderRadius: BorderRadius.circular(9.0),
@@ -94,36 +94,118 @@ class DashbordView extends GetView<DashbordController> {
                             shrinkWrap: true,
 
                             // physics: NeverScrollableScrollPhysics(),
-                            itemCount: controller.getCitys.length,
+                            itemCount: controller.getCitys.length + 1,
                             itemBuilder: (context, index) {
-                              return GestureDetector(
-                                  onTap: () {
-                                    // Get.toNamed(Routes.CITY_WISE_PARTY,
-                                    //     arguments: controller.getCitys[index].id);
-                                  },
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        'assets/cityPic.png',
-                                      ),
-                                      Text(
-                                        controller.getCitys[index].name
-                                            .toString()
-                                            .toUpperCase(),
-                                        style: TextStyle(
-                                          fontFamily: 'Malgun Gothic',
-                                          fontSize: 10,
-                                          color: Color.fromARGB(
-                                              255, 255, 255, 255),
-                                          height: 1.25,
-                                        ),
-                                        textHeightBehavior: TextHeightBehavior(
-                                            applyHeightToFirstAscent: false),
-                                        softWrap: true,
-                                      ),
-                                    ],
-                                  ));
+                              return index == 0
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: GestureDetector(
+                                          onTap: () {
+                                            // Get.toNamed(Routes.CITY_WISE_PARTY,
+                                            //     arguments: controller
+                                            //         .getCitys[index + 1].id);
+                                            Get.toNamed(Routes.SUBSCRIPTION);
+                                          },
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(5.0),
+                                                child: SizedBox(
+                                                  height: 60,
+                                                  width: 60,
+                                                  child: Image.asset(
+                                                      'assets/nearby.png'),
+                                                ),
+                                              ),
+                                              Text(
+                                                "Near By"
+                                                    .toString()
+                                                    .toUpperCase(),
+                                                style: TextStyle(
+                                                  fontFamily: 'Malgun Gothic',
+                                                  fontSize: 10,
+                                                  color: Color.fromARGB(
+                                                      255, 255, 255, 255),
+                                                  height: 1.25,
+                                                ),
+                                                textHeightBehavior:
+                                                    TextHeightBehavior(
+                                                        applyHeightToFirstAscent:
+                                                            false),
+                                                softWrap: true,
+                                              ),
+                                            ],
+                                          )),
+                                    )
+                                  : Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: GestureDetector(
+                                          onTap: () {
+                                            controller.getTodayIndParty(
+                                                city: controller
+                                                    .getCitys[index - 1].id);
+                                            controller.getTodayOrgParty(
+                                                city: controller
+                                                    .getCitys[index - 1].id);
+                                            controller.getTommarowOrgPrty(
+                                                city: controller
+                                                    .getCitys[index - 1].id);
+                                            controller.getTommarowIndPrty(
+                                                city: controller
+                                                    .getCitys[index - 1].id);
+                                            // controller.getAllCitys();
+                                            controller.nearByUsers(
+                                                city: controller
+                                                    .getCitys[index - 1].id);
+                                            // Get.toNamed(Routes.SUBSCRIPTION);
+                                          },
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: SizedBox(
+                                                  height: 50,
+                                                  width: 50,
+                                                  child: CircleAvatar(
+                                                    radius: 100,
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                      'https://manage.partypeople.in/' +
+                                                          controller
+                                                              .getCitys[
+                                                                  index - 1]
+                                                              .image,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Text(
+                                                controller
+                                                    .getCitys[index - 1].name
+                                                    .toString()
+                                                    .toUpperCase(),
+                                                style: TextStyle(
+                                                  fontFamily: 'Malgun Gothic',
+                                                  fontSize: 10,
+                                                  color: Color.fromARGB(
+                                                      255, 255, 255, 255),
+                                                  height: 1.25,
+                                                ),
+                                                textHeightBehavior:
+                                                    TextHeightBehavior(
+                                                        applyHeightToFirstAscent:
+                                                            false),
+                                                softWrap: true,
+                                              ),
+                                            ],
+                                          )),
+                                    );
                             })),
                       ),
                       SizedBox(
@@ -165,15 +247,18 @@ class DashbordView extends GetView<DashbordController> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          // controller.nearByUser[index]
-                                          //             ['profile_picture'] !=
-                                          //         ''
-                                          //     ? Image.network(
-                                          //         'https://manage.partypeople.in/v1/${controller.nearByUser[index]['profile_picture']}',
-                                          //         height: 80,
-                                          //       )
-                                          //     : Container(),
-                                          Image.asset('assets/Image.png'),
+                                          controller.nearByUser[index]
+                                                      ['profile_picture'] !=
+                                                  ''
+                                              ? CircleAvatar(
+                                                  radius: 30,
+                                                  backgroundImage: NetworkImage(
+                                                      ('https://manage.partypeople.in/${controller.nearByUser[index]['profile_picture']}')))
+                                              : Image.asset('assets/Image.png'),
+                                          // Image.asset('assets/Image.png'),
+                                          SizedBox(
+                                            height: 2,
+                                          ),
                                           Text(
                                             controller.nearByUser[index]
                                                     ['first_name']
@@ -365,7 +450,7 @@ class DashbordView extends GetView<DashbordController> {
                         height: 20,
                       ),
                       Text(
-                        'USER DATA',
+                        'My Party',
                         style: TextStyle(
                           fontFamily: 'Oswald',
                           fontSize: 18,
@@ -386,25 +471,26 @@ class DashbordView extends GetView<DashbordController> {
                   ),
                 ),
                 Positioned(
-                  top: 30,
-                  left: 20,
+                  top: 45,
+                  left: 10,
                   child: GestureDetector(
                     onTap: () {
-                      Get.toNamed(Routes.DRAWER);
+                      Get.toNamed(Routes.DRAWER, arguments: controller.data);
                     },
                     child: Icon(
                       Icons.menu,
                       color: Colors.white,
+                      size: 30,
                     ),
                   ),
                 ),
                 Positioned(
-                  top: 30,
-                  right: 20,
+                  top: 45,
+                  right: 10,
                   child: Image.asset(
                     'assets/bell.png',
-                    height: 30,
-                    width: 30,
+                    height: 40,
+                    width: 40,
                   ),
                 ),
               ],
@@ -461,7 +547,9 @@ class DashbordView extends GetView<DashbordController> {
                     style: TextStyle(color: Colors.white, fontSize: 10),
                   )),
               TextButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.toNamed(Routes.PROFILE);
+                  },
                   icon: Icon(
                     Icons.account_circle_outlined,
                     color: Color(0xff7D7373),

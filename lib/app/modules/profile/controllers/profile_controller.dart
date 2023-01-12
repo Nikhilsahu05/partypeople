@@ -1,20 +1,12 @@
 import 'package:get/get.dart';
 
-class DrawerController2 extends GetxController {
-  //TODO: Implement DrawerController
+class ProfileController extends GetxController {
+  //TODO: Implement ProfileController
 
   final count = 0.obs;
-  var name = "";
   @override
   void onInit() {
     super.onInit();
-    var data = Get.arguments;
-    try {
-      name = data['full_name'];
-      
-    } catch (e) {
-
-    }
   }
 
   @override

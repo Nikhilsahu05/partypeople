@@ -6,7 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/drawer_controller.dart';
 
-class DrawerView extends GetView<DrawerController> {
+class DrawerView extends GetView<DrawerController2> {
   const DrawerView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -28,116 +28,131 @@ class DrawerView extends GetView<DrawerController> {
               stops: [0.0, 0.564, 1.0],
             ),
           ),
-          child: Column(children: [
-            SizedBox(height: 50),
-            Image.asset('assets/profile_pic.png'),
-            Text(
-              'Rachit Pawar',
-              style: TextStyle(
-                fontFamily: 'MalgunGothicBold',
-                fontSize: 27,
-                color: const Color(0xffffffff),
-                letterSpacing: -0.54,
-                height: 1.2222222222222223,
-              ),
-              textHeightBehavior:
-                  TextHeightBehavior(applyHeightToFirstAscent: false),
-              softWrap: false,
-            ),
-            SizedBox(height: 10),
-            Container(
-              height: 66,
-              decoration: BoxDecoration(
-                color: const Color(0xffffffff),
-                border: Border.all(width: 0.5, color: const Color(0xff707070)),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0x29000000),
-                    offset: Offset(0, 5),
-                    blurRadius: 6,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: ListView(children: [
+              SizedBox(height: 50),
+              GetStorage().read('profile_picture') == null
+                  ? Image.asset('assets/profile_pic.png')
+                  : CircleAvatar(
+                      radius: 100,
+                      backgroundImage: NetworkImage(
+                        'https://manage.partypeople.in/' +
+                            GetStorage().read('profile_picture'),
+                      ),
+                    ),
+              SizedBox(height: 10),
+              Center(
+                child: Text(
+                  GetStorage().read('full_name') ?? "",
+                  style: TextStyle(
+                    fontFamily: 'MalgunGothicBold',
+                    fontSize: 27,
+                    color: const Color(0xffffffff),
+                    letterSpacing: -0.54,
+                    height: 1.2222222222222223,
                   ),
-                ],
+                  textHeightBehavior:
+                      TextHeightBehavior(applyHeightToFirstAscent: false),
+                  softWrap: false,
+                ),
               ),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        Icon(
-                          Icons.people,
-                          color: Colors.red,
-                          size: 30,
-                        ),
-                        Text(
-                          '200 Views',
-                          style: TextStyle(
-                            fontFamily: 'Segoe UI',
-                            fontSize: 18,
-                            color: const Color(0xff7d7373),
-                            fontWeight: FontWeight.w600,
-                          ),
-                          softWrap: false,
-                        ),
-                      ],
+              SizedBox(height: 10),
+              Container(
+                height: 66,
+                decoration: BoxDecoration(
+                  color: const Color(0xffffffff),
+                  border:
+                      Border.all(width: 0.5, color: const Color(0xff707070)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0x29000000),
+                      offset: Offset(0, 5),
+                      blurRadius: 6,
                     ),
-                    Column(
-                      children: [
-                        Icon(
-                          Icons.heart_broken_sharp,
-                          color: Colors.red,
-                          size: 30,
-                        ),
-                        Text(
-                          '200 Views',
-                          style: TextStyle(
-                            fontFamily: 'Segoe UI',
-                            fontSize: 18,
-                            color: const Color(0xff7d7373),
-                            fontWeight: FontWeight.w600,
+                  ],
+                ),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Icon(
+                            Icons.people,
+                            color: Colors.red,
+                            size: 30,
                           ),
-                          softWrap: false,
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Icon(
-                          Icons.calendar_month,
-                          color: Colors.red,
-                          size: 30,
-                        ),
-                        Text(
-                          '1 Week Plan',
-                          style: TextStyle(
-                            fontFamily: 'Segoe UI',
-                            fontSize: 18,
-                            color: const Color(0xff7d7373),
-                            fontWeight: FontWeight.w600,
+                          Text(
+                            '0 views',
+                            style: TextStyle(
+                              fontFamily: 'Segoe UI',
+                              fontSize: 18,
+                              color: const Color(0xff7d7373),
+                              fontWeight: FontWeight.w600,
+                            ),
+                            softWrap: false,
                           ),
-                          softWrap: false,
-                        ),
-                      ],
-                    )
-                  ]),
-            ),
-            SizedBox(height: 20),
-            GestureDetector(
-                onTap: () {
-                  Get.toNamed(Routes.CUST_PROFILE);
-                },
-                child: drawerTile(title: 'Edit Profile', icon: Icons.edit)),
-            drawerTile(title: 'FAQ', icon: Icons.chat),
-            drawerTile(title: 'Help', icon: Icons.help),
-            drawerTile(title: 'Contact Us', icon: Icons.contact_page),
-            drawerTile(title: 'About Us', icon: Icons.info),
-            GestureDetector(
-                onTap: () {
-                  GetStorage().remove('token');
-                  Get.offAllNamed(Routes.HOME);
-                },
-                child: drawerTile(title: 'Logout', icon: Icons.logout)),
-          ]),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Icon(
+                            Icons.heart_broken_sharp,
+                            color: Colors.red,
+                            size: 30,
+                          ),
+                          Text(
+                            '0 likes',
+                            style: TextStyle(
+                              fontFamily: 'Segoe UI',
+                              fontSize: 18,
+                              color: const Color(0xff7d7373),
+                              fontWeight: FontWeight.w600,
+                            ),
+                            softWrap: false,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Icon(
+                            Icons.calendar_month,
+                            color: Colors.red,
+                            size: 30,
+                          ),
+                          Text(
+                            'No active Plan',
+                            style: TextStyle(
+                              fontFamily: 'Segoe UI',
+                              fontSize: 18,
+                              color: const Color(0xff7d7373),
+                              fontWeight: FontWeight.w600,
+                            ),
+                            softWrap: false,
+                          ),
+                        ],
+                      )
+                    ]),
+              ),
+              SizedBox(height: 20),
+              GestureDetector(
+                  onTap: () {
+                    Get.toNamed(Routes.CUST_PROFILE);
+                  },
+                  child: drawerTile(title: 'Edit Profile', icon: Icons.edit)),
+              drawerTile(title: 'FAQ', icon: Icons.chat),
+              drawerTile(title: 'Help', icon: Icons.help),
+              drawerTile(title: 'Contact Us', icon: Icons.contact_page),
+              drawerTile(title: 'About Us', icon: Icons.info),
+              GestureDetector(
+                  onTap: () {
+                    GetStorage().remove('token');
+                    Get.offAllNamed(Routes.HOME);
+                  },
+                  child: drawerTile(title: 'Logout', icon: Icons.logout)),
+            ]),
+          ),
         ),
         Positioned(
           top: 30,

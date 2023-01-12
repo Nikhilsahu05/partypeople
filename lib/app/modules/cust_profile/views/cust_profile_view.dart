@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:custom_searchable_dropdown/custom_searchable_dropdown.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../../addProfile/controllers/add_profile_controller.dart';
 import '../controllers/cust_profile_controller.dart';
@@ -36,9 +39,36 @@ class CustProfileView extends GetView<CustProfileController> {
             ),
             child: Column(children: [
               SizedBox(height: 50),
-              Image.asset('assets/profile_pic.png'),
+              GestureDetector(
+                onTap: () {
+                  controller.onCamera(context);
+                },
+                child: Obx(
+                  (() => controller.profilePic.value.contains('upload')
+                      ? CircleAvatar(
+                          radius: 100,
+                          backgroundImage: NetworkImage(
+                            'https://manage.partypeople.in/' +
+                                controller.profilePic.value,
+                          ),
+                        )
+                      : controller.img != null
+                          ? CircleAvatar(
+                              radius: 100,
+                              backgroundImage: FileImage(
+                                File(controller.img!.path),
+                              ),
+                            )
+                          : Image.asset(
+                              "assets/profile_pic.png",
+                              height: 200,
+                              width: 200,
+                            )),
+                ),
+              ),
+SizedBox(height: 10),
               Text(
-                'Rachit Pawar',
+                GetStorage().read('full_name') ?? "",
                 style: TextStyle(
                   fontFamily: 'MalgunGothicBold',
                   fontSize: 27,
@@ -50,6 +80,7 @@ class CustProfileView extends GetView<CustProfileController> {
                     TextHeightBehavior(applyHeightToFirstAscent: false),
                 softWrap: false,
               ),
+
               SizedBox(height: 10),
               Container(
                 height: 66,
@@ -77,7 +108,7 @@ class CustProfileView extends GetView<CustProfileController> {
                             size: 30,
                           ),
                           Text(
-                            '200 Views',
+                            '0 Views',
                             style: TextStyle(
                               fontFamily: 'Segoe UI',
                               fontSize: 18,
@@ -96,7 +127,7 @@ class CustProfileView extends GetView<CustProfileController> {
                             size: 30,
                           ),
                           Text(
-                            '200 Views',
+                            '0 Likes',
                             style: TextStyle(
                               fontFamily: 'Segoe UI',
                               fontSize: 18,
@@ -115,7 +146,7 @@ class CustProfileView extends GetView<CustProfileController> {
                             size: 30,
                           ),
                           Text(
-                            '1 Week Plan',
+                            'No active plan',
                             style: TextStyle(
                               fontFamily: 'Segoe UI',
                               fontSize: 18,
@@ -140,7 +171,7 @@ class CustProfileView extends GetView<CustProfileController> {
                     shrinkWrap: true,
                     children: [
                       Text(
-                        'Full Name',
+                        'Full Name *',
                         style: TextStyle(
                           fontFamily: 'MalgunGothicBold',
                           fontSize: 14,
@@ -180,7 +211,7 @@ class CustProfileView extends GetView<CustProfileController> {
                         height: 20,
                       ),
                       Text(
-                        'Date of Birth',
+                        'Date of Birth *',
                         style: TextStyle(
                           fontFamily: 'MalgunGothicBold',
                           fontSize: 14,
@@ -289,31 +320,35 @@ class CustProfileView extends GetView<CustProfileController> {
                         softWrap: false,
                       ),
                       SizedBox(height: 10),
-                      CustomSearchableDropDown(
-                        // backgroundColor: Color.fromARGB(255, 255, 255, 255),
-                        items: controller.cityList,
-                        label: 'Select City',
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border:
-                              Border.all(color: Color(0xff393862), width: 0.2),
-                        ),
+                      Obx(() => controller.city == null
+                          ? Container()
+                          : CustomSearchableDropDown(
+                              // backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                              // initialValue: [controller.cityID.value ],
+                              items: controller.cityList,
+                              label: controller.city.value,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                    color: Color(0xff393862), width: 0.2),
+                              ),
 
-                        prefixIcon: Padding(
-                          padding: const EdgeInsets.all(0.0),
-                          child: Icon(Icons.search),
-                        ),
-                        dropDownMenuItems:
-                            controller.cityList.map((e) => e['name']).toList(),
-                        onChanged: (value) {
-                          if (value != null) {
-                            controller.city.value = value['name'];
-                            controller.cityID = value['id'];
-                          } else {
-                            controller.city.value = "";
-                          }
-                        },
-                      ),
+                              prefixIcon: Padding(
+                                padding: const EdgeInsets.all(0.0),
+                                child: Icon(Icons.search),
+                              ),
+                              dropDownMenuItems: controller.cityList
+                                  .map((e) => e['name'])
+                                  .toList(),
+                              onChanged: (value) {
+                                if (value != null) {
+                                  controller.city.value = value['name'];
+                                  controller.cityID.value = value['id'];
+                                } else {
+                                  controller.city.value = "";
+                                }
+                              },
+                            )),
                       SizedBox(
                         height: 20,
                       ),

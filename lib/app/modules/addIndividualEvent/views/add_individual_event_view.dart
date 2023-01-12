@@ -495,7 +495,7 @@ class AddIndividualEventView extends GetView<AddIndividualEventController> {
                       onTap: () {
                         controller.getLocation(context);
                       },
-                      controller: controller.location,
+                      controller: AddIndividualEventController.location,
 
                       minLines: 1,
                       maxLines: 1,

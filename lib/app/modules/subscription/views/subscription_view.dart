@@ -55,88 +55,341 @@ class SubscriptionView extends GetView<SubscriptionController> {
                 SizedBox(
                   height: 20,
                 ),
-                Container(
-                  height: 241,
-                  width: 169,
-                  decoration: BoxDecoration(
-                    color: const Color(0xffffffff),
-                    borderRadius: BorderRadius.circular(24.0),
-                    border:
-                        Border.all(width: 1.0, color: const Color(0xffc40d0d)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0x29312e2e),
-                        offset: Offset(10, 10),
-                        blurRadius: 20,
-                      ),
-                    ],
-                  ),
-                  child: Stack(children: [
-                    Icon(
-                      Icons.calendar_month,
-                      color: Colors.red.shade100,
-                      size: 50,
-                    ),
-                    Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            '1',
-                            style: TextStyle(
-                              fontFamily: 'Malgun Gothic',
-                              fontSize: 44,
-                              color: const Color(0xff035dc4),
-                              letterSpacing: -0.88,
-                              fontWeight: FontWeight.w700,
-                              height: 0.38636363636363635,
-                            ),
-                            textHeightBehavior: TextHeightBehavior(
-                                applyHeightToFirstAscent: false),
-                            textAlign: TextAlign.center,
-                            softWrap: false,
+                Obx((() => controller.isLoading.value
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Container(
+                        height: 241,
+                        child: Expanded(
+                          child: ListView(
+                            primary: false,
+                            shrinkWrap: true,
+                            padding: EdgeInsets.all(10),
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              Container(
+                                height: 241,
+                                width: 169,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xffffffff),
+                                  borderRadius: BorderRadius.circular(24.0),
+                                  border: Border.all(
+                                      width: 1.0,
+                                      color: const Color(0xffc40d0d)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: const Color(0x29312e2e),
+                                      offset: Offset(10, 10),
+                                      blurRadius: 20,
+                                    ),
+                                  ],
+                                ),
+                                child: Stack(children: [
+                                  Icon(
+                                    Icons.calendar_month,
+                                    color: Colors.red.shade100,
+                                    size: 50,
+                                  ),
+                                  Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        controller.subscriptions == null
+                                            ? Container()
+                                            : Text(
+                                                controller.subscriptions!.data!
+                                                    .viewSubscriptions![0]!.day
+                                                    .toString(),
+                                                style: TextStyle(
+                                                  fontFamily: 'Malgun Gothic',
+                                                  fontSize: 44,
+                                                  color:
+                                                      const Color(0xff035dc4),
+                                                  letterSpacing: -0.88,
+                                                  fontWeight: FontWeight.w700,
+                                                  height: 0.38636363636363635,
+                                                ),
+                                                textHeightBehavior:
+                                                    TextHeightBehavior(
+                                                        applyHeightToFirstAscent:
+                                                            false),
+                                                textAlign: TextAlign.center,
+                                                softWrap: false,
+                                              ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        controller.subscriptions == null
+                                            ? Container()
+                                            : Text(
+                                                controller.subscriptions!.data!
+                                                    .viewSubscriptions![0]!.name
+                                                    .toString(),
+                                                style: TextStyle(
+                                                  fontFamily: 'Malgun Gothic',
+                                                  fontSize: 22,
+                                                  color:
+                                                      const Color(0xff035dc4),
+                                                  letterSpacing: -0.44,
+                                                  height: 0.6363636363636364,
+                                                ),
+                                                textHeightBehavior:
+                                                    TextHeightBehavior(
+                                                        applyHeightToFirstAscent:
+                                                            false),
+                                                textAlign: TextAlign.center,
+                                                softWrap: false,
+                                              ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        controller.subscriptions == null
+                                            ? Container()
+                                            : Text(
+                                                '${controller.subscriptions!.data!.viewSubscriptions![0]!.amount}/mo',
+                                                style: TextStyle(
+                                                  fontFamily: 'Malgun Gothic',
+                                                  fontSize: 30,
+                                                  color:
+                                                      const Color(0xff035dc4),
+                                                  letterSpacing: -0.6,
+                                                  fontWeight: FontWeight.w700,
+                                                  height: 0.5,
+                                                ),
+                                                textHeightBehavior:
+                                                    TextHeightBehavior(
+                                                        applyHeightToFirstAscent:
+                                                            false),
+                                                textAlign: TextAlign.center,
+                                                softWrap: false,
+                                              )
+                                      ],
+                                    ),
+                                  )
+                                ]),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Container(
+                                height: 241,
+                                width: 169,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xffffffff),
+                                  borderRadius: BorderRadius.circular(24.0),
+                                  border: Border.all(
+                                      width: 1.0,
+                                      color: const Color(0xffc40d0d)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: const Color(0x29312e2e),
+                                      offset: Offset(10, 10),
+                                      blurRadius: 20,
+                                    ),
+                                  ],
+                                ),
+                                child: Stack(children: [
+                                  Icon(
+                                    Icons.calendar_month,
+                                    color: Colors.red.shade100,
+                                    size: 50,
+                                  ),
+                                  Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        controller.subscriptions == null
+                                            ? Container()
+                                            : Text(
+                                                controller.subscriptions!.data!
+                                                    .viewSubscriptions![1]!.day
+                                                    .toString(),
+                                                style: TextStyle(
+                                                  fontFamily: 'Malgun Gothic',
+                                                  fontSize: 44,
+                                                  color:
+                                                      const Color(0xff035dc4),
+                                                  letterSpacing: -0.88,
+                                                  fontWeight: FontWeight.w700,
+                                                  height: 0.38636363636363635,
+                                                ),
+                                                textHeightBehavior:
+                                                    TextHeightBehavior(
+                                                        applyHeightToFirstAscent:
+                                                            false),
+                                                textAlign: TextAlign.center,
+                                                softWrap: false,
+                                              ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        controller.subscriptions == null
+                                            ? Container()
+                                            : Text(
+                                                controller.subscriptions!.data!
+                                                    .viewSubscriptions![1]!.name
+                                                    .toString(),
+                                                style: TextStyle(
+                                                  fontFamily: 'Malgun Gothic',
+                                                  fontSize: 22,
+                                                  color:
+                                                      const Color(0xff035dc4),
+                                                  letterSpacing: -0.44,
+                                                  height: 0.6363636363636364,
+                                                ),
+                                                textHeightBehavior:
+                                                    TextHeightBehavior(
+                                                        applyHeightToFirstAscent:
+                                                            false),
+                                                textAlign: TextAlign.center,
+                                                softWrap: false,
+                                              ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        controller.subscriptions == null
+                                            ? Container()
+                                            : Text(
+                                                '${controller.subscriptions!.data!.viewSubscriptions![1]!.amount}/mo',
+                                                style: TextStyle(
+                                                  fontFamily: 'Malgun Gothic',
+                                                  fontSize: 30,
+                                                  color:
+                                                      const Color(0xff035dc4),
+                                                  letterSpacing: -0.6,
+                                                  fontWeight: FontWeight.w700,
+                                                  height: 0.5,
+                                                ),
+                                                textHeightBehavior:
+                                                    TextHeightBehavior(
+                                                        applyHeightToFirstAscent:
+                                                            false),
+                                                textAlign: TextAlign.center,
+                                                softWrap: false,
+                                              )
+                                      ],
+                                    ),
+                                  )
+                                ]),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Container(
+                                height: 241,
+                                width: 169,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xffffffff),
+                                  borderRadius: BorderRadius.circular(24.0),
+                                  border: Border.all(
+                                      width: 1.0,
+                                      color: const Color(0xffc40d0d)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: const Color(0x29312e2e),
+                                      offset: Offset(10, 10),
+                                      blurRadius: 20,
+                                    ),
+                                  ],
+                                ),
+                                child: Stack(children: [
+                                  Icon(
+                                    Icons.calendar_month,
+                                    color: Colors.red.shade100,
+                                    size: 50,
+                                  ),
+                                  Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        controller.subscriptions == null
+                                            ? Container()
+                                            : Text(
+                                                controller.subscriptions!.data!
+                                                    .viewSubscriptions![2]!.day
+                                                    .toString(),
+                                                style: TextStyle(
+                                                  fontFamily: 'Malgun Gothic',
+                                                  fontSize: 44,
+                                                  color:
+                                                      const Color(0xff035dc4),
+                                                  letterSpacing: -0.88,
+                                                  fontWeight: FontWeight.w700,
+                                                  height: 0.38636363636363635,
+                                                ),
+                                                textHeightBehavior:
+                                                    TextHeightBehavior(
+                                                        applyHeightToFirstAscent:
+                                                            false),
+                                                textAlign: TextAlign.center,
+                                                softWrap: false,
+                                              ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        controller.subscriptions == null
+                                            ? Container()
+                                            : Text(
+                                                controller.subscriptions!.data!
+                                                    .viewSubscriptions![2]!.name
+                                                    .toString(),
+                                                style: TextStyle(
+                                                  fontFamily: 'Malgun Gothic',
+                                                  fontSize: 22,
+                                                  color:
+                                                      const Color(0xff035dc4),
+                                                  letterSpacing: -0.44,
+                                                  height: 0.6363636363636364,
+                                                ),
+                                                textHeightBehavior:
+                                                    TextHeightBehavior(
+                                                        applyHeightToFirstAscent:
+                                                            false),
+                                                textAlign: TextAlign.center,
+                                                softWrap: false,
+                                              ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        controller.subscriptions == null
+                                            ? Container()
+                                            : Text(
+                                                '${controller.subscriptions!.data!.viewSubscriptions![2]!.amount}/mo',
+                                                style: TextStyle(
+                                                  fontFamily: 'Malgun Gothic',
+                                                  fontSize: 30,
+                                                  color:
+                                                      const Color(0xff035dc4),
+                                                  letterSpacing: -0.6,
+                                                  fontWeight: FontWeight.w700,
+                                                  height: 0.5,
+                                                ),
+                                                textHeightBehavior:
+                                                    TextHeightBehavior(
+                                                        applyHeightToFirstAscent:
+                                                            false),
+                                                textAlign: TextAlign.center,
+                                                softWrap: false,
+                                              )
+                                      ],
+                                    ),
+                                  )
+                                ]),
+                              ),
+                            ],
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            'Month',
-                            style: TextStyle(
-                              fontFamily: 'Malgun Gothic',
-                              fontSize: 22,
-                              color: const Color(0xff035dc4),
-                              letterSpacing: -0.44,
-                              height: 0.6363636363636364,
-                            ),
-                            textHeightBehavior: TextHeightBehavior(
-                                applyHeightToFirstAscent: false),
-                            textAlign: TextAlign.center,
-                            softWrap: false,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            '1599/mo',
-                            style: TextStyle(
-                              fontFamily: 'Malgun Gothic',
-                              fontSize: 30,
-                              color: const Color(0xff035dc4),
-                              letterSpacing: -0.6,
-                              fontWeight: FontWeight.w700,
-                              height: 0.5,
-                            ),
-                            textHeightBehavior: TextHeightBehavior(
-                                applyHeightToFirstAscent: false),
-                            textAlign: TextAlign.center,
-                            softWrap: false,
-                          )
-                        ],
-                      ),
-                    )
-                  ]),
-                ),
+                        ),
+                      ))),
                 // ElevatedButton(
                 //   onPressed: () {},
                 //   child: Text("Continue"),
@@ -212,19 +465,22 @@ class SubscriptionView extends GetView<SubscriptionController> {
                 SizedBox(
                   height: 20,
                 ),
-                Text(
-                  'No Thanks',
-                  style: TextStyle(
-                    fontFamily: 'Malgun Gothic',
-                    fontSize: 20,
-                    color: const Color(0xff707070),
-                    letterSpacing: -0.4,
-                    height: 0.75,
+                GestureDetector(
+                  onTap: () => Get.back(),
+                  child: Text(
+                    'No Thanks',
+                    style: TextStyle(
+                      fontFamily: 'Malgun Gothic',
+                      fontSize: 20,
+                      color: const Color(0xff707070),
+                      letterSpacing: -0.4,
+                      height: 0.75,
+                    ),
+                    textHeightBehavior:
+                        TextHeightBehavior(applyHeightToFirstAscent: false),
+                    textAlign: TextAlign.center,
+                    softWrap: false,
                   ),
-                  textHeightBehavior:
-                      TextHeightBehavior(applyHeightToFirstAscent: false),
-                  textAlign: TextAlign.center,
-                  softWrap: false,
                 )
               ],
             ),

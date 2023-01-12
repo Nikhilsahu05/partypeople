@@ -29,7 +29,7 @@ class AddIndividualEventController extends GetxController {
   final endDate = TextEditingController();
   final startTime = TextEditingController();
   final endTime = TextEditingController();
-  final location = TextEditingController();
+  static final   location = TextEditingController();
   static LatLng? latLng = LatLng(0, 0);
   final image = TextEditingController();
   final partyType = "Music event".obs;
@@ -158,8 +158,8 @@ class AddIndividualEventController extends GetxController {
     }
 
     await Get.to(MyApp());
-    print("data $address");
-    location.text = address;
+    //print("data $address");
+    //location.text = address;
   }
 
   sendRequst() async {

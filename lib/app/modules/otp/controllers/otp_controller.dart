@@ -1,5 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:dio/src/form_data.dart' as frm;
 
 import '../../../routes/app_pages.dart';
 
@@ -47,11 +50,29 @@ class OtpController extends GetxController {
   void verifyOtp(String smsCode) {
     PhoneAuthCredential credential =
         PhoneAuthProvider.credential(verificationId: verfd, smsCode: smsCode);
-    auth.signInWithCredential(credential).then((value) {
+    auth.signInWithCredential(credential).then((value) async {
       if (value.user != null) {
-        Get.offAllNamed(Routes.CUST_PROFILE);
-      }
-      else{
+        try {
+          var response = await Dio().post(
+              'https://manage.partypeople.in/v1/account/login',
+              data: frm.FormData.fromMap({'phone': mob.value}));
+          print(response);
+          if (response.data['status'] == 1) {
+            await GetStorage().write("token", response.data['data']['token']);
+            if (response.data['data']['first_time'] == 1) {
+              Get.offAllNamed(Routes.CUST_PROFILE,
+                  arguments: response.data['data']);
+            } else {
+              Get.offAllNamed(Routes.DASHBORD,
+                  arguments: response.data['data']);
+            }
+          } else {
+            Get.snackbar("Error", "Invalid OTP");
+          }
+        } catch (e) {
+          print(e);
+        }
+      } else {
         Get.snackbar("Error", "Invalid OTP");
       }
     });

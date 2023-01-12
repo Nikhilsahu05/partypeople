@@ -61,7 +61,7 @@ class LoginController extends GetxController {
         //token = json['token'];
         await GetStorage().write("token", json['data']['token']);
         if (json['data']['first_time'] == '1') {
-          Get.offAllNamed(Routes.ADD_PROFILE, arguments: json['data']);
+          Get.offAllNamed(Routes.CUST_PROFILE, arguments: json['data']);
         } else {
           Get.offAllNamed('/dashbord');
         }

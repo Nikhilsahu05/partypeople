@@ -41,7 +41,7 @@ class _GooglePlacesAutocompleteView
     final applicationBloc =
         Provider.of<ApplicationBloc>(context, listen: false);
 
-    AddIndividualEventController.address = "";
+    // AddIndividualEventController.address = "";
 
     //Listen for selected Location
     locationSubscription =
@@ -76,9 +76,9 @@ class _GooglePlacesAutocompleteView
   Widget build(BuildContext context) {
     final applicationBloc = Provider.of<ApplicationBloc>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Select Location'),
-      ),
+        appBar: AppBar(
+          title: Text('Select Location'),
+        ),
         body: (applicationBloc.currentLocation == null)
             ? Center(
                 child: CircularProgressIndicator(),
@@ -151,8 +151,6 @@ class _GooglePlacesAutocompleteView
                         Container(
                           height: 300.0,
                           child: ListView.builder(
-
-                            
                               itemCount: applicationBloc.result!.length,
                               itemBuilder: (context, index) {
                                 return ListTile(
@@ -297,10 +295,11 @@ class _GooglePlacesAutocompleteView
 
   void fatchaddress(LatLng center) {
     print(center);
-    if (AddIndividualEventController.address.isEmpty) {
-      AddIndividualEventController.address =
-          '${center.latitude} ${center.longitude}';
-    }
+    var address = '';
+    // if (AddIndividualEventController.address.isEmpty) {
+    //   AddIndividualEventController.address =
+    //       '${center.latitude} ${center.longitude}';
+    // }
     AddIndividualEventController.latLng = center;
     var addressData = '';
     var location = Geocoder2.getDataFromCoordinates(
@@ -309,21 +308,21 @@ class _GooglePlacesAutocompleteView
         googleMapApiKey: 'AIzaSyBiKaMXUcVCWkOnZDX9UTd8-BIDH5uTlfE');
     location.then((value) {
       addressData = value.address;
-      AddIndividualEventController.address = value.address;
-      print(value.address);
-      print(value.address);
+      address = value.address;
+      AddIndividualEventController.location.text = addressData;
     }).catchError((error) {
       addressData =
           address == '' ? '${center.latitude} ${center.longitude}' : address;
       print(addressData);
-      if(AddIndividualEventController.address.isEmpty){
-        AddIndividualEventController.address =  '${center.latitude} ${center.longitude}';
-      }
+      // if (AddIndividualEventController.address.isEmpty) {
+      //   AddIndividualEventController.address =
+      //       '${center.latitude} ${center.longitude}';
+      // }
 
       print(error);
     });
 
-    Get.back();
+    Get.back(result: address);
   }
 
   Future<void> _goToPlace(SearchResult place) async {

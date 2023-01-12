@@ -21,6 +21,7 @@ abstract class Routes {
   static const SUBSCRIPTION = _Paths.SUBSCRIPTION;
   static const DRAWER = _Paths.DRAWER;
   static const CUST_PROFILE = _Paths.CUST_PROFILE;
+  static const PROFILE = _Paths.PROFILE;
 }
 
 abstract class _Paths {
@@ -43,4 +44,5 @@ abstract class _Paths {
   static const SUBSCRIPTION = '/subscription';
   static const DRAWER = '/drawer';
   static const CUST_PROFILE = '/cust-profile';
+  static const PROFILE = '/profile';
 }

@@ -60,19 +60,19 @@ class SplashscreenThreeView extends GetView<SplashscreenThreeController> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    'Lorem Ipsum is simply dummy text\nof the printing and typesetting industry. \nLorem Ipsum has been the industry\'s \nstandard dummy text ever\n ',
-                    style: TextStyle(
-                      fontFamily: 'MalgunGothic',
-                      fontSize: 12,
-                      color: const Color(0xffffffff),
-                      letterSpacing: -0.24,
-                      height: 1.6666666666666667,
-                    ),
-                    textHeightBehavior:
-                        TextHeightBehavior(applyHeightToFirstAscent: false),
-                    softWrap: false,
-                  )
+                  // Text(
+                  //   'Lorem Ipsum is simply dummy text\nof the printing and typesetting industry. \nLorem Ipsum has been the industry\'s \nstandard dummy text ever\n ',
+                  //   style: TextStyle(
+                  //     fontFamily: 'MalgunGothic',
+                  //     fontSize: 12,
+                  //     color: const Color(0xffffffff),
+                  //     letterSpacing: -0.24,
+                  //     height: 1.6666666666666667,
+                  //   ),
+                  //   textHeightBehavior:
+                  //       TextHeightBehavior(applyHeightToFirstAscent: false),
+                  //   softWrap: false,
+                  // )
                 ],
               )),
           Positioned(
