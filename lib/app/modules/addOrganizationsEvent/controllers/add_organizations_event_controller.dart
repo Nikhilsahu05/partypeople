@@ -1,146 +1,131 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-
-import '../../GooglePlacesAutocomplete/views/myapp.dart';
-import '../../addIndividualEvent/controllers/add_individual_event_controller.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../routes/app_pages.dart';
 import 'GetCitys.dart';
 
 class AddOrganizationsEventController extends GetxController {
   //TODO: Implement AddOrganizationsEventController
-
+  RxBool isLoading = false.obs;
   final count = 0.obs;
   final description = TextEditingController();
   final name = TextEditingController();
-  final location = TextEditingController();
-  var orgType = "Music event".obs;
-  var city = "".obs;
+  TextEditingController location = TextEditingController();
+  var selectedLocation;
+  TextEditingController city = TextEditingController();
   var cityKey = "".obs;
   var citySelected = [].obs;
   var citySelectedKey = [].obs;
+  File? timelinePicture;
+  File? profilePicture;
+
+  var timeline;
+  var profile;
+
+  var latitude;
+  RxBool isEditable = false.obs;
+  var longitude;
+  Set<Marker> markers = {};
+
+  getAPIOverview() async {
+    http.Response response = await http.post(
+        Uri.parse(
+            'https://manage.partypeople.in/v1/party/organization_details'),
+        headers: {
+          'x-access-token': '${GetStorage().read("token")}',
+        });
+    print("response of Organization ${response.body}");
+    if (jsonDecode(response.body)['data'] != null) {
+      name.text = jsonDecode(response.body)['data'][0]['name'];
+      description.text = jsonDecode(response.body)['data'][0]['description'];
+      profilePicture
+          ?.rename(jsonDecode(response.body)['data'][0]['profile_pic']);
+      profilePicture?.copy(jsonDecode(response.body)['data'][0]['profile_pic']);
+
+      timelinePicture
+          ?.rename(jsonDecode(response.body)['data'][0]['timeline_pic']);
+      timelinePicture
+          ?.copy(jsonDecode(response.body)['data'][0]['timeline_pic']);
+      timeline = jsonDecode(response.body)['data'][0]['timeline_pic'];
+      profile = jsonDecode(response.body)['data'][0]['profile_pic'];
+    }
+
+    update();
+    refresh();
+  }
+
   @override
   void onInit() {
-    super.onInit();
+    getAPIOverview();
+
     getCitys();
+    onMapCreated;
+    getCurrentLocation();
+    super.onInit();
   }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {}
-  void increment() => count.value++;
 
   GetCitys? getCityList;
 
-  List<String> _kOptions = <String>[];
+  // ---- CUSTOME MAP SCREEN
 
-  Future<void> getLocation(BuildContext context) async {
-    bool serviceEnabled;
-    LocationPermission permission;
+  late GoogleMapController? mapController;
+  late LatLng center;
+  Position? currentPosition;
+  String? currentAddress;
+  RxList selectedAmenitiesListID = [].obs;
 
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        Get.snackbar("Hy", "Location permission denied",
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
-            duration: Duration(seconds: 3));
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      Get.snackbar("Hy", "Location permission denied",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-          duration: Duration(seconds: 3));
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    await Get.to(MyApp());
-    // print("data $address");
-    location.text = AddIndividualEventController.address;
+  void onMapCreated(GoogleMapController controller) {
+    mapController = controller;
   }
 
-  void addBranch(var context) {
-    AlertDialog alertDialog = AlertDialog(
-      title: Text("Add Branch"),
-      content: Obx(() => city.value != null
-          ? DropdownButton<String>(
-              //value: controller.partyType.value,
-              value: city.value.isEmpty ? null : city.value,
-              hint: Text('Select your Search Branch',
-                  style: TextStyle(
-                    fontFamily: 'Segoe UI',
-                    fontSize: 14,
-                    color: const Color(0xff035DC4),
-                  )),
-              icon: const Icon(Icons.arrow_downward, color: Color(0xff035DC4)),
-              style: const TextStyle(color: Color(0xff035DC4)),
-              isExpanded: true,
-              underline: Container(
-                height: 1,
-                width: Get.width,
-                color: const Color(0xff035DC4),
-              ),
-              onChanged: (String? newValue) {
-                if (newValue != null) {
-                  city.value = newValue;
-                  if (!citySelected.contains(_kOptions.indexOf(newValue))) {
-                    citySelectedKey.add(_kOptions.indexOf(newValue));
-                  }
-                }
-              },
-              items: _kOptions.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value,
-                      style: TextStyle(
-                        fontFamily: 'Segoe UI',
-                        fontSize: 14,
-                        color: const Color(0xff035DC4),
-                      )),
-                );
-              }).toList())
-          : Text("Please select city")),
-      actions: <Widget>[
-        TextButton(
-          child: Text("Add"),
-          onPressed: () {
-            print(description.text);
-            citySelected.add(city.value);
-            city.value = "";
+  void getCurrentLocation() async {
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) {
+      currentPosition = position;
+      center = LatLng(position.latitude, position.longitude);
+      latitude = position.latitude;
+      longitude = position.longitude;
+      markers.add(Marker(
+          markerId: MarkerId('Home'),
+          position: LatLng(position.latitude, position.longitude)));
+      update();
 
-            Get.back();
-          },
-        ),
-      ],
-    );
-    showDialog(context: context, builder: (context) => alertDialog);
+      getAddressFromLatLng();
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  Future<void> getAddressFromLatLng() async {
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+          currentPosition!.latitude, currentPosition!.longitude);
+
+      Placemark place = placemarks[0];
+
+      currentAddress =
+          "${place.street}, ${place.name}, ${place.locality}, ${place.administrativeArea}, ${place.country}, ${place.postalCode}";
+      print(currentAddress);
+      // getcurrentaddressforUI = currentAddress;
+      update();
+    } catch (e) {
+      print(e);
+    }
   }
 
   getCitys() async {
     var headers = {
-      'x-access-token':
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiaWF0IjoxNjI0MjcyMzY5fQ.kMZ3IkYt1Bmqn5sylRtU0CZolo24izxlbHV_kFkbALI',
-      'Cookie': 'ci_session=bb484ee68f2155ac47fcb20c35e31310064b7370'
+      'x-access-token': '${GetStorage().read("token")}',
     };
     var request = http.MultipartRequest(
         'GET', Uri.parse('https://manage.partypeople.in/v1/party/cities'));
@@ -152,24 +137,30 @@ class AddOrganizationsEventController extends GetxController {
     if (response.statusCode == 200) {
       // print(await response.stream.bytesToString());
       getCityList = getCitysFromJson(await response.stream.bytesToString());
-      _kOptions = getCityList!.data.map((e) => e.name).toList();
     } else {
       print(response.reasonPhrase);
     }
   }
 
-  Future<void> addOrgnition() async {
-    if (citySelected.isEmpty) {
-      Get.snackbar("Hy", "Please select city",
+  Future<void> updateOrganisation() async {
+    isLoading.value = true;
+    if (profilePicture == null) {
+      isLoading.value = false;
+      Get.offAllNamed(Routes.ORGANIZATION_PROFILE_NEW);
+    }
+    if (name.text.isEmpty) {
+      Get.snackbar("Alert", "Please enter your organization name",
+          icon: Icon(Icons.error_outline, color: Colors.white),
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
+          padding: EdgeInsets.only(bottom: 20),
           colorText: Colors.white,
           duration: Duration(seconds: 3));
       return;
     }
-    if (AddIndividualEventController.latLng!.latitude.toString() ==
-        0.0.toString()) {
-      Get.snackbar("Hy", "Please select location",
+    if (description.text.isEmpty) {
+      Get.snackbar("Alert", "Please enter description",
+          icon: Icon(Icons.error_outline, color: Colors.white),
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           colorText: Colors.white,
@@ -182,43 +173,103 @@ class AddOrganizationsEventController extends GetxController {
       // 'Cookie': 'ci_session=53748e98d26cf6811eb0a53be37158bf0cbe5b4b'
     };
 
-    var request = http.MultipartRequest('POST',
-        Uri.parse('https://manage.partypeople.in/v1/party/add_organization'));
+    var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+            'https://manage.partypeople.in/v1/party/update_organization'));
     request.fields.addAll({
+      'organization_amenitie_id': selectedAmenitiesListID
+          .toString()
+          .replaceAll('[', '')
+          .replaceAll(']', ''),
       'city_id': citySelectedKey.toString(),
       'description': description.text,
       'name': name.text,
-      'latitude': AddIndividualEventController.latLng!.latitude.toString(),
-      'longitude': AddIndividualEventController.latLng!.longitude.toString(),
+      'latitude': latitude.toString(),
+      'longitude': longitude.toString(),
+      'organization_id': '1',
       'type': '1',
     });
 
-    request.headers.addAll(headers);
+    try {
+      request.headers.addAll(headers);
+      request.files.add(await http.MultipartFile.fromPath(
+          'profile_pic', profilePicture!.path));
+      request.files.add(await http.MultipartFile.fromPath(
+          'timeline_pic', timelinePicture!.path));
+    } on Exception catch (e) {
+      print("Isssue in error :: ${e.toString()}");
+    }
+
     print(request.fields);
     http.StreamedResponse response = await request.send();
     // print(await response.stream.bytesToString());
     if (response.statusCode == 200) {
       var jsonResponse = json.decode(await response.stream.bytesToString());
-      print(jsonResponse);
-      //jsonResponse = json.decode(await response.stream.bytesToString());
-      if (jsonResponse['status'] == 1) {
-        var data = {
-          'city_id': citySelectedKey.toString(),
-          'description': description.text,
-          'name': name.text,
-          'latitude': AddIndividualEventController.latLng!.latitude.toString(),
-          'longitude':
-              AddIndividualEventController.latLng!.longitude.toString(),
-          'type': orgType.value.toString(),
-        };
-        Get.offNamed('/organization-profile', arguments: data);
-      } else {
-        Get.snackbar("Hy", jsonResponse['message'],
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
-            duration: Duration(seconds: 3));
+      if (jsonResponse['message'] == 'Organization Update Successfully.') {
+        Get.offAllNamed(Routes.ORGANIZATION_PROFILE_NEW);
       }
+
+      print(jsonResponse);
+    } else {
+      Get.offAllNamed((Routes.ORGANIZATION_PROFILE_NEW));
+
+      print(response.reasonPhrase);
+    }
+    isLoading.value = false;
+    update();
+  }
+
+  Future<void> addOrgnition() async {
+    print("Printing profile picture and timeline picture");
+    print(profilePicture?.path);
+    print(timelinePicture?.path);
+
+    isLoading.value = true;
+    var headers = {
+      'x-access-token': GetStorage().read("token").toString(),
+      // 'Cookie': 'ci_session=53748e98d26cf6811eb0a53be37158bf0cbe5b4b'
+    };
+
+    var request = http.MultipartRequest('POST',
+        Uri.parse('https://manage.partypeople.in/v1/party/add_organization'));
+    request.fields.addAll({
+      'organization_amenitie_id': selectedAmenitiesListID
+          .toString()
+          .replaceAll('[', '')
+          .replaceAll(']', ''),
+      'city_id': citySelectedKey.toString(),
+      'description': description.text,
+      'name': name.text,
+      'latitude': latitude.toString(),
+      'longitude': longitude.toString(),
+      'type': '1',
+      'profile_pic': '',
+      'timeline_pic': '',
+    });
+    isLoading.value = false;
+    request.files.add(
+        await http.MultipartFile.fromPath('profile_pic', profilePicture!.path));
+    isLoading.value = false;
+    request.files.add(await http.MultipartFile.fromPath(
+        'timeline_pic', timelinePicture!.path));
+    request.headers.addAll(headers);
+
+    print("Pending Fields :${request.fields}");
+    http.StreamedResponse response = await request.send();
+    isLoading.value = false;
+    update();
+    // print(await response.stream.bytesToString());
+    if (response.statusCode == 200) {
+      var jsonResponse = json.decode(await response.stream.bytesToString());
+      print(jsonResponse);
+      if (jsonResponse['message'] == 'Organization Create Successfully.') {
+        Get.offAllNamed(Routes.ORGANIZATION_PROFILE_NEW);
+      } else if (jsonResponse['message'] == 'Organization Already Created.') {
+        Get.offAllNamed(Routes.ORGANIZATION_PROFILE_NEW);
+      }
+
+      //jsonResponse = json.decode(await response.stream.bytesToString());
       print(jsonResponse);
     } else {
       print(response.reasonPhrase);

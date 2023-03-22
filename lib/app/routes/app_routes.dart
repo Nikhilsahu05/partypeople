@@ -1,8 +1,11 @@
+// ignore_for_file: constant_identifier_names
+
 part of 'app_pages.dart';
 // DO NOT EDIT. This is code generated via package:get_cli/get_cli.dart
 
 abstract class Routes {
   Routes._();
+
   static const HOME = _Paths.HOME;
   static const SPLASHSCREEN_TWO = _Paths.SPLASHSCREEN_TWO;
   static const SPLASHSCREEN_THREE = _Paths.SPLASHSCREEN_THREE;
@@ -22,10 +25,14 @@ abstract class Routes {
   static const DRAWER = _Paths.DRAWER;
   static const CUST_PROFILE = _Paths.CUST_PROFILE;
   static const PROFILE = _Paths.PROFILE;
+  static const ORGANIZATION_PROFILE_NEW = _Paths.ORGANIZATION_PROFILE_NEW;
+  static const ORGANIZATION_MENU = _Paths.ORGANIZATION_MENU;
+  static const AddAmenities = _Paths.AddAmenities;
 }
 
 abstract class _Paths {
   _Paths._();
+
   static const HOME = '/home';
   static const SPLASHSCREEN_TWO = '/splashscreen-two';
   static const SPLASHSCREEN_THREE = '/splashscreen-three';
@@ -45,4 +52,7 @@ abstract class _Paths {
   static const DRAWER = '/drawer';
   static const CUST_PROFILE = '/cust-profile';
   static const PROFILE = '/profile';
+  static const ORGANIZATION_PROFILE_NEW = '/organization-profile-new';
+  static const ORGANIZATION_MENU = '/organization-menu';
+  static const AddAmenities = '/AddAmenities';
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -9,7 +11,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
 import '../../GooglePlacesAutocomplete/views/myapp.dart';
-import '../views/add_individual_event_view.dart';
 
 enum SingingCharacter { Full, Awaited }
 
@@ -29,7 +30,7 @@ class AddIndividualEventController extends GetxController {
   final endDate = TextEditingController();
   final startTime = TextEditingController();
   final endTime = TextEditingController();
-  static final   location = TextEditingController();
+  static var location = TextEditingController();
   static LatLng? latLng = LatLng(0, 0);
   final image = TextEditingController();
   final partyType = "Music event".obs;
@@ -41,16 +42,6 @@ class AddIndividualEventController extends GetxController {
   SingingCharacter character = SingingCharacter.Full;
   var partyStatusChange = "".obs;
   var genderList = [];
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
   @override
   void onClose() {
@@ -76,7 +67,6 @@ class AddIndividualEventController extends GetxController {
       endDate.text = date2;
 
       //reverse string
-
     }
   }
 
@@ -86,7 +76,7 @@ class AddIndividualEventController extends GetxController {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
+        firstDate: DateTime.now(),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate) {
       //reverse the date
@@ -104,8 +94,12 @@ class AddIndividualEventController extends GetxController {
       print(result.period); // DayPeriod.pm or DayPeriod.am
       print(result.hour);
       print(result.minute);
-     var hour = result.hour.toString().length == 1 ?'0${result.hour.toString()}':result.hour.toString();
-        var min =  result.minute.toString().length == 1 ?'0${result.minute.toString()}':result.minute.toString();
+      var hour = result.hour.toString().length == 1
+          ? '0${result.hour.toString()}'
+          : result.hour.toString();
+      var min = result.minute.toString().length == 1
+          ? '0${result.minute.toString()}'
+          : result.minute.toString();
       startTime.text = "$hour:$min";
     }
   }
@@ -117,11 +111,13 @@ class AddIndividualEventController extends GetxController {
       print(result.period); // DayPeriod.pm or DayPeriod.am
       print(result.hour);
       print(result.minute);
-       var hour = result.hour.toString().length == 1 ?'0${result.hour.toString()}':result.hour.toString();
-        var min =  result.minute.toString().length == 1 ?'0${result.minute.toString()}':result.minute.toString();
+      var hour = result.hour.toString().length == 1
+          ? '0${result.hour.toString()}'
+          : result.hour.toString();
+      var min = result.minute.toString().length == 1
+          ? '0${result.minute.toString()}'
+          : result.minute.toString();
       endTime.text = "$hour:$min";
-
-      
     }
   }
 
@@ -239,7 +235,7 @@ class AddIndividualEventController extends GetxController {
     }
   }
 
-    getPertyType(String gender) {
+  getPertyType(String gender) {
     switch (gender) {
       case 'Music event':
         return '1';

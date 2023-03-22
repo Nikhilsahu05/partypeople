@@ -1,13 +1,15 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:adobe_xd/adobe_xd.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:get/get.dart';
 
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
+  TextEditingController username = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,9 +36,71 @@ class LoginView extends GetView<LoginController> {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
+                        'User Name',
+                        style: TextStyle(
+                          fontFamily: 'malgun',
+                          fontSize: 18,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          letterSpacing: -0.36,
+                          fontWeight: FontWeight.w700,
+                          height: 0.9444444444444444,
+                        ),
+                        textHeightBehavior:
+                            TextHeightBehavior(applyHeightToFirstAscent: false),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Container(
+                      height: 62,
+                      alignment: Alignment.center,
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.only(top: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(21.0),
+                        color: const Color(0xffffffff),
+                        border: Border.all(
+                            width: 0.2, color: const Color(0xff707070)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0x21329d9c),
+                            offset: Offset(0, 13),
+                            blurRadius: 34,
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10.0, right: 20.0),
+                        child: TextField(
+                          maxLines: 1,
+                          controller: username,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.person,
+                              color: const Color(0xff707070),
+                            ),
+                            border: InputBorder.none,
+                            label: Text('Enter Username'),
+                            hintStyle: TextStyle(
+                              fontFamily: 'malgun',
+                              fontSize: 18,
+                              color: const Color(0xff4b4444),
+                              letterSpacing: -0.36,
+                              fontWeight: FontWeight.w700,
+                              height: 0.9444444444444444,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
                         'Mobile Number',
                         style: TextStyle(
-                          fontFamily: 'Malgun Gothic',
+                          fontFamily: 'malgun',
                           fontSize: 18,
                           color: Color.fromARGB(255, 255, 255, 255),
                           letterSpacing: -0.36,
@@ -81,9 +145,9 @@ class LoginView extends GetView<LoginController> {
                               color: const Color(0xff707070),
                             ),
                             border: InputBorder.none,
-                            label: Text('Enter mobile number'),
+                            label: Text('Enter Mobile Number'),
                             hintStyle: TextStyle(
-                              fontFamily: 'Malgun Gothic',
+                              fontFamily: 'malgun',
                               fontSize: 18,
                               color: const Color(0xff4b4444),
                               letterSpacing: -0.36,
@@ -114,18 +178,23 @@ class LoginView extends GetView<LoginController> {
                         ],
                       ),
                       child: TextButton(
-                        onPressed: () async {
-                          Get.toNamed("/otp",
-                              arguments: controller.mobileNumber.text);
+                        onPressed: () {
+                          if (controller.mobileNumber.text.isNotEmpty &&
+                              username.text.isNotEmpty) {
+                            controller.verifyPhone();
+                          } else {
+                            Get.snackbar(
+                                'Field is Empty', 'Fill all the fields');
+                          }
                         },
                         child: Text(
                           'GET OTP',
                           style: TextStyle(
-                            fontFamily: 'Malgun Gothic',
-                            fontSize: 18,
+                            fontFamily: 'malgun',
+                            fontSize: 26,
                             color: const Color(0xffffffff),
                             letterSpacing: -0.36,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.bold,
                             height: 0.9444444444444444,
                           ),
                           textHeightBehavior: TextHeightBehavior(
@@ -139,7 +208,7 @@ class LoginView extends GetView<LoginController> {
                     Text(
                       'Prefer to login with social media',
                       style: TextStyle(
-                        fontFamily: 'MalgunGothic',
+                        fontFamily: 'malgun',
                         fontSize: 18,
                         color: Color.fromARGB(255, 255, 255, 255),
                         letterSpacing: -0.36,
@@ -152,129 +221,58 @@ class LoginView extends GetView<LoginController> {
                     SizedBox(
                       height: 20,
                     ),
-                    Container(
-                      height: 6,
-                      width: 51,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(7.0),
-                        color: const Color(0xffFFA914),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0x29000000),
-                            offset: Offset(0, 3),
-                            blurRadius: 6,
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    Column(
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            controller.logInWithGoogle();
-                          },
-                          child: Image.asset(
-                            'assets/googleLogo.png',
-                            height: 45,
+                        Container(
+                          height: 6,
+                          width: 51,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(7.0),
+                            color: const Color(0xffFFA914),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0x29000000),
+                                offset: Offset(0, 3),
+                                blurRadius: 6,
+                              ),
+                            ],
                           ),
                         ),
                         SizedBox(
-                          width: 10,
+                          height: 20,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            controller.signInWithFacebook();
-                          },
-                          child: Image.asset(
-                            'assets/facebook_icon.png',
-                            height: 100,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                controller.logInWithGoogle();
+                              },
+                              child: Image.asset(
+                                'assets/googleLogo.png',
+                                height: 45,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          'By creating an account, you agree to our \nTerms of Service and Privacy Policy',
+                          style: TextStyle(
+                            fontFamily: 'malgun',
+                            fontSize: 10,
+                            color: Colors.grey.shade300,
+                            letterSpacing: -0.2,
+                            height: 1.4,
                           ),
-                        ),
+                          textHeightBehavior: TextHeightBehavior(
+                              applyHeightToFirstAscent: false),
+                          textAlign: TextAlign.center,
+                        )
                       ],
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: <Widget>[
-                    //     Container(
-                    //       height: 50,
-                    //       width: 50,
-                    //       decoration: BoxDecoration(
-                    //         borderRadius: BorderRadius.circular(25.0),
-                    //       ),
-                    //       child: Image.asset(
-                    //         'assets/images/google_icon.png',
-                    //       ),
-                    //     ),
-                    //     SizedBox(
-                    //       width: 20,
-                    //     ),
-                    //     Container(
-                    //       height: 50,
-                    //       width: 50,
-                    //       decoration: BoxDecoration(
-                    //         borderRadius: BorderRadius.circular(25.0),
-                    //       ),
-                    //       child: Image.asset(
-                    //         'assets/images/facebook_icon.png',
-                    //         fit: BoxFit.cover,
-                    //       ),
-                    //     ),
-                    //     SizedBox(
-                    //       width: 20,
-                    //     ),
-                    //     Container(
-                    //       height: 50,
-                    //       width: 50,
-                    //       decoration: BoxDecoration(
-                    //         borderRadius: BorderRadius.circular(25.0),
-                    //       ),
-                    //       child: Image.asset(
-                    //         'assets/images/linkdin_icon.png',
-                    //       ),
-                    //     ),
-                    //     SizedBox(
-                    //       width: 20,
-                    //     ),
-                    //     Container(
-                    //       height: 50,
-                    //       width: 50,
-                    //       decoration: BoxDecoration(
-                    //         borderRadius: BorderRadius.circular(25.0),
-                    //       ),
-                    //       child: Image.asset(
-                    //         'assets/images/instagram_icon.png',
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                    // SizedBox(
-                    //   height: 50,
-                    // ),
-
-                    // SizedBox(
-                    //   height: 20,
-                    // ),
-                    Text(
-                      'By creating an account, you agree to our \nTerms of Service and Privacy Policy',
-                      style: TextStyle(
-                        fontFamily: 'Malgun Gothic',
-                        fontSize: 10,
-                        color: Color.fromARGB(255, 98, 97, 97),
-                        letterSpacing: -0.2,
-                        height: 1.4,
-                      ),
-                      textHeightBehavior:
-                          TextHeightBehavior(applyHeightToFirstAscent: false),
-                      textAlign: TextAlign.center,
-                    )
                   ],
                 ),
               ]),

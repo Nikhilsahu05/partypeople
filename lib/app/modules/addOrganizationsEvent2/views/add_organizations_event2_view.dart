@@ -1,14 +1,174 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: must_be_immutable
 
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:group_button/group_button.dart';
+import 'package:image_crop/image_crop.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:pertypeople/app/select_photo_options_screen.dart';
 
-import '../../ImageCrop/iimageCrop.dart';
-import '../../addIndividualEvent/controllers/add_individual_event_controller.dart';
+import '../../amenites_party.dart';
 import '../controllers/add_organizations_event2_controller.dart';
 
-class AddOrganizationsEvent2View
-    extends GetView<AddOrganizationsEvent2Controller> {
+//
+// class AddOrganizationsEvent2View
+//     extends GetView<AddOrganizationsEvent2Controller> {
+//
+class AddOrganizationsEvent2View extends StatefulWidget {
+  bool isPopular;
+
+  AddOrganizationsEvent2View({required this.isPopular});
+
+  @override
+  State<AddOrganizationsEvent2View> createState() =>
+      _AddOrganizationsEvent2ViewState();
+}
+
+class _AddOrganizationsEvent2ViewState
+    extends State<AddOrganizationsEvent2View> {
+  @override
+  void initState() {
+    print('is this popular party ::: ${widget.isPopular}');
+    super.initState();
+  }
+
+  String? _currentAddress;
+  Position? _currentPosition;
+
+  final cropKey = GlobalKey<CropState>();
+  File? _image;
+
+  _pickImageProfile(ImageSource source) async {
+    print("Picking Image");
+    try {
+      final image = await ImagePicker().pickImage(source: source);
+      if (image == null) return;
+      File? img = File(image.path);
+      img = await _cropImage(imageFile: img);
+      setState(() {
+        print("Image profile ==> ${controller.profile?.path}");
+
+        _image = img;
+        controller.profile = _image;
+        print("Image profile ==> ${controller.profile?.path}");
+        Navigator.of(context).pop();
+      });
+    } on PlatformException catch (e) {
+      print(e);
+      Navigator.of(context).pop();
+    }
+  }
+
+  Future<File?> _cropImage({required File imageFile}) async {
+    print('Croped Image');
+    CroppedFile? croppedImage =
+        await ImageCropper().cropImage(sourcePath: imageFile.path);
+    if (croppedImage == null) return null;
+    return File(croppedImage.path);
+  }
+
+  void _showSelectPhotoOptionsProfile(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
+        ),
+      ),
+      builder: (context) => DraggableScrollableSheet(
+          initialChildSize: 0.28,
+          maxChildSize: 0.4,
+          minChildSize: 0.28,
+          expand: false,
+          builder: (context, scrollController) {
+            return SingleChildScrollView(
+              controller: scrollController,
+              child: SelectPhotoOptionsScreen(
+                onTap: _pickImageProfile,
+              ),
+            );
+          }),
+    );
+  }
+
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
+    return true;
+  }
+
+  bool isLoading = false;
+
+  Future<void> _getCurrentPosition() async {
+    setState(() {
+      isLoading = true;
+    });
+    final hasPermission = await _handleLocationPermission();
+
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) {
+      setState(() => _currentPosition = position);
+      _getAddressFromLatLng(_currentPosition!);
+    }).catchError((e) {
+      debugPrint(e);
+    });
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Future<void> _getAddressFromLatLng(Position position) async {
+    await placemarkFromCoordinates(
+            _currentPosition!.latitude, _currentPosition!.longitude)
+        .then((List<Placemark> placemarks) {
+      Placemark place = placemarks[0];
+      setState(() {
+        _currentAddress =
+            '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+      });
+
+      ///Save current address to text editor
+      ///
+      controller.location.text = _currentAddress!;
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+
+  AddOrganizationsEvent2Controller controller =
+      Get.put(AddOrganizationsEvent2Controller());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,99 +184,6 @@ class AddOrganizationsEvent2View
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    height: 50,
-                    width: 300,
-                    decoration: BoxDecoration(
-                      color: Color(0xffA72E2E),
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          height: 35,
-                          width: 130,
-                          child: Center(
-                            child: Text(
-                              'Individuals',
-                              style: TextStyle(
-                                fontFamily: 'Oswald',
-                                fontSize: 18,
-                                color: const Color(0xfffffdfb),
-                                fontWeight: FontWeight.w500,
-                              ),
-                              softWrap: false,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 35,
-                          width: 130,
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 255, 255, 255),
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Organizations',
-                              style: TextStyle(
-                                fontFamily: 'Oswald',
-                                fontSize: 18,
-                                color: const Color(0xff3a3732),
-                                fontWeight: FontWeight.w500,
-                              ),
-                              softWrap: false,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                'Profile ',
-                style: TextStyle(
-                  fontFamily: 'Oswald',
-                  fontSize: 20,
-                  color: const Color(0xff564d4d),
-                ),
-                softWrap: false,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                'Organization name',
-                style: TextStyle(
-                  fontFamily: 'Segoe UI',
-                  fontSize: 12,
-                  color: const Color(0xff707070),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                controller.name,
-                style: TextStyle(
-                  fontFamily: 'Segoe UI',
-                  fontSize: 30,
-                  color: const Color(0xff564d4d),
-                  fontWeight: FontWeight.w600,
-                ),
-                softWrap: false,
-              ),
-              SizedBox(
-                height: 20,
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -135,45 +202,16 @@ class AddOrganizationsEvent2View
                       )
                     ],
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      controller.sendRequst();
-                    },
-                    child: Container(
-                      height: 34,
-                      width: 73,
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(168, 147, 0, 0),
-                        borderRadius: BorderRadius.circular(25.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0x1b000000),
-                            offset: Offset(0, 5),
-                            blurRadius: 3,
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Text(
-                          'POST',
-                          style: TextStyle(
-                            fontFamily: 'Oswald',
-                            fontSize: 15,
-                            color: const Color(0xffffffff),
-                          ),
-                          softWrap: false,
-                        ),
-                      ),
-                    ),
-                  )
                 ],
               ),
               SizedBox(
                 height: 20,
               ),
-              Obx(() => AddIndividualEventController.count.value != 0
-                  ? ShowPic()
-                  : Container()),
+              controller.profile != null
+                  ? Container(
+                      child: Image.file(controller.profile!),
+                    )
+                  : Container(),
               SizedBox(
                 height: 20,
               ),
@@ -226,11 +264,7 @@ class AddOrganizationsEvent2View
               ),
               GestureDetector(
                 onTap: () async {
-                  // AddIndividualEventController.picture == null
-                  await Get.to(() => GetCropedImg());
-                  AddIndividualEventController.count.value = 7;
-                  //controller.co
-                  // : null;
+                  _showSelectPhotoOptionsProfile(context);
                 },
                 child: Row(
                   children: [
@@ -251,16 +285,27 @@ class AddOrganizationsEvent2View
                     SizedBox(
                       width: 10,
                     ),
-                    Text(
-                      'Add cover photo',
-                      style: TextStyle(
-                        fontFamily: 'Segoe UI',
-                        fontSize: 18,
-                        color: const Color(0xff7d7373),
-                        fontWeight: FontWeight.w600,
-                      ),
-                      softWrap: false,
-                    )
+                    (controller.profile != null)
+                        ? Text(
+                            'Edit Cover Photo',
+                            style: TextStyle(
+                              fontFamily: 'Segoe UI',
+                              fontSize: 18,
+                              color: const Color(0xff7d7373),
+                              fontWeight: FontWeight.w600,
+                            ),
+                            softWrap: false,
+                          )
+                        : Text(
+                            'Add Cover Photo',
+                            style: TextStyle(
+                              fontFamily: 'Segoe UI',
+                              fontSize: 18,
+                              color: const Color(0xff7d7373),
+                              fontWeight: FontWeight.w600,
+                            ),
+                            softWrap: false,
+                          )
                   ],
                 ),
               ),
@@ -287,7 +332,7 @@ class AddOrganizationsEvent2View
                     width: 10,
                   ),
                   Text(
-                    'Date and Time',
+                    'Select Party Date and Time',
                     style: TextStyle(
                       fontFamily: 'Segoe UI',
                       fontSize: 18,
@@ -337,7 +382,7 @@ class AddOrganizationsEvent2View
                             borderSide: BorderSide(
                                 color: const Color(0xff035DC4), width: 1.0),
                           ),
-                          hintText: 'party Starte Date',
+                          hintText: 'Party Start Date',
                           hintStyle: TextStyle(
                             fontFamily: 'Segoe UI',
                             fontSize: 14,
@@ -380,7 +425,7 @@ class AddOrganizationsEvent2View
                             borderSide: BorderSide(
                                 color: const Color(0xff035DC4), width: 1.0),
                           ),
-                          hintText: 'party End Date',
+                          hintText: 'Party End Date',
                           hintStyle: TextStyle(
                             fontFamily: 'Segoe UI',
                             fontSize: 14,
@@ -391,9 +436,6 @@ class AddOrganizationsEvent2View
                     ),
                   )
                 ],
-              ),
-              SizedBox(
-                height: 10,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -430,7 +472,7 @@ class AddOrganizationsEvent2View
                             borderSide: BorderSide(
                                 color: const Color(0xff035DC4), width: 1.0),
                           ),
-                          hintText: 'party Starte Time',
+                          hintText: 'Party Start Time',
                           hintStyle: TextStyle(
                             fontFamily: 'Segoe UI',
                             fontSize: 14,
@@ -475,7 +517,7 @@ class AddOrganizationsEvent2View
                             borderSide: BorderSide(
                                 color: const Color(0xff035DC4), width: 1.0),
                           ),
-                          hintText: 'party End Time',
+                          hintText: 'Party End Time',
                           hintStyle: TextStyle(
                             fontFamily: 'Segoe UI',
                             fontSize: 14,
@@ -490,6 +532,149 @@ class AddOrganizationsEvent2View
               SizedBox(
                 height: 20,
               ),
+
+              ///Post
+              widget.isPopular == true
+                  ? Column(
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              height: 35,
+                              width: 35,
+                              decoration: BoxDecoration(
+                                color: const Color(0x247d7373),
+                                borderRadius: BorderRadius.circular(7.0),
+                                border: Border.all(
+                                    width: 1.0, color: const Color(0x24707070)),
+                              ),
+                              child: Icon(
+                                Icons.calendar_month,
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Select Advertisement Date',
+                              style: TextStyle(
+                                fontFamily: 'Segoe UI',
+                                fontSize: 18,
+                                color: const Color(0xff7d7373),
+                                fontWeight: FontWeight.w600,
+                              ),
+                              softWrap: false,
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                // controller.getStartDate(context);
+                              },
+                              child: Container(
+                                width: 150,
+                                child: TextField(
+                                  onTap: () => controller.getStartDate(context),
+                                  keyboardType: TextInputType.datetime,
+                                  controller: controller.startDate,
+                                  minLines: 1,
+                                  maxLines: 1,
+                                  //enabled: false,
+                                  style: TextStyle(
+                                    fontFamily: 'Segoe UI',
+                                    fontSize: 14,
+                                    color: const Color(0xff035DC4),
+                                  ),
+                                  decoration: InputDecoration(
+                                    suffixIcon: Icon(
+                                      Icons.calendar_today,
+                                      color: const Color(0xff035DC4),
+                                      size: 18,
+                                    ),
+                                    //border: InputBorder.none,
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xff035DC4)),
+                                    ),
+
+                                    border: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: const Color(0xff035DC4),
+                                          width: 1.0),
+                                    ),
+                                    hintText: 'Post Start Date',
+                                    hintStyle: TextStyle(
+                                      fontFamily: 'Segoe UI',
+                                      fontSize: 14,
+                                      color: const Color(0xff035DC4),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                //controller.getEndDate(context);
+                              },
+                              child: Container(
+                                width: 150,
+                                child: TextField(
+                                  onTap: () => controller.getEndDate(context),
+                                  controller: controller.endDate,
+
+                                  minLines: 1,
+                                  maxLines: 1,
+                                  //enabled: false,
+                                  style: TextStyle(
+                                    fontFamily: 'Segoe UI',
+                                    fontSize: 14,
+                                    color: const Color(0xff035DC4),
+                                  ),
+                                  decoration: InputDecoration(
+                                    suffixIcon: Icon(
+                                      Icons.calendar_today,
+                                      color: const Color(0xff035DC4),
+                                      size: 18,
+                                    ),
+                                    //border: InputBorder.none,
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xff035DC4)),
+                                    ),
+
+                                    border: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: const Color(0xff035DC4),
+                                          width: 1.0),
+                                    ),
+                                    hintText: 'Post End Date',
+                                    hintStyle: TextStyle(
+                                      fontFamily: 'Segoe UI',
+                                      fontSize: 14,
+                                      color: const Color(0xff035DC4),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    )
+                  : Container(),
+
+              /// | Post
+              SizedBox(
+                height: 20,
+              ),
+
               Row(
                 children: [
                   Container(
@@ -522,43 +707,26 @@ class AddOrganizationsEvent2View
                 ],
               ),
               SizedBox(
-                height: 5,
+                height: 10,
               ),
-              TextField(
-                onTap: () {
-                  controller.getLocation(context);
-                },
-                controller: controller.location,
-
-                minLines: 1,
-                maxLines: 1,
-                //enabled: false,
-                style: TextStyle(
-                  fontFamily: 'Segoe UI',
-                  fontSize: 14,
-                  color: const Color(0xff035DC4),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(30),
                 ),
-                decoration: InputDecoration(
-                  suffixIcon: Icon(
-                    Icons.gps_fixed,
-                    color: const Color(0xff035DC4),
-                    size: 18,
-                  ),
-                  //border: InputBorder.none,
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xff035DC4)),
-                  ),
-
-                  border: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: const Color(0xff035DC4), width: 1.0),
-                  ),
-                  hintText: 'Select your live location on google',
-                  hintStyle: TextStyle(
-                    fontFamily: 'Segoe UI',
-                    fontSize: 14,
-                    color: const Color(0xff035DC4),
-                  ),
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: TextField(
+                  onTap: () async {
+                    print("Open location dialog");
+                    await _getCurrentPosition();
+                  },
+                  controller: controller.location,
+                  minLines: 1,
+                  maxLines: 5,
+                  decoration: InputDecoration(
+                      hintText: "Map Location",
+                      border: InputBorder.none,
+                      suffixIcon: Icon(Icons.gps_fixed)),
                 ),
               ),
               SizedBox(
@@ -675,22 +843,18 @@ class AddOrganizationsEvent2View
                 onSelected: (string, index, isSelected) {
                   print('$index button is selected');
                   print('$index button is selected');
-                  if (isSelected) 
-                  {
+                  if (isSelected) {
                     controller.genderList.add(index + 1);
-                  } 
-                  else {
-
+                  } else {
                     controller.genderList.remove(index + 1);
-                    
                   }
                 },
                 maxSelected: 4,
                 buttons: [
-                  "Male",
-                  "Female",
+                  "Stag",
+                  "Ladies",
                   "Couple",
-                  "Other",
+                  "Others",
                 ],
               ),
               SizedBox(
@@ -826,7 +990,7 @@ class AddOrganizationsEvent2View
                     width: 10,
                   ),
                   Text(
-                    'party People Limit',
+                    'Party People Limit',
                     style: TextStyle(
                       fontFamily: 'Segoe UI',
                       fontSize: 18,
@@ -874,6 +1038,9 @@ class AddOrganizationsEvent2View
               SizedBox(
                 height: 20,
               ),
+              SizedBox(
+                height: 10,
+              ),
               Row(
                 children: [
                   Container(
@@ -886,7 +1053,7 @@ class AddOrganizationsEvent2View
                           width: 1.0, color: const Color(0x24707070)),
                     ),
                     child: Icon(
-                      Icons.check_circle,
+                      Icons.local_offer,
                       color: Colors.red,
                     ),
                   ),
@@ -894,7 +1061,7 @@ class AddOrganizationsEvent2View
                     width: 10,
                   ),
                   Text(
-                    'party Status',
+                    'Offers',
                     style: TextStyle(
                       fontFamily: 'Segoe UI',
                       fontSize: 18,
@@ -908,52 +1075,37 @@ class AddOrganizationsEvent2View
               SizedBox(
                 height: 5,
               ),
-              Obx(() => controller.partyStatusChange.value != null
-                  ? Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ListTile(
-                          title: const Text('Full',
-                              style: TextStyle(
-                                fontFamily: 'Segoe UI',
-                                fontSize: 14,
-                                color: Color(0xff035DC4),
-                              )),
-                          leading: Radio<SingingCharacter>(
-                            value: SingingCharacter.Full,
-                            groupValue: controller.character,
-                            onChanged: (SingingCharacter? value) {
-                              controller.character = value!;
-                              controller.partyStatus.text = 'Full';
-                              controller.partyStatusChange.value = 'Full';
-                              print(controller.partyStatus.text);
-                            },
-                          ),
-                        ),
-                        ListTile(
-                          title: const Text(
-                            'Awaited',
-                            style: TextStyle(
-                              fontFamily: 'Segoe UI',
-                              fontSize: 14,
-                              color: Color(0xff035DC4),
-                            ),
-                          ),
-                          leading: Radio<SingingCharacter>(
-                            value: SingingCharacter.Awaited,
-                            groupValue: controller.character,
-                            onChanged: (SingingCharacter? value) {
-                              controller.character = value!;
-                              controller.partyStatusChange.value = 'Awaited';
-                              controller.partyStatus.text = "Awaited";
-                              print(controller.partyStatus.text);
-                            },
-                          ),
-                        ),
-                      ],
-                    )
-                  : Container()),
+              Container(
+                child: TextField(
+                  minLines: 1,
+                  maxLines: 1,
+                  //enabled: false,
+                  style: TextStyle(
+                    fontFamily: 'Segoe UI',
+                    fontSize: 14,
+                    color: const Color(0xff035DC4),
+                  ),
+                  decoration: InputDecoration(
+                    //border: InputBorder.none,
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xff035DC4)),
+                    ),
+
+                    border: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: const Color(0xff035DC4), width: 1.0),
+                    ),
+                    hintText: 'Enter offers',
+
+                    suffixText: '(Optional)',
+                    hintStyle: TextStyle(
+                      fontFamily: 'Segoe UI',
+                      fontSize: 14,
+                      color: const Color(0xff035DC4),
+                    ),
+                  ),
+                ),
+              ),
               SizedBox(
                 height: 20,
               ),
@@ -969,7 +1121,7 @@ class AddOrganizationsEvent2View
                           width: 1.0, color: const Color(0x24707070)),
                     ),
                     child: Icon(
-                      Icons.group_add_rounded,
+                      Icons.monetization_on,
                       color: Colors.red,
                     ),
                   ),
@@ -977,7 +1129,7 @@ class AddOrganizationsEvent2View
                     width: 10,
                   ),
                   Text(
-                    'Invite people',
+                    'Entry Fees',
                     style: TextStyle(
                       fontFamily: 'Segoe UI',
                       fontSize: 18,
@@ -992,57 +1144,224 @@ class AddOrganizationsEvent2View
                 height: 5,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    height: 27,
-                    width: 63,
-                    decoration: BoxDecoration(
-                      color: const Color(0xe5035dc4),
-                      borderRadius: BorderRadius.circular(14.0),
-                    ),
-                    child: Center(
-                        child: Text(
-                      'invite',
-                      style: TextStyle(
-                        fontFamily: 'Segoe UI',
-                        fontSize: 13,
-                        color: const Color(0xffffffff),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 5,
                       ),
-                      softWrap: false,
-                    )),
+                      Text("Ladies"),
+                      Container(
+                        width: 150,
+                        child: TextField(
+                          controller: controller.ladiesPrice,
+
+                          keyboardType: TextInputType.number,
+                          minLines: 1,
+                          maxLines: 1,
+                          //enabled: false,
+                          style: TextStyle(
+                            fontFamily: 'Segoe UI',
+                            fontSize: 14,
+                            color: const Color(0xff035DC4),
+                          ),
+                          decoration: InputDecoration(
+                            //border: InputBorder.none,
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xff035DC4)),
+                            ),
+
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: const Color(0xff035DC4), width: 1.0),
+                            ),
+                            hintText: '₹',
+                            hintStyle: TextStyle(
+                              fontFamily: 'Segoe UI',
+                              fontSize: 14,
+                              color: const Color(0xff035DC4),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Stag"),
+                      Container(
+                        width: 150,
+                        child: TextField(
+                          controller: controller.stagPrice,
+
+                          keyboardType: TextInputType.number,
+                          minLines: 1,
+                          maxLines: 1,
+                          //enabled: false,
+                          style: TextStyle(
+                            fontFamily: 'Segoe UI',
+                            fontSize: 14,
+                            color: const Color(0xff035DC4),
+                          ),
+                          decoration: InputDecoration(
+                            //border: InputBorder.none,
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xff035DC4)),
+                            ),
+
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: const Color(0xff035DC4), width: 1.0),
+                            ),
+                            hintText: '₹',
+                            hintStyle: TextStyle(
+                              fontFamily: 'Segoe UI',
+                              fontSize: 14,
+                              color: const Color(0xff035DC4),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Couples"),
+                      Container(
+                        width: 150,
+                        child: TextField(
+                          controller: controller.couplesPrice,
+
+                          keyboardType: TextInputType.number,
+                          minLines: 1,
+                          maxLines: 1,
+                          //enabled: false,
+                          style: TextStyle(
+                            fontFamily: 'Segoe UI',
+                            fontSize: 14,
+                            color: const Color(0xff035DC4),
+                          ),
+                          decoration: InputDecoration(
+                            //border: InputBorder.none,
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xff035DC4)),
+                            ),
+
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: const Color(0xff035DC4), width: 1.0),
+                            ),
+                            hintText: '₹',
+                            hintStyle: TextStyle(
+                              fontFamily: 'Segoe UI',
+                              fontSize: 14,
+                              color: const Color(0xff035DC4),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Others"),
+                          Container(
+                            width: 150,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              controller: controller.othersPrice,
+                              minLines: 1,
+                              maxLines: 1,
+                              //enabled: false,
+                              style: TextStyle(
+                                fontFamily: 'Segoe UI',
+                                fontSize: 14,
+                                color: const Color(0xff035DC4),
+                              ),
+                              decoration: InputDecoration(
+                                //border: InputBorder.none,
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xff035DC4)),
+                                ),
+
+                                border: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: const Color(0xff035DC4),
+                                      width: 1.0),
+                                ),
+                                hintText: '₹',
+                                hintStyle: TextStyle(
+                                  fontFamily: 'Segoe UI',
+                                  fontSize: 14,
+                                  color: const Color(0xff035DC4),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+
+              SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: Container(
+                  width: 100,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        if (controller.profile != null &&
+                            controller.title.text != '' &&
+                            controller.description.text != '' &&
+                            controller.startDate.text != '' &&
+                            controller.endDate.text != '' &&
+                            controller.startTime.text != '' &&
+                            controller.endTime.text != '' &&
+                            controller.genderList.isNotEmpty &&
+                            controller.peopleLimit.text != '') {
+                          if (int.parse(controller.startPeopleAge.text) <= 17) {
+                            Get.snackbar('Age', 'Age cannot be less then 18');
+                          } else {
+                            Get.to(AddAmenitiesParty(
+                              editProfileData: '',
+                              isPopular: widget.isPopular,
+                            ));
+                          }
+                        } else {
+                          Get.snackbar(
+                              'Empty Field', 'Kindly fill all the fields');
+                        }
+                      },
+                      child: Text("Next")),
+                ),
+              )
             ],
           ),
         ),
       ),
     );
-  }
-}
-
-class ShowPic extends StatelessWidget {
-  const ShowPic({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    print('show pic');
-    return AddIndividualEventController.picture != null
-        ? Container(
-            width: MediaQuery.of(context).size.width,
-            height: 245,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.transparent,
-            ),
-            child: Image.file(
-              AddIndividualEventController.picture!,
-              fit: BoxFit.cover,
-            ),
-          )
-        : Container();
   }
 }

@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: unnecessary_null_comparison
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:group_button/group_button.dart';
 
@@ -644,12 +645,10 @@ class AddIndividualEventView extends GetView<AddIndividualEventController> {
                       isRadio: false,
                       onSelected: (string, index, isSelected) {
                         print('$index button is selected');
-                        if(isSelected){
+                        if (isSelected) {
                           controller.genderList.add(index + 1);
-                        }
-                        else{
-                          controller.
-                          genderList.remove(index + 1);
+                        } else {
+                          controller.genderList.remove(index + 1);
                         }
                       },
                       maxSelected: 4,

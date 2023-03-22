@@ -1,10 +1,11 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:pertypeople/app/modules/dashbord/controllers/GetCitys.dart';
 
 import 'getOrgData.dart';
 import 'getindividualData.dart';
@@ -22,10 +23,11 @@ class DashbordController extends GetxController {
 
   var isindividualSelected = true.obs;
   final count = 0.obs;
+
   @override
   void onInit() {
     super.onInit();
-    getUserIndData();
+    // getUserIndData();
     getUserOrgData();
     getTodayIndParty();
     getTodayOrgParty();
@@ -39,12 +41,8 @@ class DashbordController extends GetxController {
   }
 
   @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
   void onClose() {}
+
   void increment() => count.value++;
 
   void getProfile() async {
@@ -70,28 +68,28 @@ class DashbordController extends GetxController {
     }
   }
 
-  getUserIndData() async {
-    var headers = {
-      'x-access-token': GetStorage().read("token").toString(),
-      //'Cookie': 'ci_session=f72b54d682c45ebf19fcc0fd54cef39508588d0c'
-    };
-    var request = http.MultipartRequest(
-        'GET',
-        Uri.parse(
-            'https://manage.partypeople.in/v1/party/get_user_all_individual_party'));
-
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-    var json = await response.stream.bytesToString();
-    var jsondata = jsonDecode(json);
-    if (jsondata['status'] == 1) {
-      getindividualData = getindividualDataFromJson(json);
-      count.value = getindividualData!.data.length;
-    } else {
-      print(response.reasonPhrase);
-    }
-  }
+  // getUserIndData() async {
+  //   var headers = {
+  //     'x-access-token': GetStorage().read("token").toString(),
+  //     //'Cookie': 'ci_session=f72b54d682c45ebf19fcc0fd54cef39508588d0c'
+  //   };
+  //   var request = http.MultipartRequest(
+  //       'GET',
+  //       Uri.parse(
+  //           'https://manage.partypeople.in/v1/party/get_user_all_individual_party'));
+  //
+  //   request.headers.addAll(headers);
+  //
+  //   http.StreamedResponse response = await request.send();
+  //   var json = await response.stream.bytesToString();
+  //   var jsondata = jsonDecode(json);
+  //   if (jsondata['status'] == 1) {
+  //     getindividualData = getindividualDataFromJson(json);
+  //     count.value = getindividualData!.data.length;
+  //   } else {
+  //     print(response.reasonPhrase);
+  //   }
+  // }
 
   getUserOrgData() async {
     var headers = {
@@ -103,7 +101,6 @@ class DashbordController extends GetxController {
         'POST',
         Uri.parse(
             'https://manage.partypeople.in/v1/party/get_user_organization_party_by_id'));
-    request.fields.addAll({'organization_id': '1'});
 
     request.headers.addAll(headers);
 
@@ -134,9 +131,8 @@ class DashbordController extends GetxController {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      var jsonString = (await response.stream.bytesToString());
-      var getCityList = getCitysFromJson(jsonString);
-      getCitys.value = getCityList.data;
+      // var getCityList = getCitysFromJson(jsonString);
+      // getCitys.value = getCityList.data;
     } else {
       print(response.reasonPhrase);
     }
@@ -211,7 +207,13 @@ class DashbordController extends GetxController {
     };
     var request = http.Request('POST',
         Uri.parse('https://manage.partypeople.in/v1/home/get_today_party'));
-    city.isEmpty? request.bodyFields = {'offset': '0', 'organisation_id': '0'}: request.bodyFields = {'offset': '0', 'organisation_id': '0', 'city_id': city};
+    city.isEmpty
+        ? request.bodyFields = {'offset': '0', 'organisation_id': '0'}
+        : request.bodyFields = {
+            'offset': '0',
+            'organisation_id': '0',
+            'city_id': city
+          };
     //request.bodyFields = {'offset': '0', 'organisation_id': '0'};
     request.headers.addAll(headers);
 
@@ -294,35 +296,35 @@ class DashbordController extends GetxController {
     }
   }
 
-  // void getToommarowPerty() async {
-  //   var headers = {
-  //     'x-access-token': GetStorage().read("token").toString(),
-  //     'Content-Type': 'application/x-www-form-urlencoded',
-  //   };
-  //   var request = http.Request('POST',
-  //       Uri.parse('https://manage.partypeople.in/v1/home/get_tomorrow_party'));
-  //   request.bodyFields = {'offset': '0'};
-  //   request.headers.addAll(headers);
+// void getToommarowPerty() async {
+//   var headers = {
+//     'x-access-token': GetStorage().read("token").toString(),
+//     'Content-Type': 'application/x-www-form-urlencoded',
+//   };
+//   var request = http.Request('POST',
+//       Uri.parse('https://manage.partypeople.in/v1/home/get_tomorrow_party'));
+//   request.bodyFields = {'offset': '0'};
+//   request.headers.addAll(headers);
 
-  //   http.StreamedResponse response = await request.send();
+//   http.StreamedResponse response = await request.send();
 
-  //   if (response.statusCode == 200) {
-  //     var json = await response.stream.bytesToString();
+//   if (response.statusCode == 200) {
+//     var json = await response.stream.bytesToString();
 
-  //     var data = getOrgDataFromJson(json);
+//     var data = getOrgDataFromJson(json);
 
-  //     //get data whear status is 1
-  //     if (data.data.isNotEmpty) {
-  //       tommarowPertyOrgination.value = data.data
-  //           .where((element) => element.organizationId == "1")
-  //           .toList();
-  //       tommarowPertyOrgination.value = data.data
-  //           .where((element) => element.organizationId == "0")
-  //           .toList();
-  //       count.value = 98;
-  //     }
-  //   } else {
-  //     print(response.reasonPhrase);
-  //   }
-  // }
+//     //get data whear status is 1
+//     if (data.data.isNotEmpty) {
+//       tommarowPertyOrgination.value = data.data
+//           .where((element) => element.organizationId == "1")
+//           .toList();
+//       tommarowPertyOrgination.value = data.data
+//           .where((element) => element.organizationId == "0")
+//           .toList();
+//       count.value = 98;
+//     }
+//   } else {
+//     print(response.reasonPhrase);
+//   }
+// }
 }

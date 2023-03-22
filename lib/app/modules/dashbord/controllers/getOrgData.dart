@@ -2,95 +2,97 @@
 //
 //     final getOrgData = getOrgDataFromJson(jsonString);
 
-import 'package:meta/meta.dart';
+// ignore_for_file: file_names
+
 import 'dart:convert';
 
-GetOrgData getOrgDataFromJson(String str) => GetOrgData.fromJson(json.decode(str));
+GetOrgData getOrgDataFromJson(String str) =>
+    GetOrgData.fromJson(json.decode(str));
 
 String getOrgDataToJson(GetOrgData data) => json.encode(data.toJson());
 
 class GetOrgData {
-    GetOrgData({
-        required this.status,
-        required this.message,
-        required this.data,
-    });
+  GetOrgData({
+    required this.status,
+    required this.message,
+    required this.data,
+  });
 
-    int status;
-    String message;
-    List<Datum> data;
+  int status;
+  String message;
+  List<Datum> data;
 
-    factory GetOrgData.fromJson(Map<String, dynamic> json) => GetOrgData(
+  factory GetOrgData.fromJson(Map<String, dynamic> json) => GetOrgData(
         status: json["status"],
         message: json["message"],
         data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
         "data": List<dynamic>.from(data.map((x) => x.toJson())),
-    };
+      };
 }
 
 class Datum {
-    Datum({
-        required this.id,
-        required this.userId,
-        required this.organizationId,
-        required this.title,
-        required this.description,
-        required this.coverPhoto,
-        required this.startDate,
-        required this.endDate,
-        required this.startTime,
-        required this.endTime,
-        required this.latitude,
-        required this.longitude,
-        required this.type,
-        required this.gender,
-        required this.startAge,
-        required this.endAge,
-        required this.personLimit,
-        required this.status,
-        required this.active,
-        required this.createdAt,
-        required this.updatedAt,
-        required this.isDeleted,
-        required this.distance,
-        required this.organization,
-        required this.fullName,
-        required this.profilePicture,
-    });
+  Datum({
+    required this.id,
+    required this.userId,
+    required this.organizationId,
+    required this.title,
+    required this.description,
+    required this.coverPhoto,
+    required this.startDate,
+    required this.endDate,
+    required this.startTime,
+    required this.endTime,
+    required this.latitude,
+    required this.longitude,
+    required this.type,
+    required this.gender,
+    required this.startAge,
+    required this.endAge,
+    required this.personLimit,
+    required this.status,
+    required this.active,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.isDeleted,
+    required this.distance,
+    required this.organization,
+    required this.fullName,
+    required this.profilePicture,
+  });
 
-    String id;
-    String userId;
-    String organizationId;
-    String title;
-    String description;
-    String coverPhoto;
-    String startDate;
-    String endDate;
-    String startTime;
-    String endTime;
-    String latitude;
-    String longitude;
-    String type;
-    String gender;
-    String startAge;
-    String endAge;
-    String personLimit;
-    String status;
-    String active;
-    DateTime createdAt;
-    String updatedAt;
-    String isDeleted;
-    String distance;
-    dynamic organization;
-    String fullName;
-    dynamic profilePicture;
+  String id;
+  String userId;
+  String organizationId;
+  String title;
+  String description;
+  String coverPhoto;
+  String startDate;
+  String endDate;
+  String startTime;
+  String endTime;
+  String latitude;
+  String longitude;
+  String type;
+  String gender;
+  String startAge;
+  String endAge;
+  String personLimit;
+  String status;
+  String active;
+  DateTime createdAt;
+  String updatedAt;
+  String isDeleted;
+  String distance;
+  dynamic organization;
+  String fullName;
+  dynamic profilePicture;
 
-    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["id"],
         userId: json["user_id"],
         organizationId: json["organization_id"],
@@ -113,13 +115,13 @@ class Datum {
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: json["updated_at"],
         isDeleted: json["is_deleted"],
-        distance: json["distance"]??"",
+        distance: json["distance"] ?? "",
         organization: json["organization"],
-        fullName: json["full_name"],
+        fullName: json["full_name"] ?? '',
         profilePicture: json["profile_picture"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "user_id": userId,
         "organization_id": organizationId,
@@ -146,5 +148,5 @@ class Datum {
         "organization": organization,
         "full_name": fullName,
         "profile_picture": profilePicture,
-    };
+      };
 }

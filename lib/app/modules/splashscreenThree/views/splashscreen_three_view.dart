@@ -1,7 +1,7 @@
 import 'package:adobe_xd/adobe_xd.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/splashscreen_three_controller.dart';
@@ -37,44 +37,35 @@ class SplashscreenThreeView extends GetView<SplashscreenThreeController> {
                 ),
               )),
           Positioned(
-              bottom: 70,
-              left: 20,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Find Best Club',
-                    style: TextStyle(
-                      fontFamily: 'Oswald',
+            bottom: 70,
+            left: 20,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Find Best Club',
+                    style: GoogleFonts.oswald(
                       fontSize: 35,
-                      color: const Color(0xffffffff),
+                      color: Colors.white,
                       letterSpacing: -0.7000000000000001,
                       fontWeight: FontWeight.w600,
                       height: 1.9964688982282366,
-                    ),
-                    textHeightBehavior:
-                        TextHeightBehavior(applyHeightToFirstAscent: false),
-                    softWrap: false,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  // Text(
-                  //   'Lorem Ipsum is simply dummy text\nof the printing and typesetting industry. \nLorem Ipsum has been the industry\'s \nstandard dummy text ever\n ',
-                  //   style: TextStyle(
-                  //     fontFamily: 'MalgunGothic',
-                  //     fontSize: 12,
-                  //     color: const Color(0xffffffff),
-                  //     letterSpacing: -0.24,
-                  //     height: 1.6666666666666667,
-                  //   ),
-                  //   textHeightBehavior:
-                  //       TextHeightBehavior(applyHeightToFirstAscent: false),
-                  //   softWrap: false,
-                  // )
-                ],
-              )),
+                    )),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: 200,
+                  child: Text(
+                      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry\'s standard dummy text ever',
+                      style: GoogleFonts.oswald(
+                        fontSize: 12,
+                        color: Colors.white,
+                      )),
+                ),
+              ],
+            ),
+          ),
           Positioned(
             bottom: 45,
             right: 20,
@@ -85,7 +76,7 @@ class SplashscreenThreeView extends GetView<SplashscreenThreeController> {
               child: Text(
                 'Skip\n ',
                 style: TextStyle(
-                  fontFamily: 'MalgunGothic',
+                  fontFamily: 'malgun',
                   fontSize: 12,
                   color: const Color(0xffffffff),
                   letterSpacing: -0.24,

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/view_event_controller.dart';
 
 class ViewEventView extends GetView<ViewEventController> {
   const ViewEventView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -193,7 +192,7 @@ class ViewEventView extends GetView<ViewEventController> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            '${ ""}',
+                            "",
                             style: TextStyle(
                               fontFamily: 'Segoe UI',
                               fontSize: 14,

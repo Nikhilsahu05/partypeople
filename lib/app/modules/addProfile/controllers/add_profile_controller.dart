@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_overrides, unused_local_variable, unused_element
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -90,6 +92,7 @@ class AddProfileController extends GetxController {
 
   @override
   void onClose() {}
+
   void increment() => count.value++;
   var partyStatusChange = "".obs;
 
@@ -99,7 +102,7 @@ class AddProfileController extends GetxController {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime(2022 - 13),
-        firstDate: DateTime(1900),
+        firstDate: DateTime.now(),
         lastDate: DateTime(3000));
     if (picked != null && picked != selectedDate) {
       var date = picked.toString().split(" ");

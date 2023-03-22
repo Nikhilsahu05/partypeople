@@ -1,15 +1,14 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../models/place.dart';
 
 class MarkerService {
-
   LatLngBounds? bounds(Set<Marker> markers) {
     if (markers == null || markers.isEmpty) return null;
     return createBounds(markers.map((m) => m.position).toList());
   }
-
-
 
   LatLngBounds createBounds(List<LatLng> positions) {
     final southwestLat = positions.map((p) => p.latitude).reduce(

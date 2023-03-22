@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: prefer_interpolation_to_compose_strings
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -8,6 +9,7 @@ import '../controllers/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
   const ProfileView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +51,7 @@ class ProfileView extends GetView<ProfileController> {
                 Text(
                   GetStorage().read('full_name') ?? "",
                   style: TextStyle(
-                    fontFamily: 'MalgunGothicBold',
+                    fontFamily: 'malgun',
                     fontSize: 27,
                     color: const Color(0xffffffff),
                     letterSpacing: -0.54,

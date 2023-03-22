@@ -2,10 +2,33 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../../addIndividualEvent/controllers/add_individual_event_controller.dart';
 import '../controllers/add_event_controller.dart';
 
 class AddEventView extends GetView<AddEventController> {
+
+  Future<void> _showMyDialog(context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Individuals'),
+          content: SingleChildScrollView(
+            child: Text("Thank you for your interest in this feature. Our team is currently working on developing it, and we apologize for any inconvenience caused by its absence. We aim to provide the best possible user experience, and we are confident that this feature will enhance your experience with our product.")
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,13 +54,15 @@ class AddEventView extends GetView<AddEventController> {
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               GestureDetector(
-                onTap: () async {
-                  await Get.toNamed('/add-individual-event');
-                  if (AddIndividualEventController.picture != null) {
-                    print("get picture");
-                    AddIndividualEventController.picture?.delete();
-                    AddIndividualEventController.picture = null;
-                  }
+                onTap: ()  {
+                  _showMyDialog(context);
+                  // await Get.toNamed('/add-individual-event');
+                  // if (AddIndividualEventController.picture != null) {
+                  //   print("get picture");
+                  //   AddIndividualEventController.picture?.delete();
+                  //   AddIndividualEventController.picture = null;
+                  // }
+
                 },
                 child: Container(
                   height: 232,
@@ -58,7 +83,7 @@ class AddEventView extends GetView<AddEventController> {
                 'Individuals',
                 style: TextStyle(
                   fontFamily: 'Oswald',
-                  fontSize: 35,
+                  fontSize: 25,
                   color: const Color(0xffffffff),
                   fontWeight: FontWeight.w600,
                 ),
@@ -90,7 +115,7 @@ class AddEventView extends GetView<AddEventController> {
                 'Organizations',
                 style: TextStyle(
                   fontFamily: 'Oswald',
-                  fontSize: 35,
+                  fontSize: 25,
                   color: const Color(0xffffffff),
                   fontWeight: FontWeight.w600,
                 ),

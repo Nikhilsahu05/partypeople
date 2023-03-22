@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -96,7 +98,7 @@ class ApplicationBloc with ChangeNotifier {
           selectedLocationStatic!.geometry!.location!.lng,
           placeType);
       markers = [];
-      if (places.length > 0) {
+      if (places.isNotEmpty) {
         var newMarker = markerService.createMarkerFromPlace(places[0], false);
         markers?.add(newMarker);
       }

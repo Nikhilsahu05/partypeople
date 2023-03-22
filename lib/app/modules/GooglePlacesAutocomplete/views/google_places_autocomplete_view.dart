@@ -1,23 +1,19 @@
-import 'dart:convert';
+// ignore_for_file: unnecessary_import, library_private_types_in_public_api, duplicate_import, unused_field, prefer_final_fields, unnecessary_null_comparison, curly_braces_in_flow_control_structures, unused_local_variable
+
+import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder2/geocoder2.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
 import 'package:provider/provider.dart';
 
 import '../../addIndividualEvent/controllers/add_individual_event_controller.dart';
 import '../blocs/application_bloc.dart';
-import '../controllers/google_places_autocomplete_controller.dart';
-
-import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-import '../models/place.dart';
 
 class GooglePlacesAutocompleteView extends StatefulWidget {
   GooglePlacesAutocompleteView({Key? key}) : super(key: key);

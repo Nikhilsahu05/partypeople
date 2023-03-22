@@ -2,85 +2,91 @@
 //
 //     final getindividualData = getindividualDataFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
-GetindividualData getindividualDataFromJson(String str) => GetindividualData.fromJson(json.decode(str));
+// ignore_for_file: file_names, unused_import, depend_on_referenced_packages
 
-String getindividualDataToJson(GetindividualData data) => json.encode(data.toJson());
+import 'package:meta/meta.dart';
+
+GetindividualData getindividualDataFromJson(String str) =>
+    GetindividualData.fromJson(json.decode(str));
+
+String getindividualDataToJson(GetindividualData data) =>
+    json.encode(data.toJson());
 
 class GetindividualData {
-    GetindividualData({
-        required this.status,
-        required this.message,
-        required this.data,
-    });
+  GetindividualData({
+    required this.status,
+    required this.message,
+    required this.data,
+  });
 
-    int status;
-    String message;
-    List<Datum2> data;
+  int status;
+  String message;
+  List<Datum2> data;
 
-    factory GetindividualData.fromJson(Map<String, dynamic> json) => GetindividualData(
+  factory GetindividualData.fromJson(Map<String, dynamic> json) =>
+      GetindividualData(
         status: json["status"],
         message: json["message"],
         data: List<Datum2>.from(json["data"].map((x) => Datum2.fromJson(x))),
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
         "data": List<dynamic>.from(data.map((x) => x.toJson())),
-    };
+      };
 }
 
 class Datum2 {
-    Datum2({
-        required this.id,
-        required this.userId,
-        required this.organizationId,
-        required this.title,
-        required this.description,
-        required this.coverPhoto,
-        required this.startDate,
-        required this.endDate,
-        required this.startTime,
-        required this.endTime,
-        required this.latitude,
-        required this.longitude,
-        required this.type,
-        required this.gender,
-        required this.startAge,
-        required this.endAge,
-        required this.personLimit,
-        required this.status,
-        required this.active,
-        required this.createdAt,
-        required this.updatedAt,
-    });
+  Datum2({
+    required this.id,
+    required this.userId,
+    required this.organizationId,
+    required this.title,
+    required this.description,
+    required this.coverPhoto,
+    required this.startDate,
+    required this.endDate,
+    required this.startTime,
+    required this.endTime,
+    required this.latitude,
+    required this.longitude,
+    required this.type,
+    required this.gender,
+    required this.startAge,
+    required this.endAge,
+    required this.personLimit,
+    required this.status,
+    required this.active,
+    required this.createdAt,
+    required this.updatedAt,
+  });
 
-    String id;
-    String userId;
-    String organizationId;
-    String title;
-    String description;
-    String coverPhoto;
-    String startDate;
-    String endDate;
-    String startTime;
-    String endTime;
-    String latitude;
-    String longitude;
-    String type;
-    String gender;
-    String startAge;
-    String endAge;
-    String personLimit;
-    String status;
-    String active;
-    DateTime createdAt;
-    String updatedAt;
+  String id;
+  String userId;
+  String organizationId;
+  String title;
+  String description;
+  String coverPhoto;
+  String startDate;
+  String endDate;
+  String startTime;
+  String endTime;
+  String latitude;
+  String longitude;
+  String type;
+  String gender;
+  String startAge;
+  String endAge;
+  String personLimit;
+  String status;
+  String active;
+  DateTime createdAt;
+  String updatedAt;
 
-    factory Datum2.fromJson(Map<String, dynamic> json) => Datum2(
+  factory Datum2.fromJson(Map<String, dynamic> json) => Datum2(
         id: json["id"],
         userId: json["user_id"],
         organizationId: json["organization_id"],
@@ -102,9 +108,9 @@ class Datum2 {
         active: json["active"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: json["updated_at"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "user_id": userId,
         "organization_id": organizationId,
@@ -126,5 +132,5 @@ class Datum2 {
         "active": active,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt,
-    };
+      };
 }

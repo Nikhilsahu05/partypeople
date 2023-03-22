@@ -5,26 +5,16 @@ class DrawerController2 extends GetxController {
 
   final count = 0.obs;
   var name = "";
+
   @override
   void onInit() {
     super.onInit();
     var data = Get.arguments;
     try {
       name = data['full_name'];
-      
-    } catch (e) {
 
-    }
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   void increment() => count.value++;

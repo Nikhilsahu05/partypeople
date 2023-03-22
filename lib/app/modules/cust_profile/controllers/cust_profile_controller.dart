@@ -1,11 +1,13 @@
-import 'dart:convert';
+// ignore_for_file: implementation_imports, library_prefixes, empty_catches
+
+import 'package:dio/dio.dart';
 import 'package:dio/src/form_data.dart' as frm;
 import 'package:dio/src/multipart_file.dart' as multFile;
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
+
 import '../../../routes/app_pages.dart';
 import '../../addProfile/controllers/add_profile_controller.dart';
 
@@ -23,7 +25,7 @@ class CustProfileController extends GetxController {
   var mob = TextEditingController().obs;
   var city = ''.obs;
   var cityID = ''.obs;
-  var email = TextEditingController().obs;
+  var email = TextEditingController();
   var genderStatusChange = "male".obs;
   var uniqueId = ''.obs;
 
@@ -88,7 +90,7 @@ class CustProfileController extends GetxController {
 
     try {
       name.value.text = data['full_name'] ?? '';
-      email.value.text = data['email'] ?? '';
+      email.text = data['email'] ?? '';
       uniqueId.value = data['uniqueId'];
       profilePic.value = data['profile_picture'] ?? '';
       returnCity(data['city_id']);
@@ -103,12 +105,8 @@ class CustProfileController extends GetxController {
   }
 
   @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
   void onClose() {}
+
   void increment() => count.value++;
   var partyStatusChange = "".obs;
 
@@ -118,7 +116,7 @@ class CustProfileController extends GetxController {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime(2022 - 13),
-        firstDate: DateTime(1900),
+        firstDate: DateTime.now(),
         lastDate: DateTime(3000));
     if (picked != null && picked != selectedDate) {
       var date = picked.toString().split(" ");
@@ -134,12 +132,7 @@ class CustProfileController extends GetxController {
 
   updateProfile() async {
     // ignore: unused_local_variable
-    if (img != null) {
-      var formData = frm.FormData.fromMap({
-        'profile_picture':
-            await multFile.MultipartFile.fromFile(img!.path, filename: 'image'),
-      });
-    }
+    if (img != null) {}
 
     var headers = {
       'x-access-token': GetStorage().read('token').toString(),
@@ -171,7 +164,7 @@ class CustProfileController extends GetxController {
               Icons.check,
               color: Colors.white,
             ));
-        Get.offAllNamed(Routes.DASHBORD,arguments: data);
+        Get.offAllNamed(Routes.DASHBORD, arguments: data);
       } else {
         Get.snackbar("Hy", jsnData['message'],
             snackPosition: SnackPosition.BOTTOM,
@@ -297,6 +290,9 @@ class CustProfileController extends GetxController {
     Get.dialog(alertDialog);
   }
 
+  RxString mobileNumber = RxString('+91');
+  RxString cityName = RxString('');
+
   void getProfile() async {
     var headers = {
       'x-access-token': GetStorage().read('token').toString(),
@@ -315,14 +311,22 @@ class CustProfileController extends GetxController {
         profilePic.value = data['data']['profile_picture'];
         debugPrint(profilePic.value);
         name.value.text = data['data']['full_name'];
-        email.value.text = data['data']['email'];
+        email.text = data['data']['email'];
+        mobileNumber.value = data['data']['phone'];
         mob.value.text = data['data']['phone'];
         startDate.value = data['data']['dob'];
         startDateController.value.text = data['data']['dob'];
         returnCity(data['data']['city']);
+        cityName.value = data['data']['city'];
+        refresh();
+        update();
       } else {
         //print(response.reasonPhrase);
+        refresh();
+        update();
       }
+      refresh();
+      update();
     }
   }
 }

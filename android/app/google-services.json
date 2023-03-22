@@ -1,57 +1,42 @@
 {
   "project_info": {
-    "project_number": "1080765497603",
-    "project_id": "pertypeople-53f50",
-    "storage_bucket": "pertypeople-53f50.appspot.com"
+    "project_number": "1037021880130",
+    "project_id": "party-people-52b16",
+    "storage_bucket": "party-people-52b16.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1080765497603:android:17ce50a8a204669680a936",
+        "mobilesdk_app_id": "1:1037021880130:android:6954ae7ee8158c3968b2db",
         "android_client_info": {
           "package_name": "coom.perty.pertypeople"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1080765497603-c1ebptad0b6s62oneuonqauasavk2u08.apps.googleusercontent.com",
+          "client_id": "1037021880130-91jnv1r9l04uhkur0bfv6b4erkooqnt3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "coom.perty.pertypeople",
-            "certificate_hash": "d9328852a4d4a3f08d3229e12816cbde6656fac1"
+            "certificate_hash": "f603573987e0c70f5914b0d525f7a20fad24587f"
           }
         },
         {
-          "client_id": "1080765497603-etnskrucvss44m8li03hd28flkvdh9na.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "coom.perty.pertypeople",
-            "certificate_hash": "e021581422da2f37d0d8f3e4e9ff175893c74069"
-          }
-        },
-        {
-          "client_id": "1080765497603-t2o1use6trep5s9tnjlkl0sonndb5hj0.apps.googleusercontent.com",
+          "client_id": "1037021880130-f9iatgoa2r3h0btn7t106b0olu0ebns5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDbMBbW0B4gIePXB3Y4FovCuuZ8tzN0C-M"
+          "current_key": "AIzaSyAGvYXM0X5km1eShO6vQLT-dAsbz7fxRU8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1080765497603-t2o1use6trep5s9tnjlkl0sonndb5hj0.apps.googleusercontent.com",
+              "client_id": "1037021880130-f9iatgoa2r3h0btn7t106b0olu0ebns5.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "1080765497603-qpsq2815nnjamuvaprbvj3vv7i07kv01.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "coom.perty.pertypeople"
-              }
             }
           ]
         }

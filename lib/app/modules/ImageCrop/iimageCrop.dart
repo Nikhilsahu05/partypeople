@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_null_comparison
+// ignore_for_file: unnecessary_null_comparison, deprecated_member_use, file_names, library_private_types_in_public_api, unnecessary_new, unused_field
 
 import 'dart:io';
 
@@ -23,7 +23,7 @@ class _GetCropedImgState extends State<GetCropedImg> {
   @override
   void dispose() {
     super.dispose();
-   // _file?.delete();
+    // _file?.delete();
     //_sample?.delete();
     //_lastCropped?.delete();
   }
@@ -131,7 +131,7 @@ class _GetCropedImgState extends State<GetCropedImg> {
     );
 
     //_sample?.delete();
-   // _file?.delete();
+    // _file?.delete();
 
     setState(() {
       _sample = sample;
@@ -163,7 +163,7 @@ class _GetCropedImgState extends State<GetCropedImg> {
     //sample.delete();
 
     //_lastCropped?.delete();
-  // _lastCropped = file;
+    // _lastCropped = file;
 
     debugPrint('$file');
     AddIndividualEventController.count.value = 1;

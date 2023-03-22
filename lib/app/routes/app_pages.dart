@@ -1,4 +1,8 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:get/get.dart';
+import 'package:pertypeople/app/modules/organizationProfile/bindings/organization_profile_binding.dart';
+import 'package:pertypeople/app/modules/organizationProfile/views/organization_profile_view.dart';
 
 import '../modules/addEvent/bindings/add_event_binding.dart';
 import '../modules/addEvent/views/add_event_view.dart';
@@ -10,6 +14,8 @@ import '../modules/addOrganizationsEvent2/bindings/add_organizations_event2_bind
 import '../modules/addOrganizationsEvent2/views/add_organizations_event2_view.dart';
 import '../modules/addProfile/bindings/add_profile_binding.dart';
 import '../modules/addProfile/views/add_profile_view.dart';
+import '../modules/addamenities/bindings/AddAmenities_bindings.dart';
+import '../modules/addamenities/views/addamenitiesview.dart';
 import '../modules/cityList/bindings/city_list_binding.dart';
 import '../modules/cityList/views/city_list_view.dart';
 import '../modules/cityWiseParty/bindings/city_wise_party_binding.dart';
@@ -24,8 +30,10 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
-import '../modules/organizationProfile/bindings/organization_profile_binding.dart';
-import '../modules/organizationProfile/views/organization_profile_view.dart';
+import '../modules/organizationMenu/bindings/organization_menu_binding.dart';
+import '../modules/organizationMenu/views/organization_menu_view.dart';
+import '../modules/organizationProfileNew/bindings/organization_profile_new_binding.dart';
+import '../modules/organizationProfileNew/views/organization_profile_new_view.dart';
 import '../modules/otp/bindings/otp_binding.dart';
 import '../modules/otp/views/otp_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
@@ -69,7 +77,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.OTP,
-      page: () => OtpView(),
+      page: () => OTPView(),
       binding: OtpBinding(),
     ),
     GetPage(
@@ -93,18 +101,18 @@ class AppPages {
       binding: AddOrganizationsEventBinding(),
     ),
     GetPage(
+      name: _Paths.AddAmenities,
+      page: () => AddAmenities(),
+      binding: AddAmenitiesBindings(),
+    ),
+    GetPage(
       name: _Paths.CITY_LIST,
       page: () => CityListView(),
       binding: CityListBinding(),
     ),
     GetPage(
-      name: _Paths.ORGANIZATION_PROFILE,
-      page: () => OrganizationProfileView(),
-      binding: OrganizationProfileBinding(),
-    ),
-    GetPage(
       name: _Paths.ADD_ORGANIZATIONS_EVENT2,
-      page: () => AddOrganizationsEvent2View(),
+      page: () => AddOrganizationsEvent2View(isPopular: false),
       binding: AddOrganizationsEvent2Binding(),
     ),
     GetPage(
@@ -124,23 +132,51 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.SUBSCRIPTION,
-      page: () => const SubscriptionView(),
+      page: () => SubscriptionView(
+        id: '',
+        data: {},
+      ),
       binding: SubscriptionBinding(),
     ),
     GetPage(
       name: _Paths.DRAWER,
-      page: () => const DrawerView(),
+      page: () => DrawerView(
+          likes: '', views: '', profileImageView: '', timeLineImage: ''),
       binding: DrawerBinding(),
     ),
     GetPage(
       name: _Paths.CUST_PROFILE,
-      page: () => const CustProfileView(),
+      page: () => CustProfileView(
+        likes: '',
+        views: '',
+        city: '',
+        orgName: '',
+        amenities: '',
+        timelinePic: '',
+        organisationDesc: '',
+        circularDP: '',
+      ),
       binding: CustProfileBinding(),
     ),
     GetPage(
       name: _Paths.PROFILE,
       page: () => const ProfileView(),
       binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.ORGANIZATION_PROFILE_NEW,
+      page: () => const OrganizationProfileNewView(),
+      binding: OrganizationProfileNewBinding(),
+    ),
+    GetPage(
+      name: _Paths.ORGANIZATION_PROFILE,
+      page: () => OrganizationProfileView(),
+      binding: OrganizationProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.ORGANIZATION_MENU,
+      page: () => const OrganizationMenuView(),
+      binding: OrganizationMenuBinding(),
     ),
   ];
 }

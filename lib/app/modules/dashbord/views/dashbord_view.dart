@@ -1,10 +1,5 @@
-import 'dart:ui';
-
-import 'package:adobe_xd/adobe_xd.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:pertypeople/app/routes/app_pages.dart';
 
 import '../controllers/dashbord_controller.dart';
@@ -125,7 +120,7 @@ class DashbordView extends GetView<DashbordController> {
                                                     .toString()
                                                     .toUpperCase(),
                                                 style: TextStyle(
-                                                  fontFamily: 'Malgun Gothic',
+                                                  fontFamily: 'malgun',
                                                   fontSize: 10,
                                                   color: Color.fromARGB(
                                                       255, 255, 255, 255),
@@ -176,6 +171,7 @@ class DashbordView extends GetView<DashbordController> {
                                                     radius: 100,
                                                     backgroundImage:
                                                         NetworkImage(
+                                                      // ignore: prefer_interpolation_to_compose_strings
                                                       'https://manage.partypeople.in/' +
                                                           controller
                                                               .getCitys[
@@ -191,7 +187,7 @@ class DashbordView extends GetView<DashbordController> {
                                                     .toString()
                                                     .toUpperCase(),
                                                 style: TextStyle(
-                                                  fontFamily: 'Malgun Gothic',
+                                                  fontFamily: 'malgun',
                                                   fontSize: 10,
                                                   color: Color.fromARGB(
                                                       255, 255, 255, 255),
@@ -265,7 +261,7 @@ class DashbordView extends GetView<DashbordController> {
                                                 .toString()
                                                 .toUpperCase(),
                                             style: TextStyle(
-                                              fontFamily: 'Malgun Gothic',
+                                              fontFamily: 'malgun',
                                               fontSize: 10,
                                               color: Color.fromARGB(
                                                   255, 255, 255, 255),
@@ -475,7 +471,8 @@ class DashbordView extends GetView<DashbordController> {
                   left: 10,
                   child: GestureDetector(
                     onTap: () {
-                      Get.toNamed(Routes.DRAWER, arguments: controller.data);
+                      Get.toNamed(Routes.ORGANIZATION_MENU,
+                          arguments: controller.data);
                     },
                     child: Icon(
                       Icons.menu,
@@ -749,6 +746,7 @@ class TodayData extends StatelessWidget {
   }) : super(key: key);
 
   final DashbordController controller;
+
   int getNum() {
     if (controller.isindividualSelected.value) {
       return controller.toDayPertyIndividual!.length;
@@ -768,18 +766,13 @@ class TodayData extends StatelessWidget {
                 shrinkWrap: true,
 
                 // physics: NeverScrollableScrollPhysics(),
-                itemCount: controller.isindividualSelected.value
-                    ? controller.toDayPertyIndividual!.length
-                    : controller.toDayPertyOrgination!.length,
+                itemCount: 5,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
                       onTap: () {
-                        Get.toNamed(Routes.VIEW_EVENT,
-                            arguments: controller.isindividualSelected.value
-                                ? controller.toDayPertyIndividual![index]
-                                : controller.toDayPertyOrgination![index]);
+                        ///
                       },
                       child: Stack(
                         children: [
@@ -954,7 +947,7 @@ class NearByCitys extends StatelessWidget {
       decoration: BoxDecoration(
         color: Color(0xffA72E2E),
       ),
-      child: Obx(() => controller.getCitys.length != 0
+      child: Obx(() => controller.getCitys.isNotEmpty
           ? ListView.builder(
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,
