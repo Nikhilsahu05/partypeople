@@ -82,6 +82,7 @@ class _DrawerViewState extends State<DrawerView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          title: Text("My Profile"),
           iconTheme: IconThemeData(
             color: Colors.white, //change your color here
           ),

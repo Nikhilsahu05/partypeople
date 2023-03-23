@@ -28,7 +28,7 @@ class AddOrganizationsEventController extends GetxController {
   var citySelectedKey = [].obs;
   File? timelinePicture;
   File? profilePicture;
-
+  final branches = TextEditingController();
   var timeline;
   var profile;
 

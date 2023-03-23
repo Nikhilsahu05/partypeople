@@ -4,6 +4,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:pertypeople/app/modules/addOrganizationsEvent/views/mapscreen.dart';
+import 'package:pertypeople/app/modules/addOrganizationsEvent/views/mapscreen2.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 import 'app/routes/app_pages.dart';
@@ -42,14 +44,18 @@ class App extends StatelessWidget {
             ),
             child: child!),
         title: "Application",
-
+        routes: {
+          'MapScreen': (p0) => MapScreen(),
+          'MapScreen2': (p0) => MapScreen2(),
+        },
+        // initialRoute: Routes.,
         // home: SplashScreenMain(),
-        initialRoute: Routes.ADD_ORGANIZATIONS_EVENT,
+        // initialRoute: AppPages.INITIAL,
         // GetStorage().read('token') == null
         //     ?
-        // initialRoute: Routes.PROFILE,
-        // home: ProfileType(),
-        // : Routes.ORGANIZATION_PROFILE_NEW,
+        // home: (),
+        // home: AddAmenities(),
+        initialRoute: Routes.ORGANIZATION_PROFILE_NEW,
         getPages: AppPages.routes,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

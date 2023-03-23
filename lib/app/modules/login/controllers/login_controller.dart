@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:pertypeople/app/modules/global_header_id_controller.dart';
+import 'package:pertypeople/app/modules/profile_type.dart';
 import 'package:pertypeople/app/routes/app_pages.dart';
 
 class LoginController extends GetxController {
@@ -120,7 +121,7 @@ class LoginController extends GetxController {
     if (jsonDecode(response.body)['message'] == 'Organization Data Found.') {
       isLoading.value = false;
 
-      Get.offAllNamed(Routes.ORGANIZATION_PROFILE_NEW);
+      Get.offAll(ProfileType());
     } else {
       isLoading.value = false;
       Navigator.of(context).pushNamedAndRemoveUntil(

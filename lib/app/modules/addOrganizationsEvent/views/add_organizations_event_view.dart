@@ -1,18 +1,21 @@
 // ignore_for_file: library_private_types_in_public_api, prefer_typing_uninitialized_variables
 
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_crop/image_crop.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 
-import '../../../routes/app_pages.dart';
 import '../../../select_photo_options_screen.dart';
 import '../controllers/add_organizations_event_controller.dart';
 
@@ -131,9 +134,6 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
   AddOrganizationsEventController controller =
       Get.put(AddOrganizationsEventController());
 
-  String? _currentAddress;
-  Position? _currentPosition;
-
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -163,553 +163,651 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
     return true;
   }
 
+  var amenitiesTitle = [''];
+  List amenitiesIndexes = [];
+  List selectedItemsAmenities = [];
+  var jsonAddAmenitiesData;
   bool isLoading = false;
 
-  Future<void> _getCurrentPosition() async {
+  getAmenities() async {
     setState(() {
-      isLoading = true;
+      isLoading == true;
     });
-    final hasPermission = await _handleLocationPermission();
-
-    if (!hasPermission) return;
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((Position position) {
-      setState(() => _currentPosition = position);
-      _getAddressFromLatLng(_currentPosition!);
-    }).catchError((e) {
-      debugPrint(e);
+    http.Response response = await http.get(
+        Uri.parse(
+            'https://manage.partypeople.in/v1/party/organization_amenities'),
+        headers: {
+          'x-access-token':
+              'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MjUsImlhdCI6MTY3NTg2NTkxMH0.UAqwef4sbcFd2lt1gAaFPZU9KYg72tjrtqkWKc5Dq2M',
+        });
+    var jsonData = jsonDecode(response.body);
+    print(response.body);
+    setState(() {
+      jsonAddAmenitiesData = jsonData['data'];
+      amenitiesTitle.clear();
+      for (var i = 0; i < jsonData['data'].length; i++) {
+        setState(() {
+          amenitiesList.add(MultiSelectCard(
+              value: jsonAddAmenitiesData[i]['name'],
+              label: jsonAddAmenitiesData[i]['name']));
+        });
+      }
+      print(amenitiesTitle);
     });
     setState(() {
-      isLoading = false;
+      isLoading == false;
     });
   }
 
-  Future<void> _getAddressFromLatLng(Position position) async {
-    await placemarkFromCoordinates(
-            _currentPosition!.latitude, _currentPosition!.longitude)
-        .then((List<Placemark> placemarks) {
-      Placemark place = placemarks[0];
-      setState(() {
-        _currentAddress =
-            '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
-      });
+  List<MultiSelectCard> amenitiesList = [];
 
-      ///Save current address to text editor
-      ///
-      addOrganizationsEventController.location.text = _currentAddress!;
-    }).catchError((e) {
-      debugPrint(e);
-    });
+  @override
+  void initState() {
+    getAmenities();
+    _handleLocationPermission();
+    super.initState();
   }
-
-  AddOrganizationsEventController addOrganizationsEventController =
-      Get.put(AddOrganizationsEventController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.red.shade900,
-          title: Text(
-            controller.isEditable.value == true
-                ? 'Edit Organisation Profile'
-                : 'Profile',
-            style: TextStyle(
-              fontFamily: 'Oswald',
-              fontSize: 20,
-              color: Colors.white,
-            ),
-            softWrap: false,
-          ),
-        ),
         body: SingleChildScrollView(
-            child: controller.isLoading.value == true
-                ? Container(
-                    height: Get.height,
-                    width: 300,
-                    child: Column(
-                      children: [
-                        Center(
-                          child: Image.asset('assets/loading_bar.gif'),
-                        ),
-                        Text(
-                          "Wait while fetching your location",
-                          style: TextStyle(color: Colors.white, fontSize: 17),
-                        )
-                      ],
-                    ),
-                  )
-                : Stack(
+            child: Obx(
+      () => isLoading == true
+          ? Center(
+              child:
+                  CupertinoActivityIndicator(color: Colors.white, radius: 15),
+            )
+          : Container(
+              height: Get.height,
+              width: Get.width,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/red_background.png"),
+                      fit: BoxFit.fill)),
+              child: SingleChildScrollView(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(
+                        height: 40,
+                      ),
                       Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment(-1.183, -0.74),
-                            end: Alignment(1.071, -0.079),
-                            colors: [
-                              const Color(0xffd10e0e),
-                              const Color(0xff870606),
-                              const Color(0xff300202)
-                            ],
-                            stops: [0.0, 0.564, 1.0],
+                        alignment: Alignment.center,
+                        child: Text(
+                            controller.isEditable.value == true
+                                ? 'Edit Profile'
+                                : 'Profile',
+                            style: TextStyle(
+                              fontFamily: 'malgun',
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.0,
+                              color: Colors.white,
+                            )),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Stack(
+                        children: [
+                          GestureDetector(
+                            onTap: () =>
+                                _showSelectPhotoOptionsTimeline(context),
+                            child: Stack(
+                              children: [
+                                Container(
+                                  height: 200,
+                                  width: double.maxFinite,
+                                  child: controller.isEditable.value == true
+                                      ? controller.timelinePicture?.path == null
+                                          ? Card(
+                                              child: Image.network(
+                                                  'https://manage.partypeople.in/${controller.timeline}',
+                                                  fit: BoxFit.fill),
+                                            )
+                                          : Card(
+                                              child: Image.file(
+                                                controller.timelinePicture!,
+                                                fit: BoxFit.fill,
+                                              ),
+                                            )
+                                      : controller.timelinePicture != null
+                                          ? Card(
+                                              child: Image.file(
+                                                  controller.timelinePicture!,
+                                                  fit: BoxFit.fill),
+                                            )
+                                          : Card(
+                                              child: Lottie.asset(
+                                                'assets/127619-photo-click.json',
+                                              ),
+                                            ),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: Container(
+                                    child: IconButton(
+                                      onPressed: () {
+                                        _showSelectPhotoOptionsTimeline(
+                                            context);
+                                      },
+                                      icon: Icon(
+                                        Icons.camera_alt,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 10,
+                                  right: 10,
+                                  child: Container(
+                                      height: 30,
+                                      width: 30,
+                                      child: Icon(
+                                        size: 30,
+                                        Icons.camera_alt,
+                                        color: Colors.red,
+                                      )),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
+                          Positioned(
+                            bottom: 0,
+                            left: MediaQuery.of(context).size.width / 2.9,
+                            child: GestureDetector(
+                              onTap: () {
+                                _showSelectPhotoOptionsProfile(context);
+                              },
+                              child: Container(
+                                  child: Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(99)),
+                                      elevation: 5,
+                                      child: Container(
+                                        height: 100,
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: controller.isEditable.value ==
+                                                true
+                                            ? controller.profilePicture?.path ==
+                                                    null
+                                                ? CircleAvatar(
+                                                    backgroundColor:
+                                                        Colors.red.shade900,
+                                                    maxRadius: 40,
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                      'https://manage.partypeople.in/${controller.profile}',
+                                                    ),
+                                                  )
+                                                : CircleAvatar(
+                                                    backgroundColor:
+                                                        Colors.red.shade900,
+                                                    maxRadius: 40,
+                                                    backgroundImage: FileImage(
+                                                        controller
+                                                            .profilePicture!))
+                                            : controller.profilePicture != null
+                                                ? CircleAvatar(
+                                                    backgroundColor:
+                                                        Colors.red.shade900,
+                                                    maxRadius: 40,
+                                                    backgroundImage: FileImage(
+                                                        controller
+                                                            .profilePicture!))
+                                                : Container(
+                                                    width: 50,
+                                                    height: 60,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              99999),
+                                                    ),
+                                                    child: Lottie.asset(
+                                                        fit: BoxFit.cover,
+                                                        'assets/107137-add-profile-picture.json'),
+                                                  ),
+                                      ))),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      TextFieldWithTitle(
+                        title: 'Organization Name',
+                        controller: controller.name,
+                        inputType: TextInputType.name,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter an organization name';
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
+                      TextFieldWithTitle(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter an organization description';
+                          } else {
+                            return null;
+                          }
+                        },
+                        title: 'Organization Description',
+                        controller: controller.description,
+                        inputType: TextInputType.name,
+                      ),
+                      TextFieldWithTitle(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter an organization branches';
+                          } else {
+                            return null;
+                          }
+                        },
+                        title: 'Organization Branches',
+                        controller: controller.branches,
+                        inputType: TextInputType.name,
+                      ),
+                      LocationButton(),
+                      Container(
+                        alignment: Alignment.center,
+                        child: Text('Select Amenities',
+                            style: TextStyle(
+                              fontFamily: 'malgun',
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.0,
+                              color: Colors.white,
+                            )),
+                      ),
+                      SizedBox(
+                        height: 20,
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: isLoading == true
-                            ? Center(
-                                child: Container(
-                                    height: Get.height,
-                                    width: 300,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Center(
-                                          child: Icon(
-                                            Icons.pin_drop,
-                                            color: Colors.white,
-                                            size: 40,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                        Text(
-                                          "Please Wait While We are Fetching Your Location",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(color: Colors.white),
-                                        )
-                                      ],
-                                    )),
-                              )
-                            : Obx(
-                                () => Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Stack(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () =>
-                                                _showSelectPhotoOptionsTimeline(
-                                                    context),
-                                            child: Stack(
-                                              children: [
-                                                Container(
-                                                  height: 200,
-                                                  width: double.maxFinite,
-                                                  child: controller.isEditable
-                                                              .value ==
-                                                          true
-                                                      ? controller.timelinePicture
-                                                                  ?.path ==
-                                                              null
-                                                          ? Card(
-                                                              child: Image.network(
-                                                                  'https://manage.partypeople.in/${controller.timeline}',
-                                                                  fit: BoxFit
-                                                                      .fill),
-                                                            )
-                                                          : Card(
-                                                              child: Image.file(
-                                                                controller
-                                                                    .timelinePicture!,
-                                                                fit:
-                                                                    BoxFit.fill,
-                                                              ),
-                                                            )
-                                                      : controller.timelinePicture !=
-                                                              null
-                                                          ? Card(
-                                                              child: Image.file(
-                                                                  controller
-                                                                      .timelinePicture!,
-                                                                  fit: BoxFit
-                                                                      .fill),
-                                                            )
-                                                          : Card(
-                                                              child: Image.asset(
-                                                                  'assets/img.png',
-                                                                  fit: BoxFit
-                                                                      .fill),
-                                                            ),
-                                                ),
-                                                Positioned(
-                                                  bottom: 0,
-                                                  right: 0,
-                                                  child: Container(
-                                                    child: IconButton(
-                                                      onPressed: () {
-                                                        _showSelectPhotoOptionsTimeline(
-                                                            context);
-                                                      },
-                                                      icon: Icon(
-                                                        Icons.camera_alt,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Positioned(
-                                            bottom: 0,
-                                            left: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                2.9,
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                _showSelectPhotoOptionsProfile(
-                                                    context);
-                                              },
-                                              child: Container(
-                                                  child: Card(
-                                                      shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius
-                                                              .circular(99)),
-                                                      elevation: 5,
-                                                      child: Container(
-                                                          height: 100,
-                                                          width: 100,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            shape:
-                                                                BoxShape.circle,
-                                                          ),
-                                                          child: controller
-                                                                      .isEditable
-                                                                      .value ==
-                                                                  true
-                                                              ? controller.profilePicture
-                                                                          ?.path ==
-                                                                      null
-                                                                  ? CircleAvatar(
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .red
-                                                                              .shade900,
-                                                                      maxRadius:
-                                                                          40,
-                                                                      backgroundImage:
-                                                                          NetworkImage(
-                                                                        'https://manage.partypeople.in/${controller.profile}',
-                                                                      ),
-                                                                    )
-                                                                  : CircleAvatar(
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .red
-                                                                              .shade900,
-                                                                      maxRadius:
-                                                                          40,
-                                                                      backgroundImage:
-                                                                          FileImage(controller
-                                                                              .profilePicture!))
-                                                              : controller.profilePicture !=
-                                                                      null
-                                                                  ? CircleAvatar(
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .red
-                                                                              .shade900,
-                                                                      maxRadius:
-                                                                          40,
-                                                                      backgroundImage:
-                                                                          FileImage(controller.profilePicture!))
-                                                                  : CircleAvatar(
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .white,
-                                                                      maxRadius:
-                                                                          45,
-                                                                      backgroundImage:
-                                                                          AssetImage(
-                                                                        'assets/676-6764065_default-image-png.png',
-                                                                      ),
-                                                                    )))),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 30,
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[200],
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                        ),
-                                        padding: const EdgeInsets.only(
-                                            left: 15, right: 15),
-                                        child: TextField(
-                                          controller: controller.name,
-                                          minLines: 1,
-                                          maxLines: 1,
-                                          textCapitalization:
-                                              TextCapitalization.characters,
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w300),
-                                          textAlign: TextAlign.center,
-                                          decoration: InputDecoration(
-                                            hintText: "Organization Name"
-                                                .toUpperCase(),
-                                            hintStyle: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w300),
-                                            border: InputBorder.none,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[200],
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                        ),
-                                        padding: const EdgeInsets.only(
-                                            left: 10, right: 10),
-                                        child: TextField(
-                                          controller: controller.description,
-                                          minLines: 1,
-                                          maxLines: 5,
-                                          decoration: InputDecoration(
-                                            hintText: "Add Description",
-                                            border: InputBorder.none,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[200],
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                        ),
-                                        padding: const EdgeInsets.only(
-                                            left: 10, right: 10),
-                                        child: TextField(
-                                          onTap: () async {
-                                            print("Open location dialog");
-                                            await _getCurrentPosition();
-                                          },
-                                          controller: controller.location,
-                                          minLines: 1,
-                                          maxLines: 5,
-                                          decoration: InputDecoration(
-                                              hintText: "Map Location",
-                                              border: InputBorder.none,
-                                              suffixIcon:
-                                                  Icon(Icons.gps_fixed)),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[200],
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                        ),
-                                        padding: const EdgeInsets.only(
-                                            left: 10, right: 10),
-                                        child: TextField(
-                                          controller: controller.city,
-                                          minLines: 1,
-                                          maxLines: 5,
-                                          decoration: InputDecoration(
-                                            hintText: "Add More Branches",
-                                            suffix: Text("(Optional)"),
-                                            border: InputBorder.none,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Obx(() => ListView.builder(
-                                            shrinkWrap: true,
-                                            physics:
-                                                NeverScrollableScrollPhysics(),
-                                            itemCount:
-                                                controller.citySelected.length,
-                                            itemBuilder: (context, index) {
-                                              return GestureDetector(
-                                                onTap: () {
-                                                  //controller.citySelected(index);
-                                                },
-                                                child: Container(
-                                                    height: 50,
-                                                    margin: EdgeInsets.only(
-                                                        bottom: 10),
-                                                    width: Get.width,
-                                                    child: Column(
-                                                      children: [
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                              controller
-                                                                      .citySelected[
-                                                                  index],
-                                                              style: TextStyle(
-                                                                fontFamily:
-                                                                    'malgun',
-                                                                fontSize: 14,
-                                                                color: const Color(
-                                                                    0xff035dc4),
-                                                                letterSpacing:
-                                                                    -0.28,
-                                                                height:
-                                                                    1.1428571428571428,
-                                                              ),
-                                                              textHeightBehavior:
-                                                                  TextHeightBehavior(
-                                                                      applyHeightToFirstAscent:
-                                                                          false),
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              softWrap: false,
-                                                            ),
-                                                            GestureDetector(
-                                                              onTap: () {
-                                                                controller
-                                                                    .citySelected
-                                                                    .remove(controller
-                                                                            .citySelected[
-                                                                        index]);
-                                                                controller
-                                                                    .citySelectedKey
-                                                                    .remove(index
-                                                                        .toString());
-                                                              },
-                                                              child: Icon(
-                                                                Icons.close,
-                                                                color:
-                                                                    Colors.red,
-                                                                size: 28,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Container(
-                                                          height: 1,
-                                                          width: Get.width,
-                                                          color: const Color(
-                                                              0xff035dc4),
-                                                        ),
-                                                      ],
-                                                    )),
-                                              );
-                                            },
-                                          )),
-                                      Center(
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50)),
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.5,
-                                          height: 50,
-                                          child: ElevatedButton(
-                                              onPressed: () {
-                                                if (controller.name.text !=
-                                                        '' &&
-                                                    controller
-                                                            .description.text !=
-                                                        '') {
-                                                  Get.toNamed(
-                                                      Routes.AddAmenities);
-                                                } else {
-                                                  Get.snackbar('Empty Field',
-                                                      'Kindly Fill All The Fields',
-                                                      backgroundColor:
-                                                          Colors.white);
-                                                  return;
-                                                }
-                                              },
-                                              child: Text('NEXT')),
-                                        ),
-                                      )
-                                    ]),
-                              ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Center(
+                          child: MultiSelectContainer(
+                              itemsPadding: EdgeInsets.all(10),
+                              prefix: MultiSelectPrefix(
+                                  selectedPrefix: Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                    size: 14,
+                                  ),
+                                  disabledPrefix: Icon(
+                                    Icons.do_disturb_alt_sharp,
+                                    size: 14,
+                                  )),
+                              items: amenitiesList,
+                              onChange: (allSelectedItems, selectedItem) {
+                                setState(() {
+                                  selectedItemsAmenities.add(selectedItem);
+                                  print(amenitiesList);
+
+                                  for (var i = 0;
+                                      i < amenitiesList.length;
+                                      i++) {
+                                    if (amenitiesList[i].label ==
+                                        selectedItem.toString()) {
+                                      print(i);
+                                      controller.selectedAmenitiesListID
+                                          .add((i + 1).toString());
+
+                                      print(amenitiesList[i].label);
+                                    }
+                                  }
+                                });
+                              }),
+                        ),
                       ),
-                    ],
-                  )));
+                      Center(
+                          child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 28.0, vertical: 14),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (timelineImage == null) {
+                              // Show a GetX Snackbar if the text field controller is empty
+                              Get.snackbar(
+                                "Error",
+                                "Please add timeline image",
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                              );
+                            } else if (profileImage == null) {
+                              // Show a GetX Snackbar if the text field controller is empty
+                              Get.snackbar(
+                                "Error",
+                                "Please add profile image",
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                              );
+                            } else if (controller.name.text.isEmpty) {
+                              // Show a GetX Snackbar if the text field controller is empty
+                              Get.snackbar(
+                                "Error",
+                                "Please enter a valid name",
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                              );
+                            } else if (controller.description.text.isEmpty) {
+                              // Show a GetX Snackbar if the text field controller is empty
+                              Get.snackbar(
+                                "Error",
+                                "Please enter a valid organization description",
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                              );
+                            } else if (controller.branches.text.isEmpty) {
+                              // Show a GetX Snackbar if the text field controller is empty
+                              Get.snackbar(
+                                "Error",
+                                "Please enter a valid branches",
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                              );
+                            } else if (controller.location.text.isEmpty) {
+                              // Show a GetX Snackbar if the text field controller is empty
+                              Get.snackbar(
+                                "Error",
+                                "Please enter a valid location",
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                              );
+                            } else if (amenitiesList.isEmpty) {
+                              // Show a GetX Snackbar if the text field controller is empty
+                              Get.snackbar(
+                                "Error",
+                                "Select at least 1 amenities",
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                              );
+                            } else {
+                              controller.addOrgnition();
+                            }
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.business),
+                              SizedBox(width: 8),
+                              Text(
+                                'Create Organization Profile',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.red,
+                            onPrimary: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 16.0, horizontal: 24.0),
+                          ),
+                        ),
+                      )),
+                      SizedBox(
+                        height: 20,
+                      ),
+                    ]),
+              ),
+            ),
+    )));
   }
 }
 
-class GoogleMapsSystem extends StatefulWidget {
+class AmenitiesButton extends StatelessWidget {
+  var onPressed;
+  final IconData iconData;
+  final String text;
+
+  AmenitiesButton({
+    required this.onPressed,
+    required this.iconData,
+    required this.text,
+  });
+
   @override
-  _GoogleMapsSystemState createState() => _GoogleMapsSystemState();
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 14),
+      child: ElevatedButton.icon(
+        onPressed: onPressed,
+        icon: Icon(iconData),
+        label: Text(text),
+        style: ElevatedButton.styleFrom(
+          primary: Colors.white,
+          onPrimary: Colors.red,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+        ),
+      ),
+    );
+  }
 }
 
-class _GoogleMapsSystemState extends State<GoogleMapsSystem> {
-  late GoogleMapController myController;
+class TextFieldWithTitle extends StatefulWidget {
+  final String title;
+  final TextEditingController controller;
+  final TextInputType inputType;
+  final bool obscureText;
+  final String? Function(String?)? validator;
 
-  final LatLng _center = const LatLng(45.521563, -122.677433);
+  TextFieldWithTitle({
+    required this.validator,
+    required this.title,
+    required this.controller,
+    this.inputType = TextInputType.text,
+    this.obscureText = false,
+  });
 
-  void _onMapCreated(GoogleMapController controller) {
-    myController = controller;
+  @override
+  State<TextFieldWithTitle> createState() => _TextFieldWithTitleState();
+}
+
+class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
+  String? _errorMessage;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget.title,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: TextFormField(
+              controller: widget.controller,
+              keyboardType: widget.inputType,
+              obscureText: widget.obscureText,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+              ),
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                border: InputBorder.none,
+                hintText: "Enter ${widget.title}",
+                hintStyle: TextStyle(
+                  color: Colors.grey[400],
+                ),
+              ),
+              onChanged: (value) {
+                if (widget.validator != null) {
+                  setState(() {
+                    _errorMessage = widget.validator!(value);
+                  });
+                }
+              },
+              validator: widget.validator,
+              // added validator function
+              onSaved: (value) {
+                widget.controller.text = value!;
+              },
+            ),
+          ),
+          if (_errorMessage != null) // display error message if there is one
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                _errorMessage!,
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class LocationButton extends StatefulWidget {
+  @override
+  _LocationButtonState createState() => _LocationButtonState();
+}
+
+class _LocationButtonState extends State<LocationButton> {
+  String _location = '';
+  bool isLoading = false;
+  AddOrganizationsEventController controller =
+      Get.put(AddOrganizationsEventController());
+
+  Future<void> _getAddressFromLatLng(Position position) async {
+    await placemarkFromCoordinates(position!.latitude, position!.longitude)
+        .then((List<Placemark> placemarks) {
+      Placemark place = placemarks[0];
+      setState(() {
+        _location =
+            '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+        controller.location.text = _location;
+        isLoading = false;
+      });
+    }).catchError((e) {
+      debugPrint(e);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Flutter Maps Demo'),
-          backgroundColor: Colors.green,
-        ),
-        body: Stack(
-          children: <Widget>[
-            GoogleMap(
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: _center,
-                zoom: 10.0,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(14.0),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: FloatingActionButton(
-                  onPressed: () => print('You have pressed the button'),
-                  materialTapTargetSize: MaterialTapTargetSize.padded,
-                  backgroundColor: Colors.green,
-                  child: const Icon(Icons.map, size: 30.0),
+    return isLoading == true
+        ? Center(
+            child: CupertinoActivityIndicator(
+            radius: 15,
+            color: Colors.white,
+          ))
+        : Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 14),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    // Fetch the current location
+                    setState(() {
+                      isLoading = true;
+                    });
+                    Position position = await Geolocator.getCurrentPosition(
+                        desiredAccuracy: LocationAccuracy.high);
+                    _getAddressFromLatLng(position);
+                  },
+                  child: Text('Get Location'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white,
+                    onPrimary: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+                  ),
                 ),
-              ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 4,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      child: Text(
+                        _location == '' ? 'Location' : _location,
+                        style: _location == ''
+                            ? TextStyle(
+                                color: Colors.grey[400],
+                                fontSize: 18.0,
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            : TextStyle(
+                                color: Colors.black,
+                                fontSize: 18.0,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                        overflow: TextOverflow.fade,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 }
