@@ -19,76 +19,6 @@ class SubscriptionView extends StatefulWidget {
 }
 
 class _SubscriptionViewState extends State<SubscriptionView> {
-  customAlert() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Colors.white,
-              ),
-              height: MediaQuery.of(context).size.height * 0.6,
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Column(
-                children: [
-                  Text("Party Time and ID"),
-                  Center(
-                    child: GestureDetector(
-                      onTap: () async {
-                        // showCustomDialog(context);
-                        Get.to(SubscriptionView(
-                          id: widget.data['id'],
-                          data: widget.data,
-                        ));
-                      },
-                      child: Container(
-                        width: 180,
-                        height: 60,
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment(-1.183, -0.74),
-                              end: Alignment(1.071, -0.079),
-                              colors: [
-                                Colors.pink,
-                                Colors.purple,
-                                Colors.pink,
-                              ],
-                              stops: [0.0, 0.564, 1.0],
-                            ),
-                            borderRadius: BorderRadius.circular(45)),
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Container(
-                                  width: 35,
-                                  child: Image.asset('assets/shuttle.png')),
-                              Text(
-                                "Boost Post".toUpperCase(),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   void dispose() {
     super.dispose();
@@ -118,145 +48,177 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                   stops: [0.0, 0.564, 1.0],
                 ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 100,
-                  ),
-                  Text(
-                    'Get Subscriptions',
-                    style: TextStyle(
-                      fontFamily: 'Oswald',
-                      fontSize: 23,
-                      color: const Color(0xffffffff),
-                      fontWeight: FontWeight.w600,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 25,
                     ),
-                    softWrap: false,
-                  ),
-                  Text(
-                    'For people who want to [see and search parties of other \ncities], [start chat - free for females],\n',
-                    style: TextStyle(
-                      fontFamily: 'Oswald',
-                      fontSize: 14,
-                      color: const Color(0xffffffff),
+                    Text(
+                      'Get Subscriptions',
+                      style: TextStyle(
+                        fontFamily: 'Oswald',
+                        fontSize: 30,
+                        color: const Color(0xffffffff),
+                        fontWeight: FontWeight.w600,
+                      ),
+                      softWrap: false,
                     ),
-                    textAlign: TextAlign.center,
-                    softWrap: false,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    height: 200,
-                    width: 300,
-                    child: Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          // showCustomDialog(context, '499');
-                          showDialog(
-                            context: context,
-                            builder: (_) => LogoutOverlay(
-                              data: widget.data,
+                    Text(
+                      'For people who want to [see and search parties of other \ncities], [start chat - free for females],\n',
+                      style: TextStyle(
+                        fontFamily: 'Oswald',
+                        fontSize: 14,
+                        color: const Color(0xffffffff),
+                      ),
+                      textAlign: TextAlign.center,
+                      softWrap: false,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 8),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.white,
+                        ),
+                        height: 280,
+                        width: Get.width,
+                        child: GestureDetector(
+                          onTap: () {
+                            // showCustomDialog(context, '499');
+                            showDialog(
+                              context: context,
+                              builder: (_) => LogoutOverlay(
+                                data: widget.data,
+                              ),
+                            );
+                          },
+                          child: Stack(children: [
+                            Positioned(
+                              left: 50,
+                              top: 70,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '1',
+                                    style: TextStyle(
+                                      fontFamily: 'malgun',
+                                      fontSize: 30,
+                                      color: Colors.red.shade900,
+                                      letterSpacing: -0.88,
+                                      fontWeight: FontWeight.w700,
+                                      height: 0.38636363636363635,
+                                    ),
+                                    textHeightBehavior: TextHeightBehavior(
+                                        applyHeightToFirstAscent: false),
+                                    textAlign: TextAlign.center,
+                                    softWrap: false,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'DAYS',
+                                    style: TextStyle(
+                                      fontFamily: 'malgun',
+                                      fontSize: 20,
+                                      color: Colors.red.shade900,
+                                      letterSpacing: -0.44,
+                                      height: 0.6363636363636364,
+                                    ),
+                                    textHeightBehavior: TextHeightBehavior(
+                                        applyHeightToFirstAscent: false),
+                                    textAlign: TextAlign.center,
+                                    softWrap: false,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    '₹499',
+                                    style: TextStyle(
+                                      fontFamily: 'malgun',
+                                      fontSize: 30,
+                                      color: Colors.red.shade900,
+                                      letterSpacing: -0.6,
+                                      fontWeight: FontWeight.w700,
+                                      height: 0.5,
+                                    ),
+                                    textHeightBehavior: TextHeightBehavior(
+                                        applyHeightToFirstAscent: false),
+                                    textAlign: TextAlign.center,
+                                    softWrap: false,
+                                  )
+                                ],
+                              ),
                             ),
-                          );
-                        },
-                        child: Center(
-                          child: Container(
-                              height: 300,
-                              width: 120,
-                              decoration: BoxDecoration(
-                                color: const Color(0xffffffff),
-                                borderRadius: BorderRadius.circular(24.0),
-                                border: Border.all(
-                                    width: 1.0, color: const Color(0xffc40d0d)),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0x29312e2e),
-                                    offset: Offset(10, 10),
-                                    blurRadius: 20,
+                            Positioned(
+                              left: 120,
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  FeatureWidget(
+                                    title: "Popular Post",
+                                    description: "Turn More Eyes On Your Post",
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  FeatureWidget(
+                                    title: "Get More Likes",
+                                    description:
+                                        "Get More Likes From People Around the World",
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  FeatureWidget(
+                                    title: "Get More Visibility",
+                                    description:
+                                        "Get More Visibility From All Over The World",
                                   ),
                                 ],
                               ),
-                              child: Stack(children: [
-                                Icon(
-                                  Icons.calendar_month,
-                                  color: Colors.red.shade100,
-                                  size: 50,
-                                ),
-                                Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '1',
-                                        style: TextStyle(
-                                          fontFamily: 'malgun',
-                                          fontSize: 30,
-                                          color: const Color(0xff035dc4),
-                                          letterSpacing: -0.88,
-                                          fontWeight: FontWeight.w700,
-                                          height: 0.38636363636363635,
-                                        ),
-                                        textHeightBehavior: TextHeightBehavior(
-                                            applyHeightToFirstAscent: false),
-                                        textAlign: TextAlign.center,
-                                        softWrap: false,
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        'DAYS',
-                                        style: TextStyle(
-                                          fontFamily: 'malgun',
-                                          fontSize: 20,
-                                          color: const Color(0xff035dc4),
-                                          letterSpacing: -0.44,
-                                          height: 0.6363636363636364,
-                                        ),
-                                        textHeightBehavior: TextHeightBehavior(
-                                            applyHeightToFirstAscent: false),
-                                        textAlign: TextAlign.center,
-                                        softWrap: false,
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        '₹499',
-                                        style: TextStyle(
-                                          fontFamily: 'malgun',
-                                          fontSize: 30,
-                                          color: const Color(0xff035dc4),
-                                          letterSpacing: -0.6,
-                                          fontWeight: FontWeight.w700,
-                                          height: 0.5,
-                                        ),
-                                        textHeightBehavior: TextHeightBehavior(
-                                            applyHeightToFirstAscent: false),
-                                        textAlign: TextAlign.center,
-                                        softWrap: false,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Positioned(
-                                  right: 0,
-                                  child: Container(
-                                      height: 50,
-                                      width: 50,
-                                      child:
-                                          Image.asset('assets/excellence.png')),
-                                ),
-                              ])),
+                            ),
+                            Positioned(
+                              right: 0,
+                              child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  child: Image.asset('assets/excellence.png')),
+                            ),
+                          ]),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: LogoutOverlay(data: widget.data),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             Positioned(
@@ -267,17 +229,6 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                       Get.back();
                     },
                     child: Image.asset('assets/back_Button.png'))),
-            Positioned(
-              bottom: 0,
-              child: Container(
-                height: Get.height / 2.7,
-                width: Get.width,
-                color: Colors.white,
-              ),
-            ),
-            Positioned(bottom: 0, child: Image.asset("assets/sub_bottom.png")),
-            Positioned(
-                top: 20, right: 10, child: Image.asset("assets/sub_Star.png")),
           ],
         ),
       ),
@@ -400,161 +351,211 @@ class LogoutOverlayState extends State<LogoutOverlay> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Material(
-        color: Colors.transparent,
-        child: Container(
-            margin: EdgeInsets.all(20.0),
-            padding: EdgeInsets.all(15.0),
-            height: MediaQuery.of(context).size.height * 0.75,
-            width: MediaQuery.of(context).size.width * 0.8,
-            decoration: ShapeDecoration(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0))),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Image.asset('assets/icons8-wallet.gif'),
-                SizedBox(
-                  height: 20,
+      child: Container(
+          margin: EdgeInsets.all(12.0),
+          padding: EdgeInsets.all(12.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                "Your Party will be boosted as Popular Party till \n End Date - ${widget.data['end_date']} \n End Time - ${widget.data['end_time']}",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'malgun',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
                 ),
-                Text(
-                  "Your Party will be boosted as Popular Party till \n End Date - ${widget.data['end_date']} \n End Time - ${widget.data['end_time']}",
-                  style: TextStyle(
+              ),
+              SizedBox(height: 20),
+              Obx(() => Text(
+                    'Boosted Days - ${controller.quantitySelect.toString()}',
+                    style: TextStyle(
                       color: Colors.black,
+                      fontFamily: 'malgun',
                       fontWeight: FontWeight.bold,
-                      fontSize: 18),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Obx(() => Text(
-                      'Boosted Days - ${controller.quantitySelect.toString()}',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18),
-                    )),
-                SizedBox(
-                  height: 10,
-                ),
-                Obx(() => Text(
-                      'Total Amount - ₹${controller.totalAmount}',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18),
-                    )),
-                InputQty(
-                  maxVal: noOfDays,
-                  initVal: noOfDays,
-                  minVal: 1,
-                  isIntrinsicWidth: false,
-                  borderShape: BorderShapeBtn.circle,
-                  boxDecoration: const BoxDecoration(),
-                  steps: 1,
-                  onQtyChanged: (val) {
-                    controller.quantitySelect.value = int.parse(val.toString());
+                      fontSize: 18,
+                    ),
+                  )),
+              SizedBox(height: 10),
+              Obx(() => Text(
+                    'Total Amount - ₹${controller.totalAmount}',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'malgun',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  )),
+              InputQty(
+                maxVal: noOfDays,
+                initVal: noOfDays,
+                minVal: 1,
+                isIntrinsicWidth: false,
+                borderShape: BorderShapeBtn.circle,
+                boxDecoration: const BoxDecoration(),
+                steps: 1,
+                onQtyChanged: (val) {
+                  controller.quantitySelect.value = int.parse(val.toString());
 
-                    if (controller.quantitySelect.value >= 20) {
-                      controller.discountPercentage.value = 20;
-                    } else {
-                      controller.discountPercentage.value =
-                          controller.quantitySelect.value;
-                    }
+                  if (controller.quantitySelect.value >= 20) {
+                    controller.discountPercentage.value = 20;
+                  } else {
+                    controller.discountPercentage.value =
+                        controller.quantitySelect.value;
+                  }
 
-                    controller.totalAmount.value =
-                        controller.subscriptionAmount.value *
-                            int.parse(val.toString());
+                  controller.totalAmount.value =
+                      controller.subscriptionAmount.value *
+                          int.parse(val.toString());
 
-                    int amount = (((int.parse(val.toString()) *
-                                    controller.subscriptionAmount.value) *
-                                (controller.discountPercentage.value).round()) /
-                            100)
-                        .round();
+                  int amount = (((int.parse(val.toString()) *
+                                  controller.subscriptionAmount.value) *
+                              (controller.discountPercentage.value).round()) /
+                          100)
+                      .round();
 
-                    controller.totalAmount.value =
-                        controller.totalAmount.value - amount;
+                  controller.totalAmount.value =
+                      controller.totalAmount.value - amount;
 
-                    if (int.parse(val.toString()) == 1) {
-                      controller.totalAmount.value = 499;
-                    }
+                  if (int.parse(val.toString()) == 1) {
+                    controller.totalAmount.value = 499;
+                  }
 
-                    if (noOfDays == 1 || controller.totalAmount.value == 499) {
-                      controller.discountPercentage.value = 0;
-                    }
+                  if (noOfDays == 1 || controller.totalAmount.value == 499) {
+                    controller.discountPercentage.value = 0;
+                  }
+                },
+              ),
+              SizedBox(height: 20),
+              Obx(() => Text(
+                    "Discount - ${controller.discountPercentage}%",
+                    style: TextStyle(
+                      fontFamily: 'malgun',
+                    ),
+                  )),
+              SizedBox(height: 30),
+              Center(
+                child: GestureDetector(
+                  onTap: () async {
+                    setState(() {
+                      controller.initPaymentSheet(
+                          controller.totalAmount.value.toString());
+                    });
                   },
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Obx(() => Text("Discount - ${controller.discountPercentage}%")),
-                SizedBox(
-                  height: 30,
-                ),
-                Center(
-                  child: GestureDetector(
-                    onTap: () async {
-                      setState(() {
-                        controller.initPaymentSheet(
-                            controller.totalAmount.value.toString());
-                      });
-                    },
-                    child: Container(
-                      width: 180,
-                      height: 60,
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment(-1.183, -0.74),
-                            end: Alignment(1.071, -0.079),
-                            colors: [
-                              Colors.pink,
-                              Colors.purple,
-                              Colors.pink,
-                            ],
-                            stops: [0.0, 0.564, 1.0],
+                  child: Container(
+                    width: 180,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment(-1.183, -0.74),
+                        end: Alignment(1.071, -0.079),
+                        colors: [
+                          Colors.pink,
+                          Colors.purple,
+                          Colors.pink,
+                        ],
+                        stops: [0.0, 0.564, 1.0],
+                      ),
+                      borderRadius: BorderRadius.circular(45),
+                    ),
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            width: 35,
+                            child: Image.asset('assets/shuttle.png'),
                           ),
-                          borderRadius: BorderRadius.circular(45)),
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                                width: 35,
-                                child: Image.asset('assets/shuttle.png')),
-                            Text(
-                              "Boost Post".toUpperCase(),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Colors.white),
-                            ),
-                          ],
-                        ),
+                          Text(
+                            "Boost Post".toUpperCase(),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                fontFamily: 'malgun',
+                                color: Colors.white),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
-                        backgroundColor: Colors.orange),
-                    onPressed: () {
-                      Get.to(EditProfileScreen(
-                          editProfileData: widget.data, isPopularParty: false));
-                    },
-                    child: Text(
-                      "Edit Date & Time",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ))
-              ],
-            )),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)),
+                      backgroundColor: Colors.orange),
+                  onPressed: () {
+                    Get.to(EditProfileScreen(
+                        editProfileData: widget.data, isPopularParty: false));
+                  },
+                  child: Text(
+                    "Edit Date & Time",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'malgun',
+                    ),
+                  ))
+            ],
+          )),
+    );
+  }
+}
+
+class FeatureWidget extends StatelessWidget {
+  final String title;
+  final String description;
+
+  FeatureWidget({
+    required this.title,
+    required this.description,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 220,
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 4),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 8),
+          Text(
+            description,
+            style: TextStyle(
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.start,
+          ),
+        ],
       ),
     );
   }

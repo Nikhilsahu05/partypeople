@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import 'package:pertypeople/app/modules/global_header_id_controller.dart';
 
 import '../../../routes/app_pages.dart';
@@ -38,6 +39,30 @@ class AddOrganizationsEventController extends GetxController {
   var longitude;
   Set<Marker> markers = {};
 
+  Future<void> downloadTimelinePic(String imageUrl) async {
+    if (imageUrl != null) {
+      final response = await http.get(Uri.parse(imageUrl));
+      final directory = await getApplicationDocumentsDirectory();
+      final imagePath = '${directory.path}/timeline_picture.jpg';
+      final imageFile = File(imagePath);
+      await imageFile.writeAsBytes(response.bodyBytes);
+
+      timelinePicture = imageFile;
+    }
+  }
+
+  Future<void> downloadProfilePic(String imageUrl) async {
+    if (imageUrl != null) {
+      final response = await http.get(Uri.parse(imageUrl));
+      final directory = await getApplicationDocumentsDirectory();
+      final imagePath = '${directory.path}/profile_picture.jpg';
+      final imageFile = File(imagePath);
+      await imageFile.writeAsBytes(response.bodyBytes);
+
+      profilePicture = imageFile;
+    }
+  }
+
   getAPIOverview() async {
     http.Response response = await http.post(
         Uri.parse(
@@ -50,16 +75,13 @@ class AddOrganizationsEventController extends GetxController {
       name.text = jsonDecode(response.body)['data'][0]['name'];
       location.text = jsonDecode(response.body)['data'][0]['city_id'];
       description.text = jsonDecode(response.body)['data'][0]['description'];
-      profilePicture
-          ?.rename(jsonDecode(response.body)['data'][0]['profile_pic']);
-      profilePicture?.copy(jsonDecode(response.body)['data'][0]['profile_pic']);
+      String imageUrl =
+          'https://manage.partypeople.in/${jsonDecode(response.body)['data'][0]['profile_pic']}';
+      String imageUrl2 =
+          'https://manage.partypeople.in/${jsonDecode(response.body)['data'][0]['timeline_pic']}';
 
-      timelinePicture
-          ?.rename(jsonDecode(response.body)['data'][0]['timeline_pic']);
-      timelinePicture
-          ?.copy(jsonDecode(response.body)['data'][0]['timeline_pic']);
-      timeline = jsonDecode(response.body)['data'][0]['timeline_pic'];
-      profile = jsonDecode(response.body)['data'][0]['profile_pic'];
+      await downloadProfilePic(imageUrl);
+      await downloadTimelinePic(imageUrl2);
     }
 
     update();
@@ -146,10 +168,7 @@ class AddOrganizationsEventController extends GetxController {
 
   Future<void> updateOrganisation() async {
     isLoading.value = true;
-    if (profilePicture == null) {
-      isLoading.value = false;
-      Get.offAllNamed(Routes.ORGANIZATION_PROFILE_NEW);
-    }
+
     if (name.text.isEmpty) {
       Get.snackbar("Alert", "Please enter your organization name",
           icon: Icon(Icons.error_outline, color: Colors.white),
@@ -176,9 +195,7 @@ class AddOrganizationsEventController extends GetxController {
     };
 
     var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(
-            'https://manage.partypeople.in/v1/party/update_organization'));
+        'POST', Uri.parse('https://manage.partypeople.in/v1/party/'));
     request.fields.addAll({
       'organization_amenitie_id': selectedAmenitiesListID
           .toString()

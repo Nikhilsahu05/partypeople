@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 import 'package:get/get.dart';
+import 'package:pertypeople/app/modules/addOrganizationsEvent/controllers/add_organizations_event_controller.dart';
 import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 
 import '../../../routes/app_pages.dart';
@@ -46,6 +47,9 @@ class _CustProfileViewState extends State<CustProfileView> {
     getAmenities();
     super.initState();
   }
+
+  AddOrganizationsEventController addOrganizationsEventController =
+      Get.put(AddOrganizationsEventController());
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +142,8 @@ class _CustProfileViewState extends State<CustProfileView> {
                 ),
                 OrganizationProfileButton(
                   onPressed: () {
-                    Get.toNamed(Routes.ADD_ORGANIZATIONS_EVENT);
+                    addOrganizationsEventController.isEditable.value = true;
+                    Get.toNamed(Routes.DRAWER);
                   },
                 ),
                 SizedBox(

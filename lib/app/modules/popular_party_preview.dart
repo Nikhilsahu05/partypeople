@@ -2,19 +2,20 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:pertypeople/app/modules/subscription/views/subscription_view.dart';
+
+import '../../test_screen.dart';
 
 class PopularPartyPreview extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
   var data;
-  int index;
+
   bool isPopularParty;
 
-  PopularPartyPreview(
-      {required this.data, required this.index, required this.isPopularParty});
+  PopularPartyPreview({required this.data, required this.isPopularParty});
 
   @override
   State<PopularPartyPreview> createState() => _PopularPartyPreviewState();
@@ -23,41 +24,79 @@ class PopularPartyPreview extends StatefulWidget {
 class _PopularPartyPreviewState extends State<PopularPartyPreview> {
   var amenitiesTitle = [''];
   var jsonAddAmenitiesData;
-  List<MultiSelectCard> amenitiesListOthers = [];
+  List<Category> _categories = [];
+  List<CategoryList> _categoryLists = [];
+  List<String> allAmenities = [];
 
-  getAmenities() async {
+  Future<void> _fetchData() async {
     http.Response response = await http.get(
-        Uri.parse('https://manage.partypeople.in/v1/party/party_amenities'),
-        headers: {
-          'x-access-token': GetStorage().read("token").toString(),
-        });
-    var jsonData = jsonDecode(response.body);
-    print(response.body);
+      Uri.parse('https://manage.partypeople.in/v1/party/party_amenities'),
+      headers: {
+        'x-access-token': GetStorage().read("token").toString(),
+      },
+    );
+    final data = jsonDecode(response.body);
     setState(() {
-      jsonAddAmenitiesData = jsonData['data'];
-      amenitiesTitle.clear();
+      if (data['status'] == 1) {
+        _categories = (data['data'] as List)
+            .map((category) => Category.fromJson(category))
+            .toList();
 
-      for (var ix = 0; ix < jsonData['data'][3].length; ix++) {
-        setState(() {
-          for (var i = 0; i < 5; i++) {
-            setState(() {
-              amenitiesListOthers.add(MultiSelectCard(
-                  value: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
-                  label:
-                  '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'));
-              amenitiesListOthers.reversed;
-            });
-          }
+        _categories.forEach((category) {
+          _categoryLists.add(CategoryList(
+              title: category.name, amenities: category.amenities));
         });
       }
-      print(amenitiesTitle);
     });
+  }
+
+  List<Amenity> getSelectedAmenities(List<String> selectedIds) {
+    List<Amenity> selectedAmenities = [];
+    _categories.forEach((category) {
+      category.amenities.forEach((amenity) {
+        if (selectedIds.contains(amenity.id)) {
+          selectedAmenities.add(amenity);
+        }
+      });
+    });
+    return selectedAmenities;
+  }
+
+  getAmenities() async {
+    setState(() {
+      allAmenities = [widget.data['party_amenitie_id']];
+      showSelectedAmenities(allAmenities);
+    });
+    print(allAmenities);
   }
 
   @override
   void initState() {
+    _fetchData();
     getAmenities();
     super.initState();
+  }
+
+  List<Amenity> _selectedAmenities = [];
+
+  void showSelectedAmenities(List<String> selectedIds) {
+    setState(() {
+      _selectedAmenities = getSelectedAmenities(selectedIds);
+    });
+  }
+
+  Widget buildSelectedAmenities() {
+    return ListView.builder(
+      itemCount: _selectedAmenities.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(
+            _selectedAmenities[index].name,
+            style: TextStyle(color: Colors.black),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -78,14 +117,16 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
                     borderRadius: BorderRadius.circular(30),
                     color: Colors.red,
                     image: DecorationImage(
-                        image: AssetImage('assets/a.jpeg'), fit: BoxFit.fill)),
+                        image: NetworkImage(
+                            'https://manage.partypeople.in/${widget.data['cover_photo']}'),
+                        fit: BoxFit.fill)),
                 width: Get.width,
               ),
               SizedBox(
                 height: 15,
               ),
               Text(
-                "Dance Party at My Home With Music",
+                "${widget.data['title']}",
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     fontFamily: 'malgun',
@@ -97,7 +138,7 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
                 height: 15,
               ),
               Text(
-                "When an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries but also the leap into",
+                "${widget.data['description']}",
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontFamily: 'malgun',
@@ -108,9 +149,12 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
               SizedBox(
                 height: 15,
               ),
-              BoostButton(label: 'Boost Post', onPressed: () {
-
-              }),
+              BoostButton(
+                  label: 'Boost Post',
+                  onPressed: () {
+                    Get.to(SubscriptionView(
+                        id: widget.data['id'], data: widget.data));
+                  }),
               Divider(),
               ListTile(
                 leading: Icon(
@@ -118,29 +162,11 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
                   color: Colors.red,
                 ),
                 title: Text(
-                  "14 May, 2022 to 14 May 2022",
+                  "${widget.data['start_date']} to ${widget.data['end_date']}",
                   style: TextStyle(fontFamily: 'malgun', fontSize: 17),
                 ),
-                subtitle: Text("09:30 PM to 11:30 PM"),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.pin_drop,
-                  color: Colors.red,
-                ),
-                title: Text(
-                  "Jabalpur",
-                  style: TextStyle(fontFamily: 'malgun', fontSize: 17),
-                ),
-                subtitle: Text("Manohar street , House No 22 Near, MD house"),
-              ),
-              ListTile(
-                leading: Container(
-                    width: 27, child: Image.asset("assets/party.png")),
-                title: Text(
-                  "House Party ",
-                  style: TextStyle(fontFamily: 'malgun', fontSize: 17),
-                ),
+                subtitle: Text(
+                    "${widget.data['start_time']} to ${widget.data['end_time']}"),
               ),
               ListTile(
                 leading: Icon(
@@ -148,7 +174,9 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
                   color: Colors.red,
                 ),
                 title: Text(
-                  "Female , Couple",
+                  "${widget.data['gender']}"
+                      .replaceAll('[', '')
+                      .replaceAll(']', ''),
                   style: TextStyle(fontFamily: 'malgun', fontSize: 17),
                 ),
               ),
@@ -162,7 +190,7 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
                   style: TextStyle(fontFamily: 'malgun', fontSize: 17),
                 ),
                 subtitle: Text(
-                  "18 To 35 ",
+                  "${widget.data['start_age']} To ${widget.data['end_age']} ",
                 ),
               ),
               ListTile(
@@ -175,8 +203,58 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
                   style: TextStyle(fontFamily: 'malgun', fontSize: 17),
                 ),
                 subtitle: Text(
-                  "30  ",
+                  "${widget.data['person_limit']}",
                 ),
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.local_offer,
+                  color: Colors.red,
+                ),
+                title: Text(
+                  'Offers',
+                  style: TextStyle(fontFamily: 'malgun', fontSize: 17),
+                ),
+                subtitle: Text(
+                  "${widget.data['offers']}",
+                ),
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.monetization_on,
+                  color: Colors.red,
+                ),
+                title: Text(
+                  'Entry Fees',
+                  style: TextStyle(fontFamily: 'malgun', fontSize: 17),
+                ),
+                subtitle: Text(
+                  "Ladies - ${widget.data['ladies']}\n Couples - ${widget.data['couples']}\n Stag - ${widget.data['stag']}\n Others - ${widget.data['others']}",
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 28.0, vertical: 0),
+                child: Container(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Selected Amenities",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'malgun',
+                        fontSize: 18),
+                  ),
+                ),
+              ),
+              Container(
+                  height: 300, width: 300, child: buildSelectedAmenities()),
+              SizedBox(
+                height: 20,
               ),
             ],
           ),
@@ -207,10 +285,10 @@ class _OrganizationProfileButtonState extends State<OrganizationProfileButton>
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 500));
     _animation =
-    Tween<double>(begin: 1.0, end: 0.95).animate(_animationController)
-      ..addListener(() {
-        setState(() {});
-      });
+        Tween<double>(begin: 1.0, end: 0.95).animate(_animationController)
+          ..addListener(() {
+            setState(() {});
+          });
   }
 
   @override
@@ -325,58 +403,6 @@ class TitleAnswerWidget extends StatelessWidget {
   }
 }
 
-// class SelectedAmenities extends StatelessWidget {
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('My App'),
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.all(16),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Text(
-//               'Selected Amenities',
-//               style: TextStyle(
-//                 fontSize: 20,
-//                 fontWeight: FontWeight.bold,
-//                 color: Colors.black.withOpacity(0.7),
-//               ),
-//             ),
-//             SizedBox(height: 16),
-//             Expanded(
-//               child: GridView.builder(
-//                 itemCount: selectedAmenities.length,
-//                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//                   crossAxisCount: 2,
-//                   crossAxisSpacing: 16,
-//                   mainAxisSpacing: 16,
-//                   childAspectRatio: 2.5,
-//                 ),
-//                 itemBuilder: (BuildContext context, int index) {
-//                   return TitleAnswerWidget(
-//                     title: 'Amenity ${index + 1}',
-//                     answer: selectedAmenities[index],
-//                   );
-//                 },
-//               ),
-//             ),
-//             SizedBox(height: 16),
-//             OrganizationProfileButton(
-//               onPressed: () {
-//                 // Do something when the button is pressed
-//               },
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
 class BoostButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;

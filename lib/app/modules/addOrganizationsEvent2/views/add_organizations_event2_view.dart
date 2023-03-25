@@ -1,5 +1,4 @@
 // ignore_for_file: must_be_immutable
-
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -9,12 +8,15 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:group_button/group_button.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_crop/image_crop.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pertypeople/app/select_photo_options_screen.dart';
 
+import '../../../../test_screen.dart';
 import '../../addOrganizationsEvent/controllers/add_organizations_event_controller.dart';
 import '../controllers/add_organizations_event2_controller.dart';
 
@@ -34,12 +36,6 @@ class AddOrganizationsEvent2View extends StatefulWidget {
 
 class _AddOrganizationsEvent2ViewState
     extends State<AddOrganizationsEvent2View> {
-  @override
-  void initState() {
-    print('is this popular party ::: ${widget.isPopular}');
-    super.initState();
-  }
-
   String? _currentAddress;
   Position? _currentPosition;
 
@@ -70,7 +66,7 @@ class _AddOrganizationsEvent2ViewState
   Future<File?> _cropImage({required File imageFile}) async {
     print('Croped Image');
     CroppedFile? croppedImage =
-        await ImageCropper().cropImage(sourcePath: imageFile.path);
+    await ImageCropper().cropImage(sourcePath: imageFile.path);
     if (croppedImage == null) return null;
     return File(croppedImage.path);
   }
@@ -84,19 +80,20 @@ class _AddOrganizationsEvent2ViewState
           top: Radius.circular(25.0),
         ),
       ),
-      builder: (context) => DraggableScrollableSheet(
-          initialChildSize: 0.28,
-          maxChildSize: 0.4,
-          minChildSize: 0.28,
-          expand: false,
-          builder: (context, scrollController) {
-            return SingleChildScrollView(
-              controller: scrollController,
-              child: SelectPhotoOptionsScreen(
-                onTap: _pickImageProfile,
-              ),
-            );
-          }),
+      builder: (context) =>
+          DraggableScrollableSheet(
+              initialChildSize: 0.28,
+              maxChildSize: 0.4,
+              minChildSize: 0.28,
+              expand: false,
+              builder: (context, scrollController) {
+                return SingleChildScrollView(
+                  controller: scrollController,
+                  child: SelectPhotoOptionsScreen(
+                    onTap: _pickImageProfile,
+                  ),
+                );
+              }),
     );
   }
 
@@ -152,12 +149,13 @@ class _AddOrganizationsEvent2ViewState
 
   Future<void> _getAddressFromLatLng(Position position) async {
     await placemarkFromCoordinates(
-            _currentPosition!.latitude, _currentPosition!.longitude)
+        _currentPosition!.latitude, _currentPosition!.longitude)
         .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
       setState(() {
         _currentAddress =
-            '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+        '${place.street}, ${place.subLocality}, ${place
+            .subAdministrativeArea}, ${place.postalCode}';
       });
 
       ///Save current address to text editor
@@ -169,10 +167,80 @@ class _AddOrganizationsEvent2ViewState
   }
 
   AddOrganizationsEvent2Controller controller =
-      Get.put(AddOrganizationsEvent2Controller());
+  Get.put(AddOrganizationsEvent2Controller());
+
+  Future<void> downloadTimelinePic(String imageUrl) async {
+    if (imageUrl != null) {
+      final response = await http.get(Uri.parse(imageUrl));
+      final directory = await getApplicationDocumentsDirectory();
+      final imagePath = '${directory.path}/timeline_picture.jpg';
+      final imageFile = File(imagePath);
+      await imageFile.writeAsBytes(response.bodyBytes);
+
+      controller.profile = imageFile;
+    }
+  }
+
+  fillFieldPreFilled() async {
+    String imageUrl =
+        'https://manage.partypeople.in/${controller
+        .getPrefiledData['profile_pic']}';
+    downloadTimelinePic(imageUrl);
+    print(downloadTimelinePic(imageUrl));
+    controller.title.text = controller.getPrefiledData['title'];
+    controller.description.text = controller.getPrefiledData['description'];
+    controller.mobileNumber.text = controller.getPrefiledData['phone_number'];
+    controller.startDate.text = controller.getPrefiledData['start_date'];
+    controller.endDate.text = controller.getPrefiledData['end_date'];
+    controller.startTime.text = controller.getPrefiledData['start_time'];
+    controller.endTime.text = controller.getPrefiledData['end_time'];
+    controller.peopleLimit.text = controller.getPrefiledData['person_limit'];
+    controller.genderList = [controller.getPrefiledData['gender']];
+    controller.startPeopleAge.text = controller.getPrefiledData['start_age'];
+    controller.endPeopleAge.text = controller.getPrefiledData['end_age'];
+    controller.offersText.text = controller.getPrefiledData['offers'];
+    controller.ladiesPrice.text = controller.getPrefiledData['ladies'];
+    controller.stagPrice.text = controller.getPrefiledData['stag'];
+    controller.othersPrice.text = controller.getPrefiledData['others'];
+    controller.couplesPrice.text = controller.getPrefiledData['couples'];
+  }
+
+  nonField() {
+    setState(() {
+      controller.profile = null;
+      controller.title.text = '';
+      controller.description.text = '';
+      controller.mobileNumber.text = '';
+      controller.startDate.text = '';
+      controller.endDate.text = '';
+      controller.startTime.text = '';
+      controller.endTime.text = '';
+      controller.peopleLimit.text = '';
+      controller.startPeopleAge.text = '';
+      controller.endPeopleAge.text = '';
+      controller.offersText.text = '';
+      controller.ladiesPrice.text = '';
+      controller.stagPrice.text = '';
+      controller.othersPrice.text = '';
+      controller.couplesPrice.text = '';
+    });
+  }
+
+  @override
+  void initState() {
+    print("Caling fill data");
+    fillFieldPreFilled();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    // if (controller.isEditable.value == true) {
+    // fillFieldPreFilled();
+    // } else {
+    //   nonField();
+    // }
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
@@ -216,14 +284,14 @@ class _AddOrganizationsEvent2ViewState
                           width: double.maxFinite,
                           child: controller.profile != null
                               ? Card(
-                                  child: Image.file(controller.profile!,
-                                      fit: BoxFit.fill),
-                                )
+                            child: Image.file(controller.profile!,
+                                fit: BoxFit.fill),
+                          )
                               : Card(
-                                  child: Lottie.asset(
-                                    'assets/127619-photo-click.json',
-                                  ),
-                                ),
+                            child: Lottie.asset(
+                              'assets/127619-photo-click.json',
+                            ),
+                          ),
                         ),
                         Positioned(
                           bottom: 0,
@@ -284,103 +352,115 @@ class _AddOrganizationsEvent2ViewState
                   }
                 },
               ),
+              TextFieldWithTitle(
+                title: 'Mobile Number',
+                controller: controller.mobileNumber,
+                inputType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter mobile number';
+                  } else {
+                    return null;
+                  }
+                },
+              ),
               widget.isPopular == false
                   ? Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  controller.getStartDate(context);
-                                },
-                                child: TextFieldWithTitle(
-                                  title: 'Start Date',
-                                  passGesture: () {
-                                    controller.getStartDate(context);
-                                  },
-                                  controller: controller.startDate,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter an start date';
-                                    } else {
-                                      return null;
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  controller.getEndDate(context);
-                                },
-                                child: TextFieldWithTitle(
-                                  title: 'End Date',
-                                  passGesture: () {
-                                    controller.getEndDate(context);
-                                  },
-                                  controller: controller.endDate,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter an end date';
-                                    } else {
-                                      return null;
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            controller.getStartDate(context);
+                          },
+                          child: TextFieldWithTitle(
+                            title: 'Start Date',
+                            passGesture: () {
+                              controller.getStartDate(context);
+                            },
+                            controller: controller.startDate,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter an start date';
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
                         ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  controller.getStartTime(context);
-                                },
-                                child: TextFieldWithTitle(
-                                  passGesture: () {
-                                    controller.getStartTime(context);
-                                  },
-                                  title: 'Start Time',
-                                  controller: controller.startTime,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter an start time';
-                                    } else {
-                                      return null;
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  controller.getEndTime(context);
-                                },
-                                child: TextFieldWithTitle(
-                                  passGesture: () {
-                                    controller.getEndTime(context);
-                                  },
-                                  title: 'End Date',
-                                  controller: controller.endTime,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter an end time';
-                                    } else {
-                                      return null;
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            controller.getEndDate(context);
+                          },
+                          child: TextFieldWithTitle(
+                            title: 'End Date',
+                            passGesture: () {
+                              controller.getEndDate(context);
+                            },
+                            controller: controller.endDate,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter an end date';
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
                         ),
-                      ],
-                    )
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            controller.getStartTime(context);
+                          },
+                          child: TextFieldWithTitle(
+                            passGesture: () {
+                              controller.getStartTime(context);
+                            },
+                            title: 'Start Time',
+                            controller: controller.startTime,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter an start time';
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            controller.getEndTime(context);
+                          },
+                          child: TextFieldWithTitle(
+                            passGesture: () {
+                              controller.getEndTime(context);
+                            },
+                            title: 'End Time',
+                            controller: controller.endTime,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter an end time';
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              )
                   : Container(),
               LocationButton(),
               Padding(
@@ -536,7 +616,9 @@ class AmenitiesButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: () {
-        controller.sendRequst();
+        // Get.to(AddAmenitiesParty(
+        //     isPopular: false, editProfileData: controller.getPrefiledData));
+        Get.to(AmenitiesPartyScreen());
       },
       icon: Icon(
         Icons.grid_view,
@@ -673,7 +755,7 @@ class _LocationButtonState extends State<LocationButton> {
   String _location = '';
   bool isLoading = false;
   AddOrganizationsEventController controller =
-      Get.put(AddOrganizationsEventController());
+  Get.put(AddOrganizationsEventController());
 
   Future<void> _getAddressFromLatLng(Position position) async {
     await placemarkFromCoordinates(position!.latitude, position!.longitude)
@@ -681,7 +763,8 @@ class _LocationButtonState extends State<LocationButton> {
       Placemark place = placemarks[0];
       setState(() {
         _location =
-            '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+        '${place.street}, ${place.subLocality}, ${place
+            .subAdministrativeArea}, ${place.postalCode}';
         controller.location.text = _location;
         isLoading = false;
       });
@@ -694,77 +777,77 @@ class _LocationButtonState extends State<LocationButton> {
   Widget build(BuildContext context) {
     return isLoading == true
         ? Center(
-            child: CupertinoActivityIndicator(
-            radius: 15,
-            color: Colors.white,
-          ))
+        child: CupertinoActivityIndicator(
+          radius: 15,
+          color: Colors.white,
+        ))
         : Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 14),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    // Fetch the current location
-                    setState(() {
-                      isLoading = true;
-                    });
-                    Position position = await Geolocator.getCurrentPosition(
-                        desiredAccuracy: LocationAccuracy.high);
-                    _getAddressFromLatLng(position);
-                  },
-                  child: Text('Get Location'),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                    onPrimary: Colors.red,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    padding:
-                        EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 4,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      child: Text(
-                        _location == '' ? 'Location' : _location,
-                        style: _location == ''
-                            ? TextStyle(
-                                color: Colors.grey[400],
-                                fontSize: 18.0,
-                                overflow: TextOverflow.ellipsis,
-                              )
-                            : TextStyle(
-                                color: Colors.black,
-                                fontSize: 18.0,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                        overflow: TextOverflow.fade,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+      padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 14),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          ElevatedButton(
+            onPressed: () async {
+              // Fetch the current location
+              setState(() {
+                isLoading = true;
+              });
+              Position position = await Geolocator.getCurrentPosition(
+                  desiredAccuracy: LocationAccuracy.high);
+              _getAddressFromLatLng(position);
+            },
+            child: Text('Get Location'),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.white,
+              onPrimary: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              padding:
+              EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
             ),
-          );
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                child: Text(
+                  _location == '' ? 'Location' : _location,
+                  style: _location == ''
+                      ? TextStyle(
+                    color: Colors.grey[400],
+                    fontSize: 18.0,
+                    overflow: TextOverflow.ellipsis,
+                  )
+                      : TextStyle(
+                    color: Colors.black,
+                    fontSize: 18.0,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  overflow: TextOverflow.fade,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

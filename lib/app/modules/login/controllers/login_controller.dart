@@ -7,7 +7,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:pertypeople/app/modules/global_header_id_controller.dart';
-import 'package:pertypeople/app/modules/profile_type.dart';
 import 'package:pertypeople/app/routes/app_pages.dart';
 
 class LoginController extends GetxController {
@@ -96,7 +95,6 @@ class LoginController extends GetxController {
         });
     var json = jsonDecode(response.body);
     isLoading.value = false;
-    GetStorage().write('token', '${json['data']['token']}');
 
     if (response.statusCode == 200) {
       GetStorage().write('token', '${json['data']['token']}');
@@ -128,10 +126,10 @@ class LoginController extends GetxController {
     if (jsonDecode(response.body)['message'] == 'Organization Data Found.') {
       isLoading.value = false;
 
-      Get.offAll(ProfileType());
+      Get.offAllNamed(Routes.ORGANIZATION_PROFILE_NEW);
     } else {
       isLoading.value = false;
-      Get.offAll(ProfileType());
+      Get.offAllNamed(Routes.ADD_ORGANIZATIONS_EVENT);
     }
     isLoading.value = false;
   }

@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import 'package:pertypeople/app/modules/global_header_id_controller.dart';
 
 import '../../../routes/app_pages.dart';
@@ -18,11 +19,12 @@ class AddOrganizationsEvent2Controller extends GetxController {
 
   var isComplet = false.obs;
   var isLoading = false.obs;
-
+  RxList selectedAmenities = [].obs;
   static final count = false.obs;
   static var address = "";
   static File? picture;
   var date = TextEditingController();
+  var mobileNumber = TextEditingController();
   final title = TextEditingController();
   final description = TextEditingController();
   final startDate = TextEditingController();
@@ -49,6 +51,8 @@ class AddOrganizationsEvent2Controller extends GetxController {
   var genderList = [];
   File? profile;
   File? timeline;
+  var getPrefiledData;
+  RxBool isEditable = false.obs;
 
   @override
   void onClose() {
@@ -170,6 +174,18 @@ class AddOrganizationsEvent2Controller extends GetxController {
   GlobalHeaderIDController globalHeaderIDController =
       Get.put(GlobalHeaderIDController());
 
+  Future<void> downloadTimelinePic(String imageUrl) async {
+    if (imageUrl != null) {
+      final response = await http.get(Uri.parse(imageUrl));
+      final directory = await getApplicationDocumentsDirectory();
+      final imagePath = '${directory.path}/timeline_picture.jpg';
+      final imageFile = File(imagePath);
+      await imageFile.writeAsBytes(response.bodyBytes);
+
+      profile = imageFile;
+    }
+  }
+
   sendEditParty(jsonData, BuildContext context) async {
     isLoading.value = true;
     var headers = {
@@ -195,7 +211,9 @@ class AddOrganizationsEvent2Controller extends GetxController {
       'person_limit': peopleLimit.text,
       'status': '1',
       'organization_id': '1',
-      'party_amenitie_id': '1,2,3',
+      'party_amenitie_id':
+          selectedAmenities.toString().replaceAll('[', '').replaceAll(']', ''),
+      "phone_number": mobileNumber.text,
       'offers': offersText.text,
       'ladies': ladiesPrice.text,
       'stag': stagPrice.text,
@@ -269,11 +287,13 @@ class AddOrganizationsEvent2Controller extends GetxController {
       'type': getPertyType(partyType.value),
       'gender': genderList.toString(),
       'start_age': startPeopleAge.text,
-      'end_age': endPeopleAge.text,
+      'end_age': endPeopleAge.text, "phone_number": mobileNumber.text,
+
       'person_limit': peopleLimit.text,
       'status': character.name,
       'organization_id': '1',
-      'party_amenitie_id': '1,2',
+      'party_amenitie_id':
+          selectedAmenities.toString().replaceAll('[', '').replaceAll(']', ''),
       'offers': offersText.text,
       'ladies': ladiesPrice.text,
       'stag': stagPrice.text,

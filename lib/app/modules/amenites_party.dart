@@ -65,150 +65,70 @@ class GridCheck extends StatefulWidget {
 class _GridCheckState extends State<GridCheck> {
   var amenitiesTitle = [''];
   var jsonAddAmenitiesData;
-  List<MultiSelectCard> amenitiesListOthers = [];
-  List<MultiSelectCard> amenitiesListMusic = [];
-  List<MultiSelectCard> amenitiesListDressCode = [];
-  List<MultiSelectCard> amenitiesListDrinks = [];
+  List<MultiSelectCard> amenitiesList = [];
 
-  getAmenities() async {
+  Future<List<MultiSelectCard>> getAmenities() async {
+    amenitiesList = [];
     http.Response response = await http.get(
-        Uri.parse('https://manage.partypeople.in/v1/party/party_amenities'),
-        headers: {
-          'x-access-token': GetStorage().read("token").toString(),
-        });
+      Uri.parse('https://manage.partypeople.in/v1/party/party_amenities'),
+      headers: {
+        'x-access-token': GetStorage().read("token").toString(),
+      },
+    );
     var jsonData = jsonDecode(response.body);
     print(response.body);
     setState(() {
       jsonAddAmenitiesData = jsonData['data'];
       amenitiesTitle.clear();
       for (var ix = 0; ix < jsonData['data'][0].length; ix++) {
-        setState(() {
-          for (var i = 0; i < jsonData['data'][ix]['amenities'].length; i++) {
-            setState(() {
-              amenitiesListMusic.add(MultiSelectCard(
-                  highlightColor: Colors.red,
-                  value: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
-                  label:
-                      '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'));
-            });
-          }
-        });
+        for (var i = 0; i < jsonData['data'][ix]['amenities'].length; i++) {
+          amenitiesList.add(
+            MultiSelectCard(
+              highlightColor: Colors.red,
+              value: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
+              label: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
+            ),
+          );
+        }
       }
       for (var ix = 0; ix < jsonData['data'][1].length; ix++) {
-        setState(() {
-          for (var i = 0; i < jsonData['data'][ix]['amenities'].length; i++) {
-            setState(() {
-              amenitiesListDrinks.add(MultiSelectCard(
-                  value: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
-                  label:
-                      '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'));
-            });
-          }
-        });
+        for (var i = 0; i < jsonData['data'][ix]['amenities'].length; i++) {
+          amenitiesList.add(
+            MultiSelectCard(
+              value: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
+              label: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
+            ),
+          );
+        }
       }
       for (var ix = 0; ix < jsonData['data'][2].length; ix++) {
-        setState(() {
-          for (var i = 0; i < jsonData['data'][ix]['amenities'].length; i++) {
-            setState(() {
-              amenitiesListDressCode.add(MultiSelectCard(
-                  value: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
-                  label:
-                      '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'));
-            });
-          }
-        });
+        for (var i = 0; i < jsonData['data'][ix]['amenities'].length; i++) {
+          amenitiesList.add(
+            MultiSelectCard(
+              value: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
+              label: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
+            ),
+          );
+        }
       }
       for (var ix = 0; ix < jsonData['data'][3].length; ix++) {
-        setState(() {
-          for (var i = 0; i < jsonData['data'][ix]['amenities'].length; i++) {
-            setState(() {
-              amenitiesListOthers.add(MultiSelectCard(
-                  value: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
-                  label:
-                      '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'));
-            });
-          }
-        });
+        for (var i = 0; i < jsonData['data'][ix]['amenities'].length; i++) {
+          amenitiesList.add(
+            MultiSelectCard(
+              value: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
+              label: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
+            ),
+          );
+        }
       }
       print(amenitiesTitle);
     });
-  }
-
-  getAmenitiesNew() async {
-    amenitiesListOthers.clear();
-    amenitiesListDressCode.clear();
-    amenitiesListMusic.clear();
-    amenitiesListDrinks.clear();
-    http.Response response = await http.get(
-        Uri.parse('https://manage.partypeople.in/v1/party/party_amenities'),
-        headers: {
-          'x-access-token': GetStorage().read("token").toString(),
-        });
-    var jsonData = jsonDecode(response.body);
-    print(response.body);
-    setState(() {
-      jsonAddAmenitiesData = jsonData['data'];
-      amenitiesTitle.clear();
-      for (var ix = 0; ix < jsonData['data'][0].length; ix++) {
-        setState(() {
-          for (var i = 0; i < jsonData['data'][ix]['amenities'].length; i++) {
-            setState(() {
-              amenitiesListMusic.add(MultiSelectCard(
-                  highlightColor: Colors.red,
-                  value: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
-                  label:
-                      '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'));
-            });
-          }
-        });
-      }
-      for (var ix = 0; ix < jsonData['data'][1].length; ix++) {
-        setState(() {
-          for (var i = 0; i < jsonData['data'][ix]['amenities'].length; i++) {
-            setState(() {
-              amenitiesListDrinks.add(MultiSelectCard(
-                  value: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
-                  label:
-                      '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'));
-            });
-          }
-        });
-      }
-      for (var ix = 0; ix < jsonData['data'][2].length; ix++) {
-        setState(() {
-          for (var i = 0; i < jsonData['data'][ix]['amenities'].length; i++) {
-            setState(() {
-              amenitiesListDressCode.add(MultiSelectCard(
-                  value: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
-                  label:
-                      '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'));
-            });
-          }
-        });
-      }
-      for (var ix = 0; ix < jsonData['data'][3].length; ix++) {
-        setState(() {
-          for (var i = 0; i < jsonData['data'][ix]['amenities'].length; i++) {
-            setState(() {
-              amenitiesListOthers.add(MultiSelectCard(
-                  value: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
-                  label:
-                      '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'));
-            });
-          }
-        });
-      }
-      print(amenitiesTitle);
-    });
+    return amenitiesList;
   }
 
   @override
   void initState() {
-    if (widget.editData != '') {
-      getAmenities();
-    } else {
-      getAmenitiesNew();
-    }
+    getAmenities();
 
     super.initState();
   }
@@ -219,9 +139,6 @@ class _GridCheckState extends State<GridCheck> {
 
   AddAmenitiesController addAmenitiesController =
       Get.put(AddAmenitiesController());
-
-  AddOrganizationsEvent2Controller controller =
-      Get.put(AddOrganizationsEvent2Controller());
 
   @override
   Widget build(BuildContext context) {
@@ -237,7 +154,7 @@ class _GridCheckState extends State<GridCheck> {
                     ),
                     Column(children: [
                       Text(
-                        "Music",
+                        "Amenities",
                         style: TextStyle(
                             color: Colors.red, fontWeight: FontWeight.bold),
                       ),
@@ -260,90 +177,10 @@ class _GridCheckState extends State<GridCheck> {
                                     size: 14,
                                   ),
                                 )),
-                            items: amenitiesListMusic,
+                            items: amenitiesList,
                             onChange: (allSelectedItems, selectedItem) {}),
                       ),
-                      Text(
-                        "Drinks",
-                        style: TextStyle(
-                            color: Colors.red, fontWeight: FontWeight.bold),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(14.0),
-                        child: MultiSelectContainer(
-                            suffix: MultiSelectSuffix(
-                                selectedSuffix: const Padding(
-                                  padding: EdgeInsets.only(left: 5),
-                                  child: Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                    size: 14,
-                                  ),
-                                ),
-                                disabledSuffix: const Padding(
-                                  padding: EdgeInsets.only(left: 5),
-                                  child: Icon(
-                                    Icons.do_disturb_alt_sharp,
-                                    size: 14,
-                                  ),
-                                )),
-                            items: amenitiesListDrinks,
-                            onChange: (allSelectedItems, selectedItem) {}),
-                      ),
-                      Text(
-                        "Dress Code",
-                        style: TextStyle(
-                            color: Colors.red, fontWeight: FontWeight.bold),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(14.0),
-                        child: MultiSelectContainer(
-                            suffix: MultiSelectSuffix(
-                                selectedSuffix: const Padding(
-                                  padding: EdgeInsets.only(left: 5),
-                                  child: Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                    size: 14,
-                                  ),
-                                ),
-                                disabledSuffix: const Padding(
-                                  padding: EdgeInsets.only(left: 5),
-                                  child: Icon(
-                                    Icons.do_disturb_alt_sharp,
-                                    size: 14,
-                                  ),
-                                )),
-                            items: amenitiesListDressCode,
-                            onChange: (allSelectedItems, selectedItem) {}),
-                      ),
-                      Text(
-                        "Other Facilites",
-                        style: TextStyle(
-                            color: Colors.red, fontWeight: FontWeight.bold),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(14.0),
-                        child: MultiSelectContainer(
-                            suffix: MultiSelectSuffix(
-                                selectedSuffix: const Padding(
-                                  padding: EdgeInsets.only(left: 5),
-                                  child: Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                    size: 14,
-                                  ),
-                                ),
-                                disabledSuffix: const Padding(
-                                  padding: EdgeInsets.only(left: 5),
-                                  child: Icon(
-                                    Icons.do_disturb_alt_sharp,
-                                    size: 14,
-                                  ),
-                                )),
-                            items: amenitiesListOthers,
-                            onChange: (allSelectedItems, selectedItem) {}),
-                      ),
+
                       // GestureDetector(
                       //   onTap: () {
                       //     if (widget.isPopular == true) {

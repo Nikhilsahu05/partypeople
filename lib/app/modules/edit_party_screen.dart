@@ -44,6 +44,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     controller.peopleLimit.text = widget.editProfileData['person_limit'];
     controller.ladiesPrice.text = widget.editProfileData['ladies'];
     controller.stagPrice.text = widget.editProfileData['stag'];
+
     controller.couplesPrice.text = widget.editProfileData['couples'];
     controller.othersPrice.text = widget.editProfileData['others'];
     print("${widget.editProfileData}");

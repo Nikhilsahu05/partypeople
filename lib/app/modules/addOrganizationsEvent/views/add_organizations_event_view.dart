@@ -167,17 +167,37 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
   bool isLoading = false;
   List<MultiSelectCard> ameList = [];
 
-  Future<void> getAmenities() async {
-    // Get organization details
+  Future<void> newAmenities() async {
+    setState(() {
+      controller.isLoading.value = true;
+    });
     final organizationResponse = await http.post(
       Uri.parse('https://manage.partypeople.in/v1/party/organization_details'),
       headers: {
         'x-access-token': '${GetStorage().read("token")}',
       },
     );
-    final organizationData = jsonDecode(organizationResponse.body)['data'][0]
-        ['organization_amenities'];
+    final organizationData = await jsonDecode(organizationResponse.body)['data']
+        [0]['organization_amenities'];
+    for (final amenityData in organizationData) {
+      controller.selectedAmenitiesListID.add(amenityData['id']);
+      print(controller.selectedAmenitiesListID);
+      ameList.add(
+        MultiSelectCard(
+          value: amenityData['id'],
+          enabled: true,
+          selected: true,
+          label: amenityData['name'],
+        ),
+      );
+    }
+  }
 
+  Future<void> getAmenities() async {
+    // Get organization details
+    if (controller.isEditable.value == true) {
+      newAmenities();
+    }
     // Get all amenities
     final amenitiesResponse = await http.get(
       Uri.parse(
@@ -186,25 +206,16 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
         'x-access-token': '${GetStorage().read("token")}',
       },
     );
-    final amenitiesData = jsonDecode(amenitiesResponse.body)['data'];
+    final amenitiesData = await jsonDecode(amenitiesResponse.body)['data'];
 
     // Create a list of MultiSelectCard widgets for each amenity
     final amenitiesList = <MultiSelectCard>[];
     final allAmenities = <MultiSelectCard>[];
-    for (final amenityData in organizationData) {
-      ameList.add(
-        MultiSelectCard(
-          value: amenityData['name'],
-          enabled: true,
-          selected: true,
-          label: amenityData['name'],
-        ),
-      );
-    }
+
     for (final amenityData in amenitiesData) {
       bool alreadyExists = false;
       for (final ameItem in ameList) {
-        if (ameItem.value == amenityData['name']) {
+        if (ameItem.value == amenityData['id']) {
           alreadyExists = true;
           break;
         }
@@ -212,146 +223,16 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
       if (!alreadyExists) {
         ameList.add(
           MultiSelectCard(
-            value: amenityData['name'],
+            value: amenityData['id'],
             label: amenityData['name'],
           ),
         );
       }
     }
-    // for (var i = 0; i < ameList.length; i++) {
-    //   print(amenitiesData[i]['name']);
-    //   print(ameList[i].value);
-    //   if (amenitiesData[i]['name'] == ameList[i].value) {
-    //   } else {
-    //     ameList.add(
-    //       MultiSelectCard(
-    //         value: amenitiesData[i]['name'],
-    //         label: amenitiesData[i]['name'],
-    //       ),
-    //     );
-    //   }
-    // }
-    // Update the state with the amenities
-    setState(() {});
+    setState(() {
+      controller.isLoading.value = false;
+    });
   }
-
-  // getAmenities() async {
-  //   http.Response response = await http.post(
-  //       Uri.parse(
-  //           'https://manage.partypeople.in/v1/party/organization_details'),
-  //       headers: {
-  //         'x-access-token': '${GetStorage().read("token")}',
-  //       });
-  //   print("response of Organization ${jsonDecode(response.body)['data'][0]}");
-  //   setState(() {
-  //     var jsonAddAmenitiesData =
-  //         jsonDecode(response.body)['data'][0]['organization_amenities'];
-  //     for (var i = 0; i < jsonAddAmenitiesData.length; i++) {
-  //       setState(() {
-  //         amenitiesList.add(MultiSelectCard(
-  //             value: jsonAddAmenitiesData[i]['name'],
-  //             enabled: true,
-  //             perpetualSelected: true,
-  //             selected: true,
-  //             label: jsonAddAmenitiesData[i]['name']));
-  //       });
-  //     }
-  //   });
-  //
-  //   http.Response amenities = await http.get(
-  //       Uri.parse(
-  //           'https://manage.partypeople.in/v1/party/organization_amenities'),
-  //       headers: {
-  //         'x-access-token':
-  //             'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MjUsImlhdCI6MTY3NTg2NTkxMH0.UAqwef4sbcFd2lt1gAaFPZU9KYg72tjrtqkWKc5Dq2M',
-  //       });
-  //   var jsonData = jsonDecode(amenities.body);
-  //   setState(() {
-  //     var jsonAddAmenitiesData = jsonData['data'];
-  //     for (var i = 0; i < jsonAddAmenitiesData.length; i++) {
-  //       setState(() {
-  //         allAmentites.add(MultiSelectCard(
-  //             value: jsonAddAmenitiesData[i]['id'],
-  //             label: jsonAddAmenitiesData[i]['name']));
-  //       });
-  //     }
-  //   });
-  //   print(allAmentites);
-  //   print(amenitiesList);
-  //   setState(() {
-  //     finalAmenities = allAmentites;
-  //     // selectedItemsAmenities = mergeLists(amenitiesList, allAmentites);
-  //     // print("Final Amenitites + Selected : - $selectedItemsAmenities");
-  //   });
-  // }
-
-  //
-  // List<MultiSelectCard> mergeLists(
-  //     List<MultiSelectCard> list1, List<MultiSelectCard> list2) {
-  //   List<MultiSelectCard> mergedList = [];
-  //
-  //   // Add all items from list1 to the merged list
-  //   for (MultiSelectCard item in list1) {
-  //     bool found = false;
-  //     for (MultiSelectCard mergedItem in mergedList) {
-  //       // Check if the item is already in the merged list
-  //       if (item == mergedItem) {
-  //         found = true;
-  //         break;
-  //       }
-  //     }
-  //     if (!found) {
-  //       mergedList.add(item);
-  //     }
-  //   }
-  //
-  //   // Add all items from list2 to the merged list
-  //   for (MultiSelectCard item in list2) {
-  //     bool found = false;
-  //     for (MultiSelectCard mergedItem in mergedList) {
-  //       // Check if the item is already in the merged list
-  //       if (item == mergedItem) {
-  //         found = true;
-  //         break;
-  //       }
-  //     }
-  //     if (!found) {
-  //       mergedList.add(item);
-  //     }
-  //   }
-  //
-  //   return mergedList;
-  // }
-
-  // getAmenities() async {
-  //   setState(() {
-  //     isLoading == true;
-  //   });
-  //   http.Response response = await http.get(
-  //       Uri.parse(
-  //           'https://manage.partypeople.in/v1/party/organization_amenities'),
-  //       headers: {
-  //         'x-access-token':
-  //             'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MjUsImlhdCI6MTY3NTg2NTkxMH0.UAqwef4sbcFd2lt1gAaFPZU9KYg72tjrtqkWKc5Dq2M',
-  //       });
-  //   var jsonData = jsonDecode(response.body);
-  //   setState(() {
-  //     var jsonAddAmenitiesData = jsonData['data'];
-  //     amenitiesList.clear();
-  //     for (var i = 0; i < jsonAddAmenitiesData.length; i++) {
-  //       setState(() {
-  //         amenitiesList.add(MultiSelectCard(
-  //             value: jsonAddAmenitiesData[i]['id'],
-  //             label: jsonAddAmenitiesData[i]['name']));
-  //       });
-  //     }
-  //   });
-  //   print(response.body);
-  //   setState(() {});
-  //   setState(() {
-  //     isLoading == false;
-  //   });
-  // }
 
   @override
   void initState() {
@@ -591,18 +472,17 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                             )),
                         items: ameList,
                         onChange: (allSelectedItems, selectedItem) {
-                          // setState(() {
-                          //   if (controller.selectedAmenitiesListID
-                          //       .contains(selectedItem)) {
-                          //   } else {
-                          //     controller.selectedAmenitiesListID
-                          //         .add(selectedItem);
-                          //   }
-                          //
-                          //   print(selectedItem);
-                          //   print(
-                          //       "All Selected Items List ==> ${controller.selectedAmenitiesListID}");
-                          // });
+                          setState(() {
+                            if (ameList.contains(selectedItem)) {
+                            } else {
+                              controller.selectedAmenitiesListID
+                                  .add(selectedItem);
+                            }
+
+                            print(selectedItem);
+                            print(
+                                "All Selected Items List ==> ${controller.selectedAmenitiesListID}");
+                          });
                         }),
                   ),
                 ),
@@ -617,7 +497,48 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                         )
                       : ElevatedButton(
                           onPressed: () {
-                            if (timelineImage == null) {
+                            if (controller.isEditable.value == true) {
+                              if (controller.name.text.isEmpty) {
+                                // Show a GetX Snackbar if the text field controller is empty
+                                Get.snackbar(
+                                  "Error",
+                                  "Please enter a valid name",
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  backgroundColor: Colors.red,
+                                  colorText: Colors.white,
+                                );
+                              } else if (controller.description.text.isEmpty) {
+                                // Show a GetX Snackbar if the text field controller is empty
+                                Get.snackbar(
+                                  "Error",
+                                  "Please enter a valid organization description",
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  backgroundColor: Colors.red,
+                                  colorText: Colors.white,
+                                );
+                              } else if (controller.location.text.isEmpty) {
+                                // Show a GetX Snackbar if the text field controller is empty
+                                Get.snackbar(
+                                  "Error",
+                                  "Please enter a valid location",
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  backgroundColor: Colors.red,
+                                  colorText: Colors.white,
+                                );
+                              } else if (controller
+                                  .selectedAmenitiesListID.isEmpty) {
+                                // Show a GetX Snackbar if the text field controller is empty
+                                Get.snackbar(
+                                  "Error",
+                                  "Select at least 1 amenities",
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  backgroundColor: Colors.red,
+                                  colorText: Colors.white,
+                                );
+                              } else {
+                                controller.updateOrganisation();
+                              }
+                            } else if (timelineImage == null) {
                               // Show a GetX Snackbar if the text field controller is empty
                               Get.snackbar(
                                 "Error",
@@ -653,15 +574,6 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                                 backgroundColor: Colors.red,
                                 colorText: Colors.white,
                               );
-                            } else if (controller.branches.text.isEmpty) {
-                              // Show a GetX Snackbar if the text field controller is empty
-                              Get.snackbar(
-                                "Error",
-                                "Please enter a valid branches",
-                                snackPosition: SnackPosition.BOTTOM,
-                                backgroundColor: Colors.red,
-                                colorText: Colors.white,
-                              );
                             } else if (controller.location.text.isEmpty) {
                               // Show a GetX Snackbar if the text field controller is empty
                               Get.snackbar(
@@ -671,21 +583,21 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                                 backgroundColor: Colors.red,
                                 colorText: Colors.white,
                               );
-                            }
-                            // else if (amenitiesList.isEmpty) {
-                            //   // Show a GetX Snackbar if the text field controller is empty
-                            //   Get.snackbar(
-                            //     "Error",
-                            //     "Select at least 1 amenities",
-                            //     snackPosition: SnackPosition.BOTTOM,
-                            //     backgroundColor: Colors.red,
-                            //     colorText: Colors.white,
-                            //   );
-                            // }
-                            else {
+                            } else if (controller
+                                .selectedAmenitiesListID.isEmpty) {
+                              // Show a GetX Snackbar if the text field controller is empty
+                              Get.snackbar(
+                                "Error",
+                                "Select at least 1 amenities",
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                              );
+                            } else {
                               setState(() {
                                 controller.isLoading.value = true;
                               });
+
                               controller.addOrgnition();
                             }
                           },
@@ -694,10 +606,15 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                             children: [
                               Icon(Icons.business),
                               SizedBox(width: 8),
-                              Text(
-                                'Create Organization Profile',
-                                style: TextStyle(fontSize: 16),
-                              ),
+                              controller.isEditable.value == false
+                                  ? Text(
+                                      'Create Organization Profile',
+                                      style: TextStyle(fontSize: 16),
+                                    )
+                                  : Text(
+                                      'Update Organization Profile',
+                                      style: TextStyle(fontSize: 16),
+                                    )
                             ],
                           ),
                           style: ElevatedButton.styleFrom(
