@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 import 'package:get/get.dart';
@@ -38,7 +39,7 @@ class _AddAmenitiesPartyState extends State<AddAmenitiesParty> {
         body: Obx(
           () => SafeArea(
             child: controller.isLoading.value == true
-                ? Center(child: CircularProgressIndicator())
+                ? Center(child: CupertinoActivityIndicator())
                 : Container(
                     height: Get.height,
                     child: GridCheck(
@@ -84,21 +85,11 @@ class _GridCheckState extends State<GridCheck> {
         setState(() {
           for (var i = 0; i < jsonData['data'][ix]['amenities'].length; i++) {
             setState(() {
-              i == 3
-                  ? amenitiesListMusic.add(MultiSelectCard(
-                      enabled: true,
-                      selected: true,
-                      highlightColor: Colors.red,
-                      value:
-                          '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
-                      label:
-                          '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'))
-                  : amenitiesListMusic.add(MultiSelectCard(
-                      highlightColor: Colors.red,
-                      value:
-                          '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
-                      label:
-                          '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'));
+              amenitiesListMusic.add(MultiSelectCard(
+                  highlightColor: Colors.red,
+                  value: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
+                  label:
+                      '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'));
             });
           }
         });
@@ -107,19 +98,10 @@ class _GridCheckState extends State<GridCheck> {
         setState(() {
           for (var i = 0; i < jsonData['data'][ix]['amenities'].length; i++) {
             setState(() {
-              i == 5
-                  ? amenitiesListDrinks.add(MultiSelectCard(
-                      enabled: true,
-                      selected: true,
-                      value:
-                          '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
-                      label:
-                          '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'))
-                  : amenitiesListDrinks.add(MultiSelectCard(
-                      value:
-                          '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
-                      label:
-                          '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'));
+              amenitiesListDrinks.add(MultiSelectCard(
+                  value: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
+                  label:
+                      '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'));
             });
           }
         });
@@ -128,19 +110,10 @@ class _GridCheckState extends State<GridCheck> {
         setState(() {
           for (var i = 0; i < jsonData['data'][ix]['amenities'].length; i++) {
             setState(() {
-              i == 4
-                  ? amenitiesListDressCode.add(MultiSelectCard(
-                      enabled: true,
-                      selected: true,
-                      value:
-                          '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
-                      label:
-                          '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'))
-                  : amenitiesListDressCode.add(MultiSelectCard(
-                      value:
-                          '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
-                      label:
-                          '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'));
+              amenitiesListDressCode.add(MultiSelectCard(
+                  value: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
+                  label:
+                      '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'));
             });
           }
         });
@@ -371,44 +344,48 @@ class _GridCheckState extends State<GridCheck> {
                             items: amenitiesListOthers,
                             onChange: (allSelectedItems, selectedItem) {}),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          if (widget.isPopular == true) {
-                            setState(() {
-                              controller.startDate.text =
-                                  widget.editData['start_date'];
-                              controller.endDate.text =
-                                  widget.editData['end_date'];
-                              controller.startTime.text =
-                                  widget.editData['start_time'];
-                              controller.endTime.text =
-                                  widget.editData['end_time'];
-                            });
-                            controller.sendEditParty(widget.editData, context);
-                          } else {
-                            controller.sendRequst();
-                          }
-                        },
-                        child: Container(
-                          height: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
-                            color: Colors.red,
-                          ),
-                          width: 130,
-                          child: Center(
-                            child: Text(
-                              widget.editData == '' ? 'Finish' : 'Update',
-                              style: TextStyle(
-                                fontFamily: 'Oswald',
-                                fontSize: 18,
-                                color: const Color(0xffffffff),
-                              ),
-                              softWrap: false,
-                            ),
-                          ),
-                        ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     if (widget.isPopular == true) {
+                      //       setState(() {
+                      //         controller.startDate.text =
+                      //         widget.editData['start_date'];
+                      //         controller.endDate.text =
+                      //         widget.editData['end_date'];
+                      //         controller.startTime.text =
+                      //         widget.editData['start_time'];
+                      //         controller.endTime.text =
+                      //         widget.editData['end_time'];
+                      //       });
+                      //       controller.sendEditParty(widget.editData, context);
+                      //     } else {
+                      //       controller.sendRequst();
+                      //     }
+                      //   },
+                      //   child: Container(
+                      //     height: 40,
+                      //     decoration: BoxDecoration(
+                      //       borderRadius: BorderRadius.all(Radius.circular(30)),
+                      //       color: Colors.red,
+                      //     ),
+                      //     width: 130,
+                      //     child: Center(
+                      //       child: Text(
+                      //       '',
+                      //         style: TextStyle(
+                      //           fontFamily: 'Oswald',
+                      //           fontSize: 18,
+                      //           color: const Color(0xffffffff),
+                      //         ),
+                      //         softWrap: false,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      SizedBox(
+                        height: 60,
                       ),
+                      CreatePartyButton(),
                       SizedBox(
                         height: 20,
                       ),
@@ -416,5 +393,33 @@ class _GridCheckState extends State<GridCheck> {
                   ],
                 ),
               ));
+  }
+}
+
+class CreatePartyButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton.icon(
+      onPressed: () {},
+      icon: Icon(
+        Icons.group,
+        color: Colors.white,
+      ),
+      label: Text(
+        'Create Party',
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+      style: ElevatedButton.styleFrom(
+        primary: Colors.red,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        minimumSize: Size(180, 50),
+      ),
+    );
   }
 }

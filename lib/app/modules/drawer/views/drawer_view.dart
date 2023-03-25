@@ -1,18 +1,14 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, must_be_immutable, deprecated_member_use, no_leading_underscores_for_local_identifiers
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:pertypeople/app/modules/addOrganizationsEvent/controllers/add_organizations_event_controller.dart';
 import 'package:pertypeople/app/modules/verification_screen.dart';
 import 'package:pertypeople/app/settings_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../routes/app_pages.dart';
-import '../controllers/drawer_controller.dart';
 
 // class DrawerView extends GetView<DrawerController2> {
 //
@@ -35,53 +31,15 @@ class DrawerView extends StatefulWidget {
 }
 
 class _DrawerViewState extends State<DrawerView> {
-  DrawerController2 controller = Get.put(DrawerController2());
-  var timelineImage;
-  var profileImage;
-
-  _getFromGalleryTimeLine(ImageSource imageSource) async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: imageSource,
-      maxWidth: 1800,
-      maxHeight: 1800,
-    );
-    if (pickedFile != null) {
-      File imageFile = File(pickedFile.path);
-
-      //_sample?.delete();
-      //_file?.delete();
-
-      setState(() {
-        timelineImage = imageFile;
-      });
-      setState(() {
-        timelineImage = imageFile;
-      });
-    }
-  }
-
   AddOrganizationsEventController addOrganizationsEventController =
       Get.put(AddOrganizationsEventController());
-
-  _getFromGalleryProfile(ImageSource imageSource) async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: imageSource,
-      maxWidth: 1800,
-      maxHeight: 1800,
-    );
-    if (pickedFile != null) {
-      File imageFile = File(pickedFile.path);
-      setState(() {
-        profileImage = imageFile;
-        GetStorage().write('profile_picture', profileImage.toString());
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.red.shade900,
+          elevation: 0,
           title: Text("My Profile"),
           iconTheme: IconThemeData(
             color: Colors.white, //change your color here
@@ -93,316 +51,72 @@ class _DrawerViewState extends State<DrawerView> {
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: ListView(children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Stack(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: Colors.red,
-                            content: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                    onPressed: () {
-                                      _getFromGalleryTimeLine(
-                                          ImageSource.camera);
-                                    },
-                                    icon: Icon(
-                                      Icons.camera_alt,
-                                      color: Colors.white,
-                                    )),
-                                IconButton(
-                                    onPressed: () {
-                                      _getFromGalleryTimeLine(
-                                          ImageSource.gallery);
-                                    },
-                                    icon: Icon(
-                                      Icons.photo,
-                                      color: Colors.white,
-                                    )),
-                              ],
-                            ),
-                          ));
-                        },
-                        child: Container(
-                            child: Stack(
-                          children: [
-                            Container(
-                              height: 250,
-                              width: double.maxFinite,
-                              child: Card(
-                                child: timelineImage == null
-                                    ? Image.network(
-                                        widget.timeLineImage,
-                                        fit: BoxFit.fill,
-                                      )
-                                    : Image.file(
-                                        timelineImage,
-                                        fit: BoxFit.fill,
-                                      ),
-                                elevation: 5,
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                child: IconButton(
-                                  onPressed: () {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                      backgroundColor: Colors.red,
-                                      content: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          IconButton(
-                                              onPressed: () {
-                                                _getFromGalleryTimeLine(
-                                                    ImageSource.camera);
-                                              },
-                                              icon: Icon(
-                                                Icons.camera_alt,
-                                                color: Colors.white,
-                                              )),
-                                          IconButton(
-                                              onPressed: () {
-                                                _getFromGalleryTimeLine(
-                                                    ImageSource.gallery);
-                                              },
-                                              icon: Icon(
-                                                Icons.photo,
-                                                color: Colors.white,
-                                              )),
-                                        ],
-                                      ),
-                                    ));
-                                  },
-                                  icon: Icon(
-                                    Icons.camera_alt,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )),
-                      ),
-                      Positioned(
-                        bottom: 15,
-                        left: MediaQuery.of(context).size.width / 2.9,
-                        child: GestureDetector(
-                          onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              backgroundColor: Colors.red,
-                              content: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  IconButton(
-                                      onPressed: () {
-                                        _getFromGalleryProfile(
-                                            ImageSource.camera);
-                                      },
-                                      icon: Icon(
-                                        Icons.camera_alt,
-                                        color: Colors.white,
-                                      )),
-                                  IconButton(
-                                      onPressed: () {
-                                        _getFromGalleryProfile(
-                                            ImageSource.gallery);
-                                      },
-                                      icon: Icon(
-                                        Icons.photo,
-                                        color: Colors.white,
-                                      )),
-                                ],
-                              ),
-                            ));
-                          },
-                          child: Container(
-                              child: Card(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(99)),
-                                  elevation: 10,
-                                  child: Container(
-                                    height: 100,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: profileImage == null
-                                        ? CircleAvatar(
-                                            backgroundColor:
-                                                Colors.red.shade900,
-                                            maxRadius: 40,
-                                            backgroundImage: NetworkImage(
-                                                widget.profileImageView))
-                                        : CircleAvatar(
-                                            maxRadius: 40,
-                                            backgroundImage:
-                                                FileImage(profileImage)),
-                                  ))),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Center(
-                    child: Text(
-                      GetStorage().read('full_name') ?? "",
-                      style: TextStyle(
-                        fontFamily: 'malgun',
-                        fontSize: 27,
-                        color: const Color(0xffffffff),
-                        letterSpacing: -0.54,
-                        height: 1.2222222222222223,
-                      ),
-                      textHeightBehavior:
-                          TextHeightBehavior(applyHeightToFirstAscent: false),
-                      softWrap: false,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    height: 66,
-                    decoration: BoxDecoration(
-                      color: const Color(0xffffffff),
-                    ),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.people,
-                                color: Colors.red,
-                                size: 30,
-                              ),
-                              Text(
-                                '0 views',
-                                style: TextStyle(
-                                  fontFamily: 'Segoe UI',
-                                  fontSize: 16,
-                                  color: const Color(0xff7d7373),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                softWrap: false,
-                              ),
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.favorite,
-                                color: Colors.red,
-                                size: 30,
-                              ),
-                              Text(
-                                '0 likes',
-                                style: TextStyle(
-                                  fontFamily: 'Segoe UI',
-                                  fontSize: 16,
-                                  color: const Color(0xff7d7373),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                softWrap: false,
-                              ),
-                            ],
-                          ),
-                        ]),
-                  ),
-                  SizedBox(height: 20),
-                  GestureDetector(
-                      onTap: () {
-                        addOrganizationsEventController.isEditable.value = true;
-                        Get.toNamed(Routes.ADD_ORGANIZATIONS_EVENT);
-                      },
-                      child:
-                          drawerTile(title: 'Edit Profile', icon: Icons.edit)),
-                  Divider(
-                    thickness: 0.7,
-                    height: 1,
-                  ),
-                  GestureDetector(
-                      onTap: () async {
-                        final Uri _url = Uri.parse(
-                            "https://partypeople.in/index.html#rockon_faq");
+              child: ListView(children: [
+                CoverPhotoAndProfileWidget(
+                    coverPhotoUrl: widget.profileImageView,
+                    profilePhotoUrl: widget.timeLineImage),
+                SizedBox(height: 10),
+                LikesAndViewsWidget(
+                    views: int.parse(widget.views),
+                    likes: int.parse(widget.likes)),
+                SizedBox(height: 20),
+                CustomOptionWidget(
+                  title: 'Edit Organisation Profile',
+                  icon: Icons.edit,
+                  onTap: () {
+                    addOrganizationsEventController.isEditable.value = true;
+                    Get.toNamed(Routes.ADD_ORGANIZATIONS_EVENT);
+                  },
+                ),
+                CustomOptionWidget(
+                  title: 'Frequently Asked Questions',
+                  icon: Icons.question_answer,
+                  onTap: () async {
+                    final Uri _url = Uri.parse(
+                        "https://partypeople.in/index.html#rockon_faq");
 
-                        if (!await launchUrl(_url)) {
-                          throw Exception('Could not launch $_url');
-                        }
-                      },
-                      child: drawerTile(title: 'FAQ', icon: Icons.chat)),
-                  Divider(
-                    thickness: 0.7,
-                    height: 1,
-                  ),
-                  GestureDetector(
-                      onTap: () async {
-                        final Uri _url =
-                            Uri.parse("https://partypeople.in/#rockon_contact");
+                    if (!await launchUrl(_url)) {
+                      throw Exception('Could not launch $_url');
+                    }
+                  },
+                ),
+                CustomOptionWidget(
+                  title: 'Need Any Help?',
+                  icon: Icons.help_center,
+                  onTap: () async {
+                    final Uri _url =
+                        Uri.parse("https://partypeople.in/#rockon_contact");
 
-                        if (!await launchUrl(_url)) {
-                          throw Exception('Could not launch $_url');
-                        }
-                      },
-                      child: drawerTile(title: 'Help', icon: Icons.help)),
-                  Divider(
-                    thickness: 0.7,
-                    height: 1,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      print("verification screen navigation");
-                      Get.to(VerificationScreen());
-                    },
-                    child:
-                        drawerTile(title: 'Verification', icon: Icons.verified),
-                  ),
-                  Divider(
-                    thickness: 0.7,
-                    height: 1,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      print("Settings screen navigation");
-                      Get.to(SettingsView());
-                    },
-                    child: drawerTile(title: 'Settings', icon: Icons.settings),
-                  ),
-                  Divider(
-                    thickness: 0.7,
-                    height: 1,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      GetStorage().remove('token');
-                      Get.offAllNamed(Routes.HOME);
-                    },
-                    child: drawerTile(title: 'Logout', icon: Icons.logout),
-                  ),
-                  Divider(
-                    thickness: 0.7,
-                    height: 1,
-                  ),
-                ]),
-              ),
+                    if (!await launchUrl(_url)) {
+                      throw Exception('Could not launch $_url');
+                    }
+                  },
+                ),
+                CustomOptionWidget(
+                  title: 'Document Verification',
+                  icon: Icons.verified,
+                  onTap: () {
+                    print("verification screen navigation");
+                    Get.to(VerificationScreen());
+                  },
+                ),
+                CustomOptionWidget(
+                  title: 'Settings',
+                  icon: Icons.settings,
+                  onTap: () {
+                    print("Settings screen navigation");
+                    Get.to(SettingsView());
+                  },
+                ),
+                CustomOptionWidget(
+                  title: 'Logout',
+                  icon: Icons.login_outlined,
+                  onTap: () {
+                    GetStorage().remove('token');
+                    Get.offAllNamed(Routes.HOME);
+                  },
+                ),
+              ]),
             ),
           ],
         ));
@@ -473,6 +187,186 @@ class _DrawerViewState extends State<DrawerView> {
             height: 20,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CoverPhotoAndProfileWidget extends StatelessWidget {
+  final String coverPhotoUrl;
+  final String profilePhotoUrl;
+
+  CoverPhotoAndProfileWidget({
+    required this.coverPhotoUrl,
+    required this.profilePhotoUrl,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200.0,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: NetworkImage(coverPhotoUrl),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            bottom: 0.0,
+            left: Get.height * 0.19,
+            child: Container(
+              width: 80.0,
+              height: 80.0,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.white,
+                  width: 2.0,
+                ),
+                image: DecorationImage(
+                  image: NetworkImage(profilePhotoUrl),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class LikesAndViewsWidget extends StatelessWidget {
+  final int likes;
+  final int views;
+
+  LikesAndViewsWidget({required this.likes, required this.views});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 4,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            children: [
+              Icon(
+                Icons.favorite,
+                size: 28.0,
+                color: Colors.red.shade900,
+              ),
+              SizedBox(height: 8.0),
+              Text(
+                likes.toString(),
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey[800],
+                ),
+              ),
+            ],
+          ),
+          Container(
+            height: 40.0,
+            width: 1.0,
+            color: Colors.grey[350],
+          ),
+          Column(
+            children: [
+              Icon(
+                Icons.people,
+                size: 28.0,
+                color: Colors.red.shade900,
+              ),
+              SizedBox(height: 8.0),
+              Text(
+                views.toString(),
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey[800],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+//Placeholder image for testing
+//http://via.placeholder.com/640x360
+
+class CustomOptionWidget extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final VoidCallback? onTap;
+
+  CustomOptionWidget({
+    required this.icon,
+    required this.title,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 4.0),
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.15),
+                blurRadius: 6,
+                offset: Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                size: 28.0,
+                color: Colors.red.shade900,
+              ),
+              SizedBox(width: 16.0),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey[800],
+                  ),
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios_outlined,
+                size: 20.0,
+                color: Colors.grey[500],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

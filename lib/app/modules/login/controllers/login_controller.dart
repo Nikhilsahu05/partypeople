@@ -61,7 +61,7 @@ class LoginController extends GetxController {
         print(json);
         globalHeaderIDController.token.value = json['data']['token'];
         //token = json['token'];
-        await GetStorage().write("token", json['data']['token']);
+
         if (json['data']['first_time'] == '1') {
           Get.offAllNamed(Routes.ADD_ORGANIZATIONS_EVENT,
               arguments: json['data']);
@@ -83,6 +83,7 @@ class LoginController extends GetxController {
   }
 
   verifyOTP(String otpValue, BuildContext context) async {
+    isLoading.value = true;
     http.Response response = await http.post(
         Uri.parse(
           'https://manage.partypeople.in/v1/account/otp_verify',
@@ -94,8 +95,12 @@ class LoginController extends GetxController {
           'x-access-token': globalHeaderIDController.token.value
         });
     var json = jsonDecode(response.body);
+    isLoading.value = false;
+    GetStorage().write('token', '${json['data']['token']}');
 
     if (response.statusCode == 200) {
+      GetStorage().write('token', '${json['data']['token']}');
+      isLoading.value = false;
       Get.snackbar('OTP', '${json['message']}', backgroundColor: Colors.white);
       if (json['message'].contains('successfully'.toUpperCase()) ||
           json['message'].contains('successfully'.toLowerCase())) {
@@ -104,8 +109,10 @@ class LoginController extends GetxController {
         print("Can proceed to new screen");
       }
     } else {
+      isLoading.value = false;
       Get.snackbar('OTP', '${json['message']}');
     }
+    isLoading.value = false;
   }
 
   getAPIOverview(BuildContext context) async {
@@ -124,29 +131,31 @@ class LoginController extends GetxController {
       Get.offAll(ProfileType());
     } else {
       isLoading.value = false;
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          Routes.ADD_ORGANIZATIONS_EVENT, (Route<dynamic> route) => false);
+      Get.offAll(ProfileType());
     }
+    isLoading.value = false;
   }
 
   verifyPhone() async {
     Get.snackbar('OTP', 'OTP Sent Successfully', backgroundColor: Colors.white);
 
     if (mobileNumber.text.isPhoneNumber) {
+      isLoading.value = true;
       var url = Uri.parse('https://manage.partypeople.in/v1/account/login');
       var response = await http.post(url, body: {
         'phone': mobileNumber.text,
       });
       var json = jsonDecode(response.body);
+      GetStorage().write('token', '${json['data']['token']}');
       globalHeaderIDController.token.value = json['data']['token'];
       globalHeaderIDController.uniqueID.value = json['data']['unique_id'];
       globalHeaderIDController.userId.value =
           json['data']['user_id'].toString();
       globalHeaderIDController.phone.value = json['data']['phone'];
       print(json['data']['token']);
-      await GetStorage().write("token", json['data']['token']);
 
       globalHeaderIDController.token.value = json['data']['token'];
+      isLoading.value = false;
 
       Get.toNamed(Routes.OTP, arguments: mobileNumber.text);
     }

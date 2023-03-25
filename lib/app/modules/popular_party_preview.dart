@@ -6,10 +6,6 @@ import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
-import 'package:pertypeople/app/modules/edit_party_screen.dart';
-import 'package:pertypeople/app/modules/subscription/views/subscription_view.dart';
-import 'package:share_plus/share_plus.dart';
 
 class PopularPartyPreview extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
@@ -48,7 +44,7 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
               amenitiesListOthers.add(MultiSelectCard(
                   value: '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}',
                   label:
-                      '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'));
+                  '${jsonAddAmenitiesData[ix]['amenities'][i]['name']}'));
               amenitiesListOthers.reversed;
             });
           }
@@ -66,293 +62,353 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.grey.shade200,
-        body: SingleChildScrollView(
-          child: Stack(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+        child: SingleChildScrollView(
+          child: Column(
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 250,
-                    width: double.maxFinite,
-                    child: Stack(
-                      children: [
-                        Container(
-                          height: 250,
-                          width: double.maxFinite,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: NetworkImage(
-                                      'https://manage.partypeople.in/${widget.data['cover_photo']}'))),
-                        ),
-                        Container(
-                          height: 50,
-                          child: ListTile(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            leading: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                child: Icon(
-                                  Icons.arrow_back,
-                                  color: Colors.red.shade900,
-                                )),
-                            trailing: Container(
-                              height: 100,
-                              width: 300,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  GestureDetector(
-                                      onTap: () {
-                                        Share.share('${widget.data['title']}');
-                                      },
-                                      child: CircleAvatar(
-                                          backgroundColor: Colors.white,
-                                          child: Icon(
-                                            Icons.share,
-                                            color: Colors.black,
-                                          ))),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          width: double.maxFinite,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: Text(
-                      "${widget.data['title']}",
-                      textAlign: TextAlign.start,
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: Text(
-                      "${widget.data['description']}",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    height: 66,
-                    decoration: BoxDecoration(
-                      color: const Color(0xffffffff),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0x29000000),
-                          offset: Offset(0, 5),
-                          blurRadius: 6,
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Column(
-                            children: [
-                              Icon(
-                                Icons.people,
-                                color: Colors.red,
-                                size: 30,
-                              ),
-                              Text(
-                                '${widget.data['view']} Views',
-                                style: TextStyle(
-                                  fontFamily: 'Segoe UI',
-                                  fontSize: 18,
-                                  color: const Color(0xff7d7373),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                softWrap: false,
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Icon(
-                                Icons.favorite,
-                                color: Colors.red,
-                                size: 30,
-                              ),
-                              Text(
-                                '${widget.data['like']}  Likes',
-                                style: TextStyle(
-                                  fontFamily: 'Segoe UI',
-                                  fontSize: 18,
-                                  color: const Color(0xff7d7373),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                softWrap: false,
-                              ),
-                            ],
-                          ),
-                        ]),
-                  ),
-                  ListTile(
-                    enabled: true,
-                    leading: Icon(Icons.date_range, color: Colors.red.shade900),
-                    title: Text(
-                      "${DateFormat.yMEd().format(DateTime.parse(widget.data['start_date']))} to ${DateFormat.yMEd().format(DateTime.parse(widget.data['end_date']))}",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(fontSize: 14, color: Colors.black),
-                    ),
-                  ),
-                  ListTile(
-                    enabled: true,
-                    leading: Icon(Icons.timer, color: Colors.red.shade900),
-                    title: Text(
-                      "${widget.data['start_time']} to ${widget.data['end_time']}",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(fontSize: 14, color: Colors.black),
-                    ),
-                  ),
-                  ListTile(
-                    enabled: true,
-                    leading: Icon(Icons.person, color: Colors.red.shade900),
-                    title: Text(
-                      "AGE :${widget.data['start_age']} - ${widget.data['end_age']}",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(fontSize: 14, color: Colors.black),
-                    ),
-                  ),
-                  ListTile(
-                    enabled: true,
-                    leading: Icon(Icons.person, color: Colors.red.shade900),
-                    title: Text(
-                      "Persons Limit :${widget.data['person_limit']}",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(fontSize: 14, color: Colors.black),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(14.0),
-                    child: MultiSelectContainer(
-                        maxSelectableCount: 0,
-                        suffix: MultiSelectSuffix(
-                            selectedSuffix: const Padding(
-                              padding: EdgeInsets.only(left: 5),
-                              child: Icon(
-                                Icons.check,
-                                color: Colors.white,
-                                size: 14,
-                              ),
-                            ),
-                            disabledSuffix: const Padding(
-                              padding: EdgeInsets.only(left: 5),
-                              child: Icon(
-                                Icons.do_disturb_alt_sharp,
-                                size: 14,
-                              ),
-                            )),
-                        items: amenitiesListOthers,
-                        onChange: (allSelectedItems, selectedItem) {}),
-                  ),
-                  widget.data['papular_status'] != '1'
-                      ? Center(
-                          child: GestureDetector(
-                            onTap: () async {
-                              // showCustomDialog(context);
-                              Get.to(SubscriptionView(
-                                id: widget.data['id'],
-                                data: widget.data,
-                              ));
-                            },
-                            child: Container(
-                              width: 180,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment(-1.183, -0.74),
-                                    end: Alignment(1.071, -0.079),
-                                    colors: [
-                                      Colors.pink,
-                                      Colors.purple,
-                                      Colors.pink,
-                                    ],
-                                    stops: [0.0, 0.564, 1.0],
-                                  ),
-                                  borderRadius: BorderRadius.circular(45)),
-                              child: Center(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Container(
-                                        width: 35,
-                                        child:
-                                            Image.asset('assets/shuttle.png')),
-                                    Text(
-                                      "Boost Post".toUpperCase(),
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                          color: Colors.white),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      : Container(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                ],
+              SizedBox(
+                height: 50,
               ),
-              Positioned(
-                top: MediaQuery.of(context).size.height * 0.29,
-                right: 10,
-                child: SizedBox(
-                  height: 40,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Get.to(EditProfileScreen(
-                          isPopularParty: widget.isPopularParty,
-                          editProfileData: widget.data));
-                    },
-                    child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.orange,
-                            borderRadius: BorderRadius.circular(40)),
-                        width: 75,
-                        child: Center(
-                            child: Icon(
-                          Icons.edit,
-                          color: Colors.black,
-                        ))),
-                    style: ElevatedButton.styleFrom(
-                        elevation: 0, backgroundColor: Colors.transparent),
-                  ),
+              Container(
+                height: 250,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    color: Colors.red,
+                    image: DecorationImage(
+                        image: AssetImage('assets/a.jpeg'), fit: BoxFit.fill)),
+                width: Get.width,
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                "Dance Party at My Home With Music",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    fontFamily: 'malgun',
+                    fontSize: 30,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                "When an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries but also the leap into",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontFamily: 'malgun',
+                  fontSize: 16,
+                  color: Color(0xff7D7373),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              BoostButton(label: 'Boost Post', onPressed: () {
+
+              }),
+              Divider(),
+              ListTile(
+                leading: Icon(
+                  Icons.calendar_month,
+                  color: Colors.red,
+                ),
+                title: Text(
+                  "14 May, 2022 to 14 May 2022",
+                  style: TextStyle(fontFamily: 'malgun', fontSize: 17),
+                ),
+                subtitle: Text("09:30 PM to 11:30 PM"),
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.pin_drop,
+                  color: Colors.red,
+                ),
+                title: Text(
+                  "Jabalpur",
+                  style: TextStyle(fontFamily: 'malgun', fontSize: 17),
+                ),
+                subtitle: Text("Manohar street , House No 22 Near, MD house"),
+              ),
+              ListTile(
+                leading: Container(
+                    width: 27, child: Image.asset("assets/party.png")),
+                title: Text(
+                  "House Party ",
+                  style: TextStyle(fontFamily: 'malgun', fontSize: 17),
+                ),
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.supervised_user_circle_outlined,
+                  color: Colors.red,
+                ),
+                title: Text(
+                  "Female , Couple",
+                  style: TextStyle(fontFamily: 'malgun', fontSize: 17),
+                ),
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.group,
+                  color: Colors.red,
+                ),
+                title: Text(
+                  'Age',
+                  style: TextStyle(fontFamily: 'malgun', fontSize: 17),
+                ),
+                subtitle: Text(
+                  "18 To 35 ",
+                ),
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.warning,
+                  color: Colors.red,
+                ),
+                title: Text(
+                  'People Limit',
+                  style: TextStyle(fontFamily: 'malgun', fontSize: 17),
+                ),
+                subtitle: Text(
+                  "30  ",
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class OrganizationProfileButton extends StatefulWidget {
+  final Function onPressed;
+
+  OrganizationProfileButton({required this.onPressed});
+
+  @override
+  _OrganizationProfileButtonState createState() =>
+      _OrganizationProfileButtonState();
+}
+
+class _OrganizationProfileButtonState extends State<OrganizationProfileButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+    _animation =
+    Tween<double>(begin: 1.0, end: 0.95).animate(_animationController)
+      ..addListener(() {
+        setState(() {});
+      });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) {
+        _animationController.forward();
+      },
+      onTapUp: (_) {
+        _animationController.reverse();
+        widget.onPressed();
+      },
+      onTapCancel: () {
+        _animationController.reverse();
+      },
+      child: Transform.scale(
+        scale: _animation.value,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                spreadRadius: 1,
+                blurRadius: 3,
+                offset: Offset(0, 2),
+              ),
+            ],
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xffFF4D4D),
+                Color(0xffFF0000),
+              ],
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.edit,
+                  color: Colors.white,
+                ),
+                SizedBox(width: 8),
+                Text(
+                  'Edit Party',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+}
+
+class TitleAnswerWidget extends StatelessWidget {
+  final String title;
+  final String answer;
+
+  TitleAnswerWidget({required this.title, required this.answer});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black.withOpacity(0.7),
+            ),
+          ),
+          SizedBox(height: 8),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.red.withOpacity(0.2),
+            ),
+            child: Text(
+              answer,
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.black.withOpacity(0.7),
+              ),
+            ),
+          ),
+          SizedBox(height: 16),
+        ],
+      ),
+    );
+  }
+}
+
+// class SelectedAmenities extends StatelessWidget {
+//
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('My App'),
+//       ),
+//       body: Padding(
+//         padding: const EdgeInsets.all(16),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Text(
+//               'Selected Amenities',
+//               style: TextStyle(
+//                 fontSize: 20,
+//                 fontWeight: FontWeight.bold,
+//                 color: Colors.black.withOpacity(0.7),
+//               ),
+//             ),
+//             SizedBox(height: 16),
+//             Expanded(
+//               child: GridView.builder(
+//                 itemCount: selectedAmenities.length,
+//                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//                   crossAxisCount: 2,
+//                   crossAxisSpacing: 16,
+//                   mainAxisSpacing: 16,
+//                   childAspectRatio: 2.5,
+//                 ),
+//                 itemBuilder: (BuildContext context, int index) {
+//                   return TitleAnswerWidget(
+//                     title: 'Amenity ${index + 1}',
+//                     answer: selectedAmenities[index],
+//                   );
+//                 },
+//               ),
+//             ),
+//             SizedBox(height: 16),
+//             OrganizationProfileButton(
+//               onPressed: () {
+//                 // Do something when the button is pressed
+//               },
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+class BoostButton extends StatelessWidget {
+  final String label;
+  final VoidCallback onPressed;
+
+  const BoostButton({Key? key, required this.label, required this.onPressed})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        primary: Colors.red.shade900,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.flash_on, color: Colors.white),
+          SizedBox(width: 8),
+          Text(
+            label.toUpperCase(),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }

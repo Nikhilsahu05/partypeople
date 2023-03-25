@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:pertypeople/app/modules/global_header_id_controller.dart';
 
 import '../../../routes/app_pages.dart';
 import '../../GooglePlacesAutocomplete/views/myapp.dart';
@@ -41,7 +42,7 @@ class AddOrganizationsEvent2Controller extends GetxController {
   final stagPrice = TextEditingController();
   final couplesPrice = TextEditingController();
   final othersPrice = TextEditingController();
-
+  final offersText = TextEditingController();
   SingingCharacter character = SingingCharacter.Full;
   var partyStatusChange = "".obs;
   var name = '';
@@ -166,6 +167,8 @@ class AddOrganizationsEvent2Controller extends GetxController {
   }
 
   var fullEditableData;
+  GlobalHeaderIDController globalHeaderIDController =
+      Get.put(GlobalHeaderIDController());
 
   sendEditParty(jsonData, BuildContext context) async {
     isLoading.value = true;
@@ -193,7 +196,7 @@ class AddOrganizationsEvent2Controller extends GetxController {
       'status': '1',
       'organization_id': '1',
       'party_amenitie_id': '1,2,3',
-      'offers': 'No Offer',
+      'offers': offersText.text,
       'ladies': ladiesPrice.text,
       'stag': stagPrice.text,
       'couples': couplesPrice.text,
@@ -271,7 +274,7 @@ class AddOrganizationsEvent2Controller extends GetxController {
       'status': character.name,
       'organization_id': '1',
       'party_amenitie_id': '1,2',
-      'offers': '0',
+      'offers': offersText.text,
       'ladies': ladiesPrice.text,
       'stag': stagPrice.text,
       'couples': couplesPrice.text,

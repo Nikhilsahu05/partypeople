@@ -3,6 +3,7 @@
 import 'package:get/get.dart';
 import 'package:pertypeople/app/modules/organizationProfile/bindings/organization_profile_binding.dart';
 import 'package:pertypeople/app/modules/organizationProfile/views/organization_profile_view.dart';
+import 'package:pertypeople/app/splash_main.dart';
 
 import '../modules/addEvent/bindings/add_event_binding.dart';
 import '../modules/addEvent/views/add_event_view.dart';
@@ -52,9 +53,14 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.HOME;
+  static const INITIAL = Routes.PARTYPEOPLE;
 
   static final routes = [
+    GetPage(
+      name: _Paths.PARTYPEOPLE,
+      page: () => SplashScreenMain(),
+      binding: HomeBinding(),
+    ),
     GetPage(
       name: _Paths.HOME,
       page: () => HomeView(),
@@ -147,14 +153,7 @@ class AppPages {
     GetPage(
       name: _Paths.CUST_PROFILE,
       page: () => CustProfileView(
-        likes: '',
-        views: '',
-        city: '',
-        orgName: '',
-        amenities: '',
-        timelinePic: '',
-        organisationDesc: '',
-        circularDP: '',
+        organizationData: {},
       ),
       binding: CustProfileBinding(),
     ),

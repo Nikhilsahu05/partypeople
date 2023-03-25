@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:pertypeople/app/modules/global_header_id_controller.dart';
 
 import '../../../routes/app_pages.dart';
 import 'GetCitys.dart';
@@ -47,6 +48,7 @@ class AddOrganizationsEventController extends GetxController {
     print("response of Organization ${response.body}");
     if (jsonDecode(response.body)['data'] != null) {
       name.text = jsonDecode(response.body)['data'][0]['name'];
+      location.text = jsonDecode(response.body)['data'][0]['city_id'];
       description.text = jsonDecode(response.body)['data'][0]['description'];
       profilePicture
           ?.rename(jsonDecode(response.body)['data'][0]['profile_pic']);
@@ -182,9 +184,9 @@ class AddOrganizationsEventController extends GetxController {
           .toString()
           .replaceAll('[', '')
           .replaceAll(']', ''),
-      'city_id': citySelectedKey.toString(),
+      'city_id': location.text,
       'description': description.text,
-      'name': name.text,
+      'name': name.text.toUpperCase(),
       'latitude': latitude.toString(),
       'longitude': longitude.toString(),
       'organization_id': '1',
@@ -220,6 +222,9 @@ class AddOrganizationsEventController extends GetxController {
     update();
   }
 
+  GlobalHeaderIDController globalHeaderIDController =
+      Get.put(GlobalHeaderIDController());
+
   Future<void> addOrgnition() async {
     print("Printing profile picture and timeline picture");
     print(profilePicture?.path);
@@ -238,31 +243,31 @@ class AddOrganizationsEventController extends GetxController {
           .toString()
           .replaceAll('[', '')
           .replaceAll(']', ''),
-      'city_id': citySelectedKey.toString(),
+      'city_id': location.text,
       'description': description.text,
-      'name': name.text,
+      'name': name.text.toUpperCase(),
       'latitude': latitude.toString(),
       'longitude': longitude.toString(),
       'type': '1',
       'profile_pic': '',
       'timeline_pic': '',
     });
-    isLoading.value = false;
     request.files.add(
         await http.MultipartFile.fromPath('profile_pic', profilePicture!.path));
-    isLoading.value = false;
+
     request.files.add(await http.MultipartFile.fromPath(
         'timeline_pic', timelinePicture!.path));
     request.headers.addAll(headers);
 
     print("Pending Fields :${request.fields}");
     http.StreamedResponse response = await request.send();
-    isLoading.value = false;
+
     update();
     // print(await response.stream.bytesToString());
     if (response.statusCode == 200) {
       var jsonResponse = json.decode(await response.stream.bytesToString());
       print(jsonResponse);
+      isLoading.value = false;
       if (jsonResponse['message'] == 'Organization Create Successfully.') {
         Get.offAllNamed(Routes.ORGANIZATION_PROFILE_NEW);
       } else if (jsonResponse['message'] == 'Organization Already Created.') {

@@ -16,8 +16,7 @@ class _SplashScreenMainState extends State<SplashScreenMain> {
   void initState() {
     super.initState();
     Timer(Duration(seconds: 3), () {
-      Navigator.pushNamedAndRemoveUntil(
-          context, AppPages.INITIAL, (route) => false);
+      Navigator.pushNamedAndRemoveUntil(context, Routes.HOME, (route) => false);
     });
   }
 
