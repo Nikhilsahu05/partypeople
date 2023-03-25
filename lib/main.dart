@@ -55,7 +55,7 @@ class App extends StatelessWidget {
         //     ?
         // AppPages.INITIAL,
         // :
-        initialRoute: Routes.ORGANIZATION_PROFILE_NEW,
+        initialRoute: Routes.LOGIN,
         // home: (),
         // home: AddAmenities(),
         // initialRoute: Routes.LOGIN,

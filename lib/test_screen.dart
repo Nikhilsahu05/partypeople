@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -110,53 +111,63 @@ class _AmenitiesPartyScreenState extends State<AmenitiesPartyScreen> {
       appBar: AppBar(
         title: Text('Category List'),
       ),
-      body: Column(
-        children: [
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: _categoryLists.length,
-            itemBuilder: (context, index) {
-              final categoryList = _categoryLists[index];
+      body: _categoryLists.length == 0
+          ? Container(
+              child: Center(
+                child: CupertinoActivityIndicator(
+                  radius: 15,
+                  color: Colors.black,
+                ),
+              ),
+            )
+          : Column(
+              children: [
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _categoryLists.length,
+                  itemBuilder: (context, index) {
+                    final categoryList = _categoryLists[index];
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(categoryList.title,
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black)),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Wrap(
-                      spacing: 10.0,
-                      children: categoryList.amenities.map((amenity) {
-                        return GestureDetector(
-                          onTap: () => _selectAmenity(amenity),
-                          child: Chip(
-                            label: Text(
-                              amenity.name,
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(categoryList.title,
                               style: TextStyle(
-                                  color: Colors.white, fontFamily: 'malgun'),
-                            ),
-                            backgroundColor: amenity.selected
-                                ? Colors.red
-                                : Colors.grey[400],
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Wrap(
+                            spacing: 10.0,
+                            children: categoryList.amenities.map((amenity) {
+                              return GestureDetector(
+                                onTap: () => _selectAmenity(amenity),
+                                child: Chip(
+                                  label: Text(
+                                    amenity.name,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'malgun'),
+                                  ),
+                                  backgroundColor: amenity.selected
+                                      ? Colors.red
+                                      : Colors.grey[400],
+                                ),
+                              );
+                            }).toList(),
                           ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-          AmenitiesButton()
-        ],
-      ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                AmenitiesButton()
+              ],
+            ),
     );
   }
 }

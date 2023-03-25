@@ -1,7 +1,9 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:lottie/lottie.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -35,70 +37,165 @@ class _VerificationScreenState extends State<VerificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Verification"),
-      ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 10,
+        appBar: AppBar(
+          title: Text(
+            "Verification",
+            style: TextStyle(
+              color: Colors.white,
+            ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: Center(
-              child: Text(
-                "Thank you for choosing our app for your needs. To ensure the safety and security of our users, we require all users to complete a verification process. As a part of this process, we need you to sign and seal the attached agreement and upload a scanned copy of the same.\n\n"
-                "This agreement outlines the terms and conditions of using our app, and we highly recommend that you read it thoroughly before signing. By signing this agreement, you agree to comply with all the terms and conditions mentioned herein.\n\n"
-                "Once we receive the signed agreement, our team will review and verify your account. If the verification process is successful, you will receive a verification status that will build trust with the customers.",
+          backgroundColor: Colors.red,
+        ),
+        body: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: SizedBox(
+                  height: Get.height * 0.3,
+                  child: Lottie.asset("assets/120628-verification.json"),
+                ),
+              ),
+              Text(
+                "Thank you for choosing our app for your needs. To ensure the safety and security of our users, we require all users to complete a verification process.",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Text(
+                "As a part of this process, we need you to sign and seal the attached agreement and upload a scanned copy of the same.",
                 style: TextStyle(
                   fontSize: 16,
                 ),
               ),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          ElevatedButton(
-              onPressed: () {
-                launchUrl(_url);
-              },
-              child: Text("Download PDF")),
-          SizedBox(
-            height: 10,
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-            onPressed: () async {
-              FilePickerResult? result =
-                  await FilePicker.platform.pickFiles(allowMultiple: true);
-
-              if (result != null) {
-                Alert(
-                  context: context,
-                  type: AlertType.success,
-                  title: "PDF Uploaded",
-                  desc:
-                      "Thank You for Uploading, Your Document is Under Verification.",
-                  buttons: [
-                    DialogButton(
-                      child: Text(
-                        "OK",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+              SizedBox(
+                height: 16,
+              ),
+              Text(
+                "This agreement outlines the terms and conditions of using our app, and we highly recommend that you read it thoroughly before signing. By signing this agreement, you agree to comply with all the terms and conditions mentioned herein.",
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(
+                height: 24,
+              ),
+              Center(
+                child: Container(
+                  width: 250,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      launchUrl(_url);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.redAccent,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      onPressed: () => Navigator.pop(context),
-                      width: 120,
-                    )
-                  ],
-                ).show();
-              } else {
-                // User canceled the picker
-              }
-            },
-            child: Text("Upload PDF"),
+                      elevation: 8,
+                      textStyle: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.download,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          "Download PDF",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 24,
+              ),
+              Center(
+                child: Container(
+                  width: 250,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      FilePickerResult? result = await FilePicker.platform
+                          .pickFiles(allowMultiple: true);
+
+                      if (result != null) {
+                        Alert(
+                          context: context,
+                          type: AlertType.success,
+                          title: "PDF Uploaded",
+                          desc:
+                              "Thank You for Uploading, Your Document is Under Verification.",
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                "OK",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                              width: 120,
+                            )
+                          ],
+                        ).show();
+                      } else {
+                        // User canceled the picker
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.redAccent,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      elevation: 8,
+                      textStyle: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.upload,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          "Upload PDF",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ));
   }
 }

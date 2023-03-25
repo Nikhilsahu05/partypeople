@@ -1,13 +1,7 @@
 // ignore_for_file: must_be_immutable
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:pertypeople/app/modules/subscription/views/subscription_view.dart';
-
-import '../../test_screen.dart';
 
 class PopularPartyPreview extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
@@ -24,80 +18,8 @@ class PopularPartyPreview extends StatefulWidget {
 class _PopularPartyPreviewState extends State<PopularPartyPreview> {
   var amenitiesTitle = [''];
   var jsonAddAmenitiesData;
-  List<Category> _categories = [];
-  List<CategoryList> _categoryLists = [];
+
   List<String> allAmenities = [];
-
-  Future<void> _fetchData() async {
-    http.Response response = await http.get(
-      Uri.parse('https://manage.partypeople.in/v1/party/party_amenities'),
-      headers: {
-        'x-access-token': GetStorage().read("token").toString(),
-      },
-    );
-    final data = jsonDecode(response.body);
-    setState(() {
-      if (data['status'] == 1) {
-        _categories = (data['data'] as List)
-            .map((category) => Category.fromJson(category))
-            .toList();
-
-        _categories.forEach((category) {
-          _categoryLists.add(CategoryList(
-              title: category.name, amenities: category.amenities));
-        });
-      }
-    });
-  }
-
-  List<Amenity> getSelectedAmenities(List<String> selectedIds) {
-    List<Amenity> selectedAmenities = [];
-    _categories.forEach((category) {
-      category.amenities.forEach((amenity) {
-        if (selectedIds.contains(amenity.id)) {
-          selectedAmenities.add(amenity);
-        }
-      });
-    });
-    return selectedAmenities;
-  }
-
-  getAmenities() async {
-    setState(() {
-      allAmenities = [widget.data['party_amenitie_id']];
-      showSelectedAmenities(allAmenities);
-    });
-    print(allAmenities);
-  }
-
-  @override
-  void initState() {
-    _fetchData();
-    getAmenities();
-    super.initState();
-  }
-
-  List<Amenity> _selectedAmenities = [];
-
-  void showSelectedAmenities(List<String> selectedIds) {
-    setState(() {
-      _selectedAmenities = getSelectedAmenities(selectedIds);
-    });
-  }
-
-  Widget buildSelectedAmenities() {
-    return ListView.builder(
-      itemCount: _selectedAmenities.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(
-            _selectedAmenities[index].name,
-            style: TextStyle(color: Colors.black),
-          ),
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -235,24 +157,23 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
               SizedBox(
                 height: 20,
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 28.0, vertical: 0),
-                child: Container(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    "Selected Amenities",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'malgun',
-                        fontSize: 18),
-                  ),
-                ),
-              ),
-              Container(
-                  height: 300, width: 300, child: buildSelectedAmenities()),
+              // Padding(
+              //   padding:
+              //   const EdgeInsets.symmetric(horizontal: 28.0, vertical: 0),
+              //   child: Container(
+              //     alignment: Alignment.topLeft,
+              //     child: Text(
+              //       "Selected Amenities",
+              //       textAlign: TextAlign.left,
+              //       style: TextStyle(
+              //           color: Colors.black,
+              //           fontWeight: FontWeight.bold,
+              //           fontFamily: 'malgun',
+              //           fontSize: 18),
+              //     ),
+              //   ),
+              // ),
+
               SizedBox(
                 height: 20,
               ),

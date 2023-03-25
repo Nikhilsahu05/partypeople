@@ -45,6 +45,7 @@ class AddOrganizationsEvent2Controller extends GetxController {
   final couplesPrice = TextEditingController();
   final othersPrice = TextEditingController();
   final offersText = TextEditingController();
+  RxBool isPopular = false.obs;
   SingingCharacter character = SingingCharacter.Full;
   var partyStatusChange = "".obs;
   var name = '';
