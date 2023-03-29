@@ -85,7 +85,9 @@ class _AmenitiesPartyScreenState extends State<AmenitiesPartyScreen> {
           _categoryLists.add(CategoryList(
               title: category.name, amenities: category.amenities));
         });
-        getSelectedID();
+        if (controller.isEditable.value == true) {
+          getSelectedID();
+        }
       }
     });
   }
@@ -193,7 +195,9 @@ class _AmenitiesPartyScreenState extends State<AmenitiesPartyScreen> {
                   },
                 ),
                 AmenitiesButton(() {
-                  controller.sendEditParty();
+                  controller.isEditable.value == true
+                      ? controller.sendEditParty()
+                      : controller.sendRequst();
                 })
               ],
             ),
@@ -221,14 +225,23 @@ class _AmenitiesButtonState extends State<AmenitiesButton> {
         Icons.grid_view,
         color: Colors.white,
       ),
-      label: Text(
-        'Create Party',
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
-      ),
+      label: controller.isEditable.value == true
+          ? Text(
+              'Update Party',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            )
+          : Text(
+              'Create Party',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
       style: ElevatedButton.styleFrom(
         primary: Colors.red,
         shape: RoundedRectangleBorder(

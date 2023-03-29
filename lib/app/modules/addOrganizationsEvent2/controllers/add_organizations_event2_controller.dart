@@ -276,7 +276,8 @@ class AddOrganizationsEvent2Controller extends GetxController {
       'person_limit': peopleLimit.text,
       'status': character.name,
       'organization_id': '1',
-      'party_amenitie_id': '1,2,3',
+      'party_amenitie_id':
+          selectedAmenities.toString().replaceAll('[', ' ').replaceAll(']', ''),
       'offers': offersText.text,
       'ladies': ladiesPrice.text,
       'stag': stagPrice.text,
