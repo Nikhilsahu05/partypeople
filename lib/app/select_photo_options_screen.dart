@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pertypeople/app/default_image_screen.dart';
 import 'package:pertypeople/app/re_usable_select_photo_button.dart';
 
 class SelectPhotoOptionsScreen extends StatelessWidget {
@@ -43,19 +45,25 @@ class SelectPhotoOptionsScreen extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
+            SelectPhoto(
+              onTap: () => onTap(ImageSource.camera),
+              icon: Icons.camera_alt_outlined,
+              textLabel: 'Use a Camera',
+            ),
             const Center(
               child: Text(
                 'OR',
                 style: TextStyle(fontSize: 18),
               ),
             ),
+            SelectPhoto(
+                textLabel: 'Default Images',
+                icon: Icons.grid_4x4,
+                onTap: () {
+                  Get.to(ImageScreen());
+                }),
             const SizedBox(
               height: 10,
-            ),
-            SelectPhoto(
-              onTap: () => onTap(ImageSource.camera),
-              icon: Icons.camera_alt_outlined,
-              textLabel: 'Use a Camera',
             ),
           ])
         ],

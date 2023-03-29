@@ -50,12 +50,9 @@ class App extends StatelessWidget {
         },
         // initialRoute: Routes.,
         // home: SplashScreenMain(),
-        // initialRoute:
-        // GetStorage().read('token') == null
-        //     ?
-        // AppPages.INITIAL,
-        // :
-        initialRoute: Routes.LOGIN,
+        initialRoute: GetStorage().read('token') == null
+            ? AppPages.INITIAL
+            : Routes.ORGANIZATION_PROFILE_NEW,
         // home: (),
         // home: AddAmenities(),
         // initialRoute: Routes.LOGIN,

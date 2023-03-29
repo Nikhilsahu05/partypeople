@@ -3,6 +3,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +18,7 @@ import 'package:image_crop/image_crop.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
+import 'package:pertypeople/cached_image_placeholder.dart';
 
 import '../../../select_photo_options_screen.dart';
 import '../controllers/add_organizations_event_controller.dart';
@@ -29,10 +32,35 @@ class AddOrganizationsEventView extends StatefulWidget {
 }
 
 class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
-  var profileImage;
-  var timelineImage;
   final cropKey = GlobalKey<CropState>();
-  File? _image;
+
+  Future<String?> savePhotoToFirebase(
+      String tokenId, File photo, String imageName) async {
+    try {
+      setState(() {
+        controller.isLoading.value = true;
+      });
+      await FirebaseAuth.instance.signInAnonymously();
+
+      // Initialize Firebase Storage
+      FirebaseStorage storage = FirebaseStorage.instance;
+
+      // Create a reference to the photo in Firebase Storage
+      Reference photoRef =
+          storage.ref().child('$tokenId/organization/$imageName.jpg');
+
+      // Upload the photo to Firebase Storage
+      await photoRef.putFile(photo);
+
+      // Get the download URL for the photo
+      String downloadURL = await photoRef.getDownloadURL();
+
+      return downloadURL;
+    } catch (e) {
+      print('Error saving photo to Firebase Storage: $e');
+      return null;
+    }
+  }
 
   _pickImageTimeLine(ImageSource source) async {
     try {
@@ -41,11 +69,13 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
       File? img = File(image.path);
       img = await _cropImage(imageFile: img);
       setState(() {
-        _image = img;
+        savePhotoToFirebase(GetStorage().read("token"), img!, 'timeLine')
+            .then((value) {
+          print('checking URL ::: $value');
+          controller.timeline.value = value!;
+          controller.isLoading.value = false;
+        });
 
-        controller.timelinePicture = _image;
-        timelineImage = _image;
-        print('iamge path :::: ${controller.timelinePicture?.path}');
         Navigator.of(context).pop();
       });
     } on PlatformException catch (e) {
@@ -61,11 +91,11 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
       File? img = File(image.path);
       img = await _cropImage(imageFile: img);
       setState(() {
-        _image = img;
-        profileImage = _image;
-        controller.profilePicture = _image;
-        print('Image profile ::: ${profileImage?.path}');
-
+        savePhotoToFirebase(GetStorage().read('token'), img!, 'profileImage')
+            .then((value) {
+          controller.profile.value = value!;
+          controller.isLoading.value = false;
+        });
         Navigator.of(context).pop();
       });
     } on PlatformException catch (e) {
@@ -196,7 +226,8 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
   Future<void> getAmenities() async {
     // Get organization details
     if (controller.isEditable.value == true) {
-      newAmenities();
+      print("Function for matching amenities is now working");
+      await newAmenities();
     }
     // Get all amenities
     final amenitiesResponse = await http.get(
@@ -207,10 +238,6 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
       },
     );
     final amenitiesData = await jsonDecode(amenitiesResponse.body)['data'];
-
-    // Create a list of MultiSelectCard widgets for each amenity
-    final amenitiesList = <MultiSelectCard>[];
-    final allAmenities = <MultiSelectCard>[];
 
     for (final amenityData in amenitiesData) {
       bool alreadyExists = false;
@@ -288,30 +315,24 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                           Container(
                             height: 200,
                             width: double.maxFinite,
-                            child: controller.isEditable.value == true
-                                ? controller.timelinePicture?.path == null
-                                    ? Card(
-                                        child: Image.network(
-                                            'https://manage.partypeople.in/${controller.timeline}',
-                                            fit: BoxFit.fill),
-                                      )
-                                    : Card(
-                                        child: Image.file(
-                                          controller.timelinePicture!,
-                                          fit: BoxFit.fill,
-                                        ),
-                                      )
-                                : controller.timelinePicture != null
-                                    ? Card(
-                                        child: Image.file(
-                                            controller.timelinePicture!,
-                                            fit: BoxFit.fill),
-                                      )
-                                    : Card(
-                                        child: Lottie.asset(
-                                          'assets/127619-photo-click.json',
-                                        ),
-                                      ),
+                            child: controller.timeline.value != ''
+                                ? Card(
+                                    child: CachedNetworkImageWidget(
+                                        imageUrl: controller.timeline.value,
+                                        width: Get.width,
+                                        height: 200,
+                                        fit: BoxFit.fill,
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error_outline),
+                                        placeholder: (context, url) => Center(
+                                            child: CupertinoActivityIndicator(
+                                                color: Colors.black,
+                                                radius: 15))))
+                                : Card(
+                                    child: Lottie.asset(
+                                      'assets/127619-photo-click.json',
+                                    ),
+                                  ),
                           ),
                           Positioned(
                             bottom: 0,
@@ -343,6 +364,8 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                         ],
                       ),
                     ),
+
+                    ///TODO: ADD CACHED IMAGE PLACEHOLDER
                     Positioned(
                       bottom: 0,
                       left: MediaQuery.of(context).size.width / 2.9,
@@ -361,41 +384,25 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                   ),
-                                  child: controller.isEditable.value == true
-                                      ? controller.profilePicture?.path == null
-                                          ? CircleAvatar(
-                                              backgroundColor:
-                                                  Colors.red.shade900,
-                                              maxRadius: 40,
-                                              backgroundImage: NetworkImage(
-                                                'https://manage.partypeople.in/${controller.profile}',
-                                              ),
-                                            )
-                                          : CircleAvatar(
-                                              backgroundColor:
-                                                  Colors.red.shade900,
-                                              maxRadius: 40,
-                                              backgroundImage: FileImage(
-                                                  controller.profilePicture!))
-                                      : controller.profilePicture != null
-                                          ? CircleAvatar(
-                                              backgroundColor:
-                                                  Colors.red.shade900,
-                                              maxRadius: 40,
-                                              backgroundImage: FileImage(
-                                                  controller.profilePicture!))
-                                          : Container(
-                                              width: 50,
-                                              height: 60,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        99999),
-                                              ),
-                                              child: Lottie.asset(
-                                                  fit: BoxFit.cover,
-                                                  'assets/107137-add-profile-picture.json'),
-                                            ),
+                                  child: controller.profile.value != ''
+                                      ? CircleAvatar(
+                                          backgroundColor: Colors.red.shade900,
+                                          maxRadius: 40,
+                                          backgroundImage: NetworkImage(
+                                            controller.profile.value,
+                                          ),
+                                        )
+                                      : Container(
+                                          width: 50,
+                                          height: 60,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(99999),
+                                          ),
+                                          child: Lottie.asset(
+                                              fit: BoxFit.cover,
+                                              'assets/107137-add-profile-picture.json'),
+                                        ),
                                 ))),
                       ),
                     ),
@@ -405,7 +412,7 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                   height: 30,
                 ),
                 TextFieldWithTitle(
-                  title: 'Organization Name',
+                  title: 'Organization Name *',
                   controller: controller.name,
                   inputType: TextInputType.name,
                   validator: (value) {
@@ -424,7 +431,7 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                       return null;
                     }
                   },
-                  title: 'Organization Description',
+                  title: 'Organization Description *',
                   controller: controller.description,
                   inputType: TextInputType.name,
                 ),
@@ -443,7 +450,7 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                 LocationButton(),
                 Container(
                   alignment: Alignment.center,
-                  child: Text('Select Amenities',
+                  child: Text('Select Amenities *',
                       style: TextStyle(
                         fontFamily: 'malgun',
                         fontSize: 18,
@@ -497,109 +504,9 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                         )
                       : ElevatedButton(
                           onPressed: () {
-                            if (controller.isEditable.value == true) {
-                              if (controller.name.text.isEmpty) {
-                                // Show a GetX Snackbar if the text field controller is empty
-                                Get.snackbar(
-                                  "Error",
-                                  "Please enter a valid name",
-                                  snackPosition: SnackPosition.BOTTOM,
-                                  backgroundColor: Colors.red,
-                                  colorText: Colors.white,
-                                );
-                              } else if (controller.description.text.isEmpty) {
-                                // Show a GetX Snackbar if the text field controller is empty
-                                Get.snackbar(
-                                  "Error",
-                                  "Please enter a valid organization description",
-                                  snackPosition: SnackPosition.BOTTOM,
-                                  backgroundColor: Colors.red,
-                                  colorText: Colors.white,
-                                );
-                              } else if (controller.location.text.isEmpty) {
-                                // Show a GetX Snackbar if the text field controller is empty
-                                Get.snackbar(
-                                  "Error",
-                                  "Please enter a valid location",
-                                  snackPosition: SnackPosition.BOTTOM,
-                                  backgroundColor: Colors.red,
-                                  colorText: Colors.white,
-                                );
-                              } else if (controller
-                                  .selectedAmenitiesListID.isEmpty) {
-                                // Show a GetX Snackbar if the text field controller is empty
-                                Get.snackbar(
-                                  "Error",
-                                  "Select at least 1 amenities",
-                                  snackPosition: SnackPosition.BOTTOM,
-                                  backgroundColor: Colors.red,
-                                  colorText: Colors.white,
-                                );
-                              } else {
-                                controller.updateOrganisation();
-                              }
-                            } else if (timelineImage == null) {
-                              // Show a GetX Snackbar if the text field controller is empty
-                              Get.snackbar(
-                                "Error",
-                                "Please add timeline image",
-                                snackPosition: SnackPosition.BOTTOM,
-                                backgroundColor: Colors.red,
-                                colorText: Colors.white,
-                              );
-                            } else if (profileImage == null) {
-                              // Show a GetX Snackbar if the text field controller is empty
-                              Get.snackbar(
-                                "Error",
-                                "Please add profile image",
-                                snackPosition: SnackPosition.BOTTOM,
-                                backgroundColor: Colors.red,
-                                colorText: Colors.white,
-                              );
-                            } else if (controller.name.text.isEmpty) {
-                              // Show a GetX Snackbar if the text field controller is empty
-                              Get.snackbar(
-                                "Error",
-                                "Please enter a valid name",
-                                snackPosition: SnackPosition.BOTTOM,
-                                backgroundColor: Colors.red,
-                                colorText: Colors.white,
-                              );
-                            } else if (controller.description.text.isEmpty) {
-                              // Show a GetX Snackbar if the text field controller is empty
-                              Get.snackbar(
-                                "Error",
-                                "Please enter a valid organization description",
-                                snackPosition: SnackPosition.BOTTOM,
-                                backgroundColor: Colors.red,
-                                colorText: Colors.white,
-                              );
-                            } else if (controller.location.text.isEmpty) {
-                              // Show a GetX Snackbar if the text field controller is empty
-                              Get.snackbar(
-                                "Error",
-                                "Please enter a valid location",
-                                snackPosition: SnackPosition.BOTTOM,
-                                backgroundColor: Colors.red,
-                                colorText: Colors.white,
-                              );
-                            } else if (controller
-                                .selectedAmenitiesListID.isEmpty) {
-                              // Show a GetX Snackbar if the text field controller is empty
-                              Get.snackbar(
-                                "Error",
-                                "Select at least 1 amenities",
-                                snackPosition: SnackPosition.BOTTOM,
-                                backgroundColor: Colors.red,
-                                colorText: Colors.white,
-                              );
-                            } else {
-                              setState(() {
-                                controller.isLoading.value = true;
-                              });
-
-                              controller.addOrgnition();
-                            }
+                            controller.isEditable.value == true
+                                ? controller.updateOrganisation()
+                                : controller.addOrgnition();
                           },
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -822,7 +729,10 @@ class _LocationButtonState extends State<LocationButton> {
                       controller.longitude = position.longitude;
                     });
                   },
-                  child: Text('Get Location'),
+                  child: Icon(
+                    Icons.pin_drop,
+                    color: Colors.red,
+                  ),
                   style: ElevatedButton.styleFrom(
                     primary: Colors.white,
                     onPrimary: Colors.red,
@@ -830,7 +740,7 @@ class _LocationButtonState extends State<LocationButton> {
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     padding:
-                        EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
                   ),
                 ),
                 SizedBox(
@@ -864,14 +774,14 @@ class _LocationButtonState extends State<LocationButton> {
                             ? TextStyle(
                                 color: Colors.grey[400],
                                 fontSize: 18.0,
-                                overflow: TextOverflow.ellipsis,
+                                overflow: TextOverflow.fade,
                               )
                             : TextStyle(
                                 color: Colors.black,
                                 fontSize: 18.0,
-                                overflow: TextOverflow.ellipsis,
+                                overflow: TextOverflow.fade,
                               ),
-                        overflow: TextOverflow.fade,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),

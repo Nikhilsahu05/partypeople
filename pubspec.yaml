@@ -1,5 +1,5 @@
 name: pertypeople
-version: 1.1.1+2
+version: 1.2.2+3
 publish_to: none
 description: A new Flutter project.
 environment:
@@ -14,8 +14,6 @@ dependencies:
   flutter_otp_text_field: ^1.0.1
   paytm_allinonesdk: ^1.2.1
   chip_list: ^2.4.3+8
-
-
   firebase_core:
   google_sign_in: ^5.3.3
   flutter_facebook_auth: ^5.0.7
@@ -62,6 +60,9 @@ dependencies:
   custom_refresh_indicator: ^2.0.1
   dotted_line: ^3.1.0
   lottie: ^2.3.0
+  firebase_storage: any
+  cached_network_image: ^3.2.3
+  responsive_grid_list: ^1.3.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -82,6 +83,7 @@ flutter:
     - assets/.env
     - assets/
     - assets/dancecouple.png
+    - assets/default_party_images/
 
 
   fonts:

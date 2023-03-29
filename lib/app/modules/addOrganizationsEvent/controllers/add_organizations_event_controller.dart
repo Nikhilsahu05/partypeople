@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -10,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 import 'package:pertypeople/app/modules/global_header_id_controller.dart';
 
 import '../../../routes/app_pages.dart';
@@ -28,40 +26,15 @@ class AddOrganizationsEventController extends GetxController {
   var cityKey = "".obs;
   var citySelected = [].obs;
   var citySelectedKey = [].obs;
-  File? timelinePicture;
-  File? profilePicture;
+
   final branches = TextEditingController();
-  var timeline;
-  var profile;
+  RxString timeline = ''.obs;
+  RxString profile = ''.obs;
 
   var latitude;
   RxBool isEditable = false.obs;
   var longitude;
   Set<Marker> markers = {};
-
-  Future<void> downloadTimelinePic(String imageUrl) async {
-    if (imageUrl != null) {
-      final response = await http.get(Uri.parse(imageUrl));
-      final directory = await getApplicationDocumentsDirectory();
-      final imagePath = '${directory.path}/timeline_picture.jpg';
-      final imageFile = File(imagePath);
-      await imageFile.writeAsBytes(response.bodyBytes);
-
-      timelinePicture = imageFile;
-    }
-  }
-
-  Future<void> downloadProfilePic(String imageUrl) async {
-    if (imageUrl != null) {
-      final response = await http.get(Uri.parse(imageUrl));
-      final directory = await getApplicationDocumentsDirectory();
-      final imagePath = '${directory.path}/profile_picture.jpg';
-      final imageFile = File(imagePath);
-      await imageFile.writeAsBytes(response.bodyBytes);
-
-      profilePicture = imageFile;
-    }
-  }
 
   getAPIOverview() async {
     http.Response response = await http.post(
@@ -75,13 +48,9 @@ class AddOrganizationsEventController extends GetxController {
       name.text = jsonDecode(response.body)['data'][0]['name'];
       location.text = jsonDecode(response.body)['data'][0]['city_id'];
       description.text = jsonDecode(response.body)['data'][0]['description'];
-      String imageUrl =
-          'https://manage.partypeople.in/${jsonDecode(response.body)['data'][0]['profile_pic']}';
-      String imageUrl2 =
-          'https://manage.partypeople.in/${jsonDecode(response.body)['data'][0]['timeline_pic']}';
-
-      await downloadProfilePic(imageUrl);
-      await downloadTimelinePic(imageUrl2);
+      timeline.value =
+          "${jsonDecode(response.body)['data'][0]['timeline_pic']}";
+      profile.value = "${jsonDecode(response.body)['data'][0]['profile_pic']}";
     }
 
     update();
@@ -169,33 +138,14 @@ class AddOrganizationsEventController extends GetxController {
   Future<void> updateOrganisation() async {
     isLoading.value = true;
 
-    if (name.text.isEmpty) {
-      Get.snackbar("Alert", "Please enter your organization name",
-          icon: Icon(Icons.error_outline, color: Colors.white),
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          padding: EdgeInsets.only(bottom: 20),
-          colorText: Colors.white,
-          duration: Duration(seconds: 3));
-      return;
-    }
-    if (description.text.isEmpty) {
-      Get.snackbar("Alert", "Please enter description",
-          icon: Icon(Icons.error_outline, color: Colors.white),
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-          duration: Duration(seconds: 3));
-      return;
-    }
-
     var headers = {
       'x-access-token': GetStorage().read("token").toString(),
-      // 'Cookie': 'ci_session=53748e98d26cf6811eb0a53be37158bf0cbe5b4b'
     };
 
     var request = http.MultipartRequest(
-        'POST', Uri.parse('https://manage.partypeople.in/v1/party/'));
+        'POST',
+        Uri.parse(
+            'https://manage.partypeople.in/v1/party/update_organization'));
     request.fields.addAll({
       'organization_amenitie_id': selectedAmenitiesListID
           .toString()
@@ -208,33 +158,28 @@ class AddOrganizationsEventController extends GetxController {
       'longitude': longitude.toString(),
       'organization_id': '1',
       'type': '1',
+      'profile_pic': profile.value,
+      'timeline_pic': timeline.value,
     });
 
     try {
       request.headers.addAll(headers);
-      request.files.add(await http.MultipartFile.fromPath(
-          'profile_pic', profilePicture!.path));
-      request.files.add(await http.MultipartFile.fromPath(
-          'timeline_pic', timelinePicture!.path));
-    } on Exception catch (e) {
-      print("Isssue in error :: ${e.toString()}");
-    }
-
-    print(request.fields);
-    http.StreamedResponse response = await request.send();
-    // print(await response.stream.bytesToString());
-    if (response.statusCode == 200) {
-      var jsonResponse = json.decode(await response.stream.bytesToString());
-      if (jsonResponse['message'] == 'Organization Update Successfully.') {
-        Get.offAllNamed(Routes.ORGANIZATION_PROFILE_NEW);
+      http.StreamedResponse response = await request.send();
+      if (response.statusCode == 200) {
+        var jsonResponse = json.decode(await response.stream.bytesToString());
+        if (jsonResponse['message'] == 'Organization Update Successfully.') {
+          Get.offAllNamed(Routes.ORGANIZATION_PROFILE_NEW);
+        }
+        print(jsonResponse);
+      } else {
+        Get.offAllNamed((Routes.ORGANIZATION_PROFILE_NEW));
+        print(response.reasonPhrase);
       }
-
-      print(jsonResponse);
-    } else {
-      Get.offAllNamed((Routes.ORGANIZATION_PROFILE_NEW));
-
-      print(response.reasonPhrase);
+    } catch (e) {
+      print("API call error: ${e.toString()}");
+      // handle the error here
     }
+
     isLoading.value = false;
     update();
   }
@@ -244,8 +189,6 @@ class AddOrganizationsEventController extends GetxController {
 
   Future<void> addOrgnition() async {
     print("Printing profile picture and timeline picture");
-    print(profilePicture?.path);
-    print(timelinePicture?.path);
 
     isLoading.value = true;
     var headers = {
@@ -266,14 +209,10 @@ class AddOrganizationsEventController extends GetxController {
       'latitude': latitude.toString(),
       'longitude': longitude.toString(),
       'type': '1',
-      'profile_pic': '',
-      'timeline_pic': '',
+      'profile_pic': '$profile',
+      'timeline_pic': '$timeline',
     });
-    request.files.add(
-        await http.MultipartFile.fromPath('profile_pic', profilePicture!.path));
 
-    request.files.add(await http.MultipartFile.fromPath(
-        'timeline_pic', timelinePicture!.path));
     request.headers.addAll(headers);
 
     print("Pending Fields :${request.fields}");

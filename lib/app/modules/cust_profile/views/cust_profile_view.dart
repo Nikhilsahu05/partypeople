@@ -1,9 +1,9 @@
-import 'dart:ui';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 import 'package:get/get.dart';
 import 'package:pertypeople/app/modules/addOrganizationsEvent/controllers/add_organizations_event_controller.dart';
+import 'package:pertypeople/cached_image_placeholder.dart';
 import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 
 import '../../../routes/app_pages.dart';
@@ -54,168 +54,153 @@ class _CustProfileViewState extends State<CustProfileView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(
+        body: Column(
       children: [
-        Container(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-            child: Container(
-              decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
+        Stack(children: [
+          Container(
+            child: CachedNetworkImageWidget(
+              imageUrl: '${widget.organizationData['timeline_pic']}',
+              fit: BoxFit.fill,
+              height: 300,
+              width: Get.width,
+              errorWidget: (context, url, error) => Icon(Icons.error_outline),
+              placeholder: (context, url) => Center(
+                  child: CupertinoActivityIndicator(
+                      color: Colors.black, radius: 15)),
             ),
           ),
-          height: Get.height * 0.3,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: NetworkImage(
-                      'https://manage.partypeople.in/${widget.organizationData['timeline_pic']}'))),
+          Positioned(
+            bottom: 0,
+            left: Get.width * 0.35,
+            child: ClipOval(
+              child: CachedNetworkImageWidget(
+                imageUrl: '${widget.organizationData['profile_pic']}',
+                fit: BoxFit.fill,
+                height: 120,
+                width: 120,
+                errorWidget: (context, url, error) => Icon(Icons.error_outline),
+                placeholder: (context, url) => Center(
+                    child: CupertinoActivityIndicator(
+                        color: Colors.black, radius: 15)),
+              ),
+            ),
+          ),
+        ]),
+        SizedBox(
+          height: 20,
         ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            width: Get.width,
-            height: Get.height - Get.height * 0.25,
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(30)),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 75,
-                ),
-                Text(
-                  "${widget.organizationData['name']}",
+        SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "${widget.organizationData['name']}",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'malgun',
+                    fontSize: 32),
+              ),
+              Container(
+                width: Get.width * 0.8,
+                child: Text(
+                  "${widget.organizationData['description']}",
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'malgun',
-                      fontSize: 32),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                SmoothStarRating(
-                  allowHalfRating: false,
-                  starCount: 5,
-                  rating: double.parse(widget.organizationData['rating']),
-                  size: 20.0,
-                  color: Colors.orange,
-                  borderColor: Colors.orange,
-                  filledIconData: Icons.star,
-                  halfFilledIconData: Icons.star_half,
-                  defaultIconData: Icons.star_border,
-                  spacing: .5,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                LikesAndViewsWidget(
-                    likes: int.parse(widget.organizationData['like']),
-                    views: int.parse(widget.organizationData['view'])),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "${widget.organizationData['city_id']}",
-                  style: TextStyle(
-                      color: Colors.grey[600],
+                      letterSpacing: 1.01,
                       fontSize: 18,
                       fontFamily: 'malgun'),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  width: Get.width * 0.8,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              SmoothStarRating(
+                allowHalfRating: false,
+                starCount: 5,
+                rating: double.parse(widget.organizationData['rating']),
+                size: 20.0,
+                color: Colors.orange,
+                borderColor: Colors.orange,
+                filledIconData: Icons.star,
+                halfFilledIconData: Icons.star_half,
+                defaultIconData: Icons.star_border,
+                spacing: .5,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              LikesAndViewsWidget(
+                  likes: int.parse(widget.organizationData['like']),
+                  views: int.parse(widget.organizationData['view'])),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "${widget.organizationData['city_id']}",
+                style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 18,
+                    fontFamily: 'malgun'),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              OrganizationProfileButton(
+                onPressed: () {
+                  addOrganizationsEventController.isEditable.value = true;
+
+                  Get.toNamed(Routes.ADD_ORGANIZATIONS_EVENT);
+                },
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 28.0, vertical: 0),
+                child: Container(
+                  alignment: Alignment.topLeft,
                   child: Text(
-                    "${widget.organizationData['description']}",
-                    textAlign: TextAlign.center,
+                    "Selected Amenities",
+                    textAlign: TextAlign.left,
                     style: TextStyle(
                         color: Colors.black,
-                        letterSpacing: 1.01,
-                        fontSize: 18,
-                        fontFamily: 'malgun'),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'malgun',
+                        fontSize: 18),
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                OrganizationProfileButton(
-                  onPressed: () {
-                    addOrganizationsEventController.isEditable.value = true;
-                    Get.toNamed(Routes.DRAWER);
-                  },
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 28.0, vertical: 0),
-                  child: Container(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Selected Amenities",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'malgun',
-                          fontSize: 18),
-                    ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Center(
+                  child: MultiSelectContainer(
+                    isMaxSelectableWithPerpetualSelects: true,
+                    controller: MultiSelectController(
+                        deSelectPerpetualSelectedItems: true),
+                    itemsDecoration: MultiSelectDecorations(),
+                    itemsPadding: EdgeInsets.all(10),
+                    maxSelectableCount: 0,
+                    prefix: MultiSelectPrefix(
+                        disabledPrefix: Icon(
+                      Icons.do_disturb_alt_sharp,
+                      size: 14,
+                    )),
+                    items: listOfAmenities,
+                    onChange: (List<dynamic> selectedItems, selectedItem) {},
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Center(
-                    child: MultiSelectContainer(
-                      isMaxSelectableWithPerpetualSelects: true,
-                      controller: MultiSelectController(
-                          deSelectPerpetualSelectedItems: true),
-                      itemsDecoration: MultiSelectDecorations(),
-                      itemsPadding: EdgeInsets.all(10),
-                      maxSelectableCount: 0,
-                      prefix: MultiSelectPrefix(
-                          disabledPrefix: Icon(
-                        Icons.do_disturb_alt_sharp,
-                        size: 14,
-                      )),
-                      items: listOfAmenities,
-                      onChange: (List<dynamic> selectedItems, selectedItem) {},
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 28.0),
-            child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                )),
-          ),
-        ),
-        Positioned(
-          top: Get.height * 0.18,
-          left: Get.height / 6,
-          child: CircleAvatar(
-            radius: 60,
-            backgroundImage: NetworkImage(
-                'https://manage.partypeople.in/${widget.organizationData['profile_pic']}'),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+            ],
           ),
         ),
       ],

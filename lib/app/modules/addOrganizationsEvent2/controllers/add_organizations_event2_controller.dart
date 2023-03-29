@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 import 'package:pertypeople/app/modules/global_header_id_controller.dart';
 
 import '../../../routes/app_pages.dart';
@@ -50,8 +49,7 @@ class AddOrganizationsEvent2Controller extends GetxController {
   var partyStatusChange = "".obs;
   var name = '';
   var genderList = [];
-  File? profile;
-  File? timeline;
+  RxString timeline = ''.obs;
   var getPrefiledData;
   RxBool isEditable = false.obs;
 
@@ -175,25 +173,13 @@ class AddOrganizationsEvent2Controller extends GetxController {
   GlobalHeaderIDController globalHeaderIDController =
       Get.put(GlobalHeaderIDController());
 
-  Future<void> downloadTimelinePic(String imageUrl) async {
-    if (imageUrl != null) {
-      final response = await http.get(Uri.parse(imageUrl));
-      final directory = await getApplicationDocumentsDirectory();
-      final imagePath = '${directory.path}/timeline_picture.jpg';
-      final imageFile = File(imagePath);
-      await imageFile.writeAsBytes(response.bodyBytes);
-
-      profile = imageFile;
-    }
-  }
-
-  sendEditParty(jsonData, BuildContext context) async {
+  sendEditParty() async {
     isLoading.value = true;
     var headers = {
       'x-access-token': GetStorage().read("token").toString(),
       // 'Cookie': 'ci_session=f72b54d682c45ebf19fcc0fd54cef39508588d0c'
     };
-    print("file size ${picture?.lengthSync()}");
+
     var request = http.MultipartRequest(
         'POST', Uri.parse('https://manage.partypeople.in/v1/party/update'));
     request.fields.addAll({
@@ -213,20 +199,17 @@ class AddOrganizationsEvent2Controller extends GetxController {
       'status': '1',
       'organization_id': '1',
       'party_amenitie_id':
-          selectedAmenities.toString().replaceAll('[', '').replaceAll(']', ''),
+          selectedAmenities.toString().replaceAll('[', ' ').replaceAll(']', ''),
       "phone_number": mobileNumber.text,
       'offers': offersText.text,
       'ladies': ladiesPrice.text,
       'stag': stagPrice.text,
       'couples': couplesPrice.text,
       'others': othersPrice.text,
-      'cover_photo': '',
-      'party_id': '${jsonData['id']}',
+      'party_id': '1,2,3',
+      'cover_photo': timeline.value
       // 'organization_id': '1'
     });
-
-    request.files
-        .add(await http.MultipartFile.fromPath('cover_photo', profile!.path));
 
     request.headers.addAll(headers);
 
@@ -293,28 +276,20 @@ class AddOrganizationsEvent2Controller extends GetxController {
       'person_limit': peopleLimit.text,
       'status': character.name,
       'organization_id': '1',
-      'party_amenitie_id':
-          selectedAmenities.toString().replaceAll('[', '').replaceAll(']', ''),
+      'party_amenitie_id': '1,2,3',
       'offers': offersText.text,
       'ladies': ladiesPrice.text,
       'stag': stagPrice.text,
       'couples': couplesPrice.text,
       'others': othersPrice.text,
-      'cover_photo': '',
+      'cover_photo': timeline.value
       // 'organization_id': '1'
     });
 
-    request.files
-        .add(await http.MultipartFile.fromPath('cover_photo', profile!.path));
-
     request.headers.addAll(headers);
-    print(request.fields);
-    print(request.files);
     http.StreamedResponse response = await request.send();
-
     if (response.statusCode == 200) {
       isLoading.value = false;
-
       var json = jsonDecode(await response.stream.bytesToString());
       print(json);
       if (json['status'] == 1) {

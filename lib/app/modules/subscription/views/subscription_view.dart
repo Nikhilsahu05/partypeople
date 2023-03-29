@@ -3,8 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:input_quantity/input_quantity.dart';
-import 'package:pertypeople/app/modules/edit_party_screen.dart';
+import 'package:pertypeople/app/modules/addOrganizationsEvent2/controllers/add_organizations_event2_controller.dart';
 
+import '../../../routes/app_pages.dart';
 import '../controllers/subscription_controller.dart';
 
 // ignore: must_be_immutable
@@ -31,205 +32,134 @@ class _SubscriptionViewState extends State<SubscriptionView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Stack(
-          children: [
-            Container(
-              height: Get.height,
-              width: Get.width,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment(-1.183, -0.74),
-                  end: Alignment(1.071, -0.079),
-                  colors: [
-                    const Color(0xffd10e0e),
-                    const Color(0xff870606),
-                    const Color(0xff300202)
-                  ],
-                  stops: [0.0, 0.564, 1.0],
-                ),
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 25,
-                    ),
-                    Text(
-                      'Get Subscriptions',
-                      style: TextStyle(
-                        fontFamily: 'Oswald',
-                        fontSize: 30,
-                        color: const Color(0xffffffff),
-                        fontWeight: FontWeight.w600,
-                      ),
-                      softWrap: false,
-                    ),
-                    Text(
-                      'For people who want to [see and search parties of other \ncities], [start chat - free for females],\n',
-                      style: TextStyle(
-                        fontFamily: 'Oswald',
-                        fontSize: 14,
-                        color: const Color(0xffffffff),
-                      ),
-                      textAlign: TextAlign.center,
-                      softWrap: false,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 8),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: Colors.white,
-                        ),
-                        height: 280,
-                        width: Get.width,
-                        child: GestureDetector(
-                          onTap: () {
-                            // showCustomDialog(context, '499');
-                            showDialog(
-                              context: context,
-                              builder: (_) => LogoutOverlay(
-                                data: widget.data,
-                              ),
-                            );
-                          },
-                          child: Stack(children: [
-                            Positioned(
-                              left: 50,
-                              top: 70,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '1',
-                                    style: TextStyle(
-                                      fontFamily: 'malgun',
-                                      fontSize: 30,
-                                      color: Colors.red.shade900,
-                                      letterSpacing: -0.88,
-                                      fontWeight: FontWeight.w700,
-                                      height: 0.38636363636363635,
-                                    ),
-                                    textHeightBehavior: TextHeightBehavior(
-                                        applyHeightToFirstAscent: false),
-                                    textAlign: TextAlign.center,
-                                    softWrap: false,
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    'DAYS',
-                                    style: TextStyle(
-                                      fontFamily: 'malgun',
-                                      fontSize: 20,
-                                      color: Colors.red.shade900,
-                                      letterSpacing: -0.44,
-                                      height: 0.6363636363636364,
-                                    ),
-                                    textHeightBehavior: TextHeightBehavior(
-                                        applyHeightToFirstAscent: false),
-                                    textAlign: TextAlign.center,
-                                    softWrap: false,
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    '₹499',
-                                    style: TextStyle(
-                                      fontFamily: 'malgun',
-                                      fontSize: 30,
-                                      color: Colors.red.shade900,
-                                      letterSpacing: -0.6,
-                                      fontWeight: FontWeight.w700,
-                                      height: 0.5,
-                                    ),
-                                    textHeightBehavior: TextHeightBehavior(
-                                        applyHeightToFirstAscent: false),
-                                    textAlign: TextAlign.center,
-                                    softWrap: false,
-                                  )
-                                ],
-                              ),
-                            ),
-                            Positioned(
-                              left: 120,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  FeatureWidget(
-                                    title: "Popular Post",
-                                    description: "Turn More Eyes On Your Post",
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  FeatureWidget(
-                                    title: "Get More Likes",
-                                    description:
-                                        "Get More Likes From People Around the World",
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  FeatureWidget(
-                                    title: "Get More Visibility",
-                                    description:
-                                        "Get More Visibility From All Over The World",
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Positioned(
-                              right: 0,
-                              child: Container(
-                                  height: 50,
-                                  width: 50,
-                                  child: Image.asset('assets/excellence.png')),
-                            ),
-                          ]),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      color: Colors.white,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: LogoutOverlay(data: widget.data),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+        child: Container(
+          height: Get.height,
+          width: Get.width,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment(-1.183, -0.74),
+              end: Alignment(1.071, -0.079),
+              colors: [
+                const Color(0xffd10e0e),
+                const Color(0xff870606),
+                const Color(0xff300202)
+              ],
+              stops: [0.0, 0.564, 1.0],
             ),
-            Positioned(
-                top: 30,
-                left: 10,
-                child: GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: Image.asset('assets/back_Button.png'))),
-          ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 50,
+              ),
+              Text(
+                'Get Subscriptions',
+                style: TextStyle(
+                  fontFamily: 'Oswald',
+                  fontSize: 30,
+                  color: const Color(0xffffffff),
+                  fontWeight: FontWeight.w600,
+                ),
+                softWrap: false,
+              ),
+              Text(
+                'For people who want to [see and search parties of other \ncities], [start chat - free for females],\n',
+                style: TextStyle(
+                  fontFamily: 'Oswald',
+                  fontSize: 14,
+                  color: const Color(0xffffffff),
+                ),
+                textAlign: TextAlign.center,
+                softWrap: false,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    color: Colors.white,
+                  ),
+                  height: Get.height * 0.23,
+                  width: Get.width * 0.3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        '1',
+                        style: TextStyle(
+                          fontFamily: 'malgun',
+                          fontSize: 30,
+                          color: Colors.red.shade900,
+                          letterSpacing: -0.88,
+                          fontWeight: FontWeight.w700,
+                          height: 0.38636363636363635,
+                        ),
+                        textHeightBehavior:
+                            TextHeightBehavior(applyHeightToFirstAscent: false),
+                        textAlign: TextAlign.center,
+                        softWrap: false,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'DAYS',
+                        style: TextStyle(
+                          fontFamily: 'malgun',
+                          fontSize: 20,
+                          color: Colors.red.shade900,
+                          letterSpacing: -0.44,
+                          height: 0.6363636363636364,
+                        ),
+                        textHeightBehavior:
+                            TextHeightBehavior(applyHeightToFirstAscent: false),
+                        textAlign: TextAlign.center,
+                        softWrap: false,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        '₹499',
+                        style: TextStyle(
+                          fontFamily: 'malgun',
+                          fontSize: 30,
+                          color: Colors.red.shade900,
+                          letterSpacing: -0.6,
+                          fontWeight: FontWeight.w700,
+                          height: 0.5,
+                        ),
+                        textHeightBehavior:
+                            TextHeightBehavior(applyHeightToFirstAscent: false),
+                        textAlign: TextAlign.center,
+                        softWrap: false,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                color: Colors.white,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: LogoutOverlay(data: widget.data),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -348,10 +278,14 @@ class LogoutOverlayState extends State<LogoutOverlay> {
     super.initState();
   }
 
+  AddOrganizationsEvent2Controller addOrganizationsEvent2Controller =
+      Get.put(AddOrganizationsEvent2Controller());
+
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
+          height: Get.height,
           margin: EdgeInsets.all(12.0),
           padding: EdgeInsets.all(12.0),
           decoration: BoxDecoration(
@@ -359,7 +293,7 @@ class LogoutOverlayState extends State<LogoutOverlay> {
             borderRadius: BorderRadius.circular(15.0),
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Text(
                 "Your Party will be boosted as Popular Party till \n End Date - ${widget.data['end_date']} \n End Time - ${widget.data['end_time']}",
@@ -438,6 +372,26 @@ class LogoutOverlayState extends State<LogoutOverlay> {
                     ),
                   )),
               SizedBox(height: 30),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)),
+                      backgroundColor: Colors.orange),
+                  onPressed: () {
+                    addOrganizationsEvent2Controller.isPopular.value = false;
+                    addOrganizationsEvent2Controller.isEditable.value = true;
+                    Get.toNamed(Routes.ADD_ORGANIZATIONS_EVENT2);
+                  },
+                  child: Text(
+                    "Edit Date & Time",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'malgun',
+                    ),
+                  )),
+              SizedBox(
+                height: 20,
+              ),
               Center(
                 child: GestureDetector(
                   onTap: () async {
@@ -484,25 +438,6 @@ class LogoutOverlayState extends State<LogoutOverlay> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)),
-                      backgroundColor: Colors.orange),
-                  onPressed: () {
-                    Get.to(EditProfileScreen(
-                        editProfileData: widget.data, isPopularParty: false));
-                  },
-                  child: Text(
-                    "Edit Date & Time",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'malgun',
-                    ),
-                  ))
             ],
           )),
     );

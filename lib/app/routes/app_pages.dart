@@ -15,8 +15,6 @@ import '../modules/addOrganizationsEvent2/bindings/add_organizations_event2_bind
 import '../modules/addOrganizationsEvent2/views/add_organizations_event2_view.dart';
 import '../modules/addProfile/bindings/add_profile_binding.dart';
 import '../modules/addProfile/views/add_profile_view.dart';
-import '../modules/addamenities/bindings/AddAmenities_bindings.dart';
-import '../modules/addamenities/views/addamenitiesview.dart';
 import '../modules/cityList/bindings/city_list_binding.dart';
 import '../modules/cityList/views/city_list_view.dart';
 import '../modules/cityWiseParty/bindings/city_wise_party_binding.dart';
@@ -106,11 +104,11 @@ class AppPages {
       page: () => AddOrganizationsEventView(),
       binding: AddOrganizationsEventBinding(),
     ),
-    GetPage(
-      name: _Paths.AddAmenities,
-      page: () => AddAmenities(),
-      binding: AddAmenitiesBindings(),
-    ),
+    // GetPage(
+    //   name: _Paths.AddAmenities,
+    //   page: () => AddAmenities(),
+    //   binding: AddAmenitiesBindings(),
+    // ),
     GetPage(
       name: _Paths.CITY_LIST,
       page: () => CityListView(),

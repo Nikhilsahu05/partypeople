@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, must_be_immutable, deprecated_member_use, no_leading_underscores_for_local_identifiers
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -53,8 +54,8 @@ class _DrawerViewState extends State<DrawerView> {
               height: MediaQuery.of(context).size.height,
               child: ListView(children: [
                 CoverPhotoAndProfileWidget(
-                    coverPhotoUrl: widget.profileImageView,
-                    profilePhotoUrl: widget.timeLineImage),
+                    coverPhotoUrl: widget.timeLineImage,
+                    profilePhotoUrl: widget.profileImageView),
                 SizedBox(height: 10),
                 LikesAndViewsWidget(
                     views: int.parse(widget.views),
@@ -207,7 +208,7 @@ class CoverPhotoAndProfileWidget extends StatelessWidget {
       height: 200.0,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage(coverPhotoUrl),
+          image: CachedNetworkImageProvider(coverPhotoUrl),
           fit: BoxFit.cover,
         ),
       ),
@@ -226,7 +227,7 @@ class CoverPhotoAndProfileWidget extends StatelessWidget {
                   width: 2.0,
                 ),
                 image: DecorationImage(
-                  image: NetworkImage(profilePhotoUrl),
+                  image: CachedNetworkImageProvider(profilePhotoUrl),
                   fit: BoxFit.cover,
                 ),
               ),

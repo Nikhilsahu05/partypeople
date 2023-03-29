@@ -1,23 +1,24 @@
 // ignore_for_file: must_be_immutable
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:group_button/group_button.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_crop/image_crop.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:pertypeople/app/select_photo_options_screen.dart';
+import 'package:pertypeople/cached_image_placeholder.dart';
 
-import '../../../../test_screen.dart';
-import '../../addOrganizationsEvent/controllers/add_organizations_event_controller.dart';
+import '../../../testing_screen.dart';
 import '../controllers/add_organizations_event2_controller.dart';
 
 //
@@ -36,11 +37,35 @@ class AddOrganizationsEvent2View extends StatefulWidget {
 
 class _AddOrganizationsEvent2ViewState
     extends State<AddOrganizationsEvent2View> {
-  String? _currentAddress;
-  Position? _currentPosition;
-
   final cropKey = GlobalKey<CropState>();
-  File? _image;
+
+  Future<String?> savePhotoToFirebase(
+      String tokenId, File photo, String imageName) async {
+    try {
+      setState(() {
+        controller.isLoading.value = true;
+      });
+      await FirebaseAuth.instance.signInAnonymously();
+
+      // Initialize Firebase Storage
+      FirebaseStorage storage = FirebaseStorage.instance;
+
+      // Create a reference to the photo in Firebase Storage
+      Reference photoRef =
+          storage.ref().child('$tokenId/PartyPost/$imageName.jpg');
+
+      // Upload the photo to Firebase Storage
+      await photoRef.putFile(photo);
+
+      // Get the download URL for the photo
+      String downloadURL = await photoRef.getDownloadURL();
+
+      return downloadURL;
+    } catch (e) {
+      print('Error saving photo to Firebase Storage: $e');
+      return null;
+    }
+  }
 
   _pickImageProfile(ImageSource source) async {
     print("Picking Image");
@@ -50,11 +75,13 @@ class _AddOrganizationsEvent2ViewState
       File? img = File(image.path);
       img = await _cropImage(imageFile: img);
       setState(() {
-        print("Image profile ==> ${controller.profile?.path}");
+        savePhotoToFirebase(
+                GetStorage().read('token'), img!, 'HostedEventPhoto')
+            .then((value) {
+          controller.timeline.value = value!;
+          controller.isLoading.value = false;
+        });
 
-        _image = img;
-        controller.profile = _image;
-        print("Image profile ==> ${controller.profile?.path}");
         Navigator.of(context).pop();
       });
     } on PlatformException catch (e) {
@@ -64,7 +91,6 @@ class _AddOrganizationsEvent2ViewState
   }
 
   Future<File?> _cropImage({required File imageFile}) async {
-    print('Croped Image');
     CroppedFile? croppedImage =
         await ImageCropper().cropImage(sourcePath: imageFile.path);
     if (croppedImage == null) return null;
@@ -96,94 +122,11 @@ class _AddOrganizationsEvent2ViewState
     );
   }
 
-  Future<bool> _handleLocationPermission() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'Location services are disabled. Please enable the services')));
-      return false;
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Location permissions are denied')));
-        return false;
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'Location permissions are permanently denied, we cannot request permissions.')));
-      return false;
-    }
-    return true;
-  }
-
-  bool isLoading = false;
-
-  Future<void> _getCurrentPosition() async {
-    setState(() {
-      isLoading = true;
-    });
-    final hasPermission = await _handleLocationPermission();
-
-    if (!hasPermission) return;
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((Position position) {
-      setState(() => _currentPosition = position);
-      _getAddressFromLatLng(_currentPosition!);
-    }).catchError((e) {
-      debugPrint(e);
-    });
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  Future<void> _getAddressFromLatLng(Position position) async {
-    await placemarkFromCoordinates(
-            _currentPosition!.latitude, _currentPosition!.longitude)
-        .then((List<Placemark> placemarks) {
-      Placemark place = placemarks[0];
-      setState(() {
-        _currentAddress =
-            '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
-      });
-
-      ///Save current address to text editor
-      ///
-      controller.location.text = _currentAddress!;
-    }).catchError((e) {
-      debugPrint(e);
-    });
-  }
-
   AddOrganizationsEvent2Controller controller =
       Get.put(AddOrganizationsEvent2Controller());
 
-  Future<void> downloadTimelinePic(String imageUrl) async {
-    if (imageUrl != null) {
-      final response = await http.get(Uri.parse(imageUrl));
-      final directory = await getApplicationDocumentsDirectory();
-      final imagePath = '${directory.path}/timeline_picture.jpg';
-      final imageFile = File(imagePath);
-      await imageFile.writeAsBytes(response.bodyBytes);
-
-      controller.profile = imageFile;
-    }
-  }
-
   fillFieldPreFilled() async {
-    String imageUrl =
-        'https://manage.partypeople.in/${controller.getPrefiledData['cover_photo']}';
-    downloadTimelinePic(imageUrl);
-    print(downloadTimelinePic(imageUrl));
+    controller.timeline.value = '${controller.getPrefiledData['cover_photo']}';
     controller.title.text = controller.getPrefiledData['title'];
     controller.description.text = controller.getPrefiledData['description'];
     controller.mobileNumber.text = controller.getPrefiledData['phone_number'];
@@ -204,7 +147,7 @@ class _AddOrganizationsEvent2ViewState
 
   nonField() {
     setState(() {
-      controller.profile = null;
+      controller.timeline.value = '';
       controller.title.text = '';
       controller.description.text = '';
       controller.mobileNumber.text = '';
@@ -225,6 +168,11 @@ class _AddOrganizationsEvent2ViewState
 
   @override
   void initState() {
+    if (controller.isEditable.value == true) {
+      fillFieldPreFilled();
+    } else {
+      nonField();
+    }
     print("Caling fill data");
     // fillFieldPreFilled();
 
@@ -233,376 +181,443 @@ class _AddOrganizationsEvent2ViewState
 
   @override
   Widget build(BuildContext context) {
-    if (controller.isEditable.value == true) {
-      fillFieldPreFilled();
-    } else {
-      nonField();
-    }
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 50,
-        elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        appBar: AppBar(
+          toolbarHeight: 50,
+          elevation: 0,
+          iconTheme: IconThemeData(color: Colors.black),
+        ),
+        body: Obx(
+          () => SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Image.asset('assets/mice.png'),
-                      Text(
-                        'Host New Event',
-                        style: TextStyle(
-                          fontFamily: 'Oswald',
-                          fontSize: 22,
-                          color: const Color(0xffc40d0d),
-                          fontWeight: FontWeight.w600,
-                        ),
-                        softWrap: false,
-                      )
+                      Row(
+                        children: [
+                          Image.asset('assets/mice.png'),
+                          Text(
+                            'Host New Event',
+                            style: TextStyle(
+                              fontFamily: 'Oswald',
+                              fontSize: 22,
+                              color: const Color(0xffc40d0d),
+                              fontWeight: FontWeight.w600,
+                            ),
+                            softWrap: false,
+                          )
+                        ],
+                      ),
                     ],
                   ),
-                ],
-              ),
-              Stack(
-                children: [
-                  GestureDetector(
-                    onTap: () => _showSelectPhotoOptionsProfile(context),
-                    child: Stack(
-                      children: [
-                        Container(
-                          height: 200,
-                          width: double.maxFinite,
-                          child: controller.profile != null
-                              ? Card(
-                                  child: Image.file(controller.profile!,
-                                      fit: BoxFit.fill),
-                                )
-                              : Card(
-                                  child: Lottie.asset(
-                                    'assets/127619-photo-click.json',
+                  Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: () => _showSelectPhotoOptionsProfile(context),
+                        child: Stack(
+                          children: [
+                            Container(
+                              height: 200,
+                              width: double.maxFinite,
+                              child: controller.timeline.value != ''
+                                  ? Card(
+                                      child: CachedNetworkImageWidget(
+                                          imageUrl: controller.timeline.value,
+                                          width: Get.width,
+                                          height: 300,
+                                          fit: BoxFit.fill,
+                                          errorWidget: (context, url, error) =>
+                                              Center(
+                                                child:
+                                                    CupertinoActivityIndicator(
+                                                  radius: 15,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                          placeholder: (context, url) => Center(
+                                              child: CupertinoActivityIndicator(
+                                                  color: Colors.black,
+                                                  radius: 15))))
+                                  : Card(
+                                      child: Lottie.asset(
+                                        'assets/127619-photo-click.json',
+                                      ),
+                                    ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                child: IconButton(
+                                  onPressed: () {
+                                    _showSelectPhotoOptionsProfile(context);
+                                  },
+                                  icon: Icon(
+                                    Icons.camera_alt,
+                                    color: Colors.white,
                                   ),
                                 ),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            child: IconButton(
-                              onPressed: () {
-                                _showSelectPhotoOptionsProfile(context);
-                              },
-                              icon: Icon(
-                                Icons.camera_alt,
-                                color: Colors.white,
                               ),
                             ),
+                            Positioned(
+                              bottom: 10,
+                              right: 10,
+                              child: Container(
+                                  height: 30,
+                                  width: 30,
+                                  child: Icon(
+                                    size: 30,
+                                    Icons.camera_alt,
+                                    color: Colors.red,
+                                  )),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFieldWithTitle(
+                    title: 'Party Title',
+                    controller: controller.title,
+                    inputType: TextInputType.name,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter an party title';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  TextFieldWithTitle(
+                    title: 'Party Description',
+                    controller: controller.description,
+                    inputType: TextInputType.name,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter an party description';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 28.0, vertical: 14),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Mobile Number',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'malgun',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
                           ),
                         ),
-                        Positioned(
-                          bottom: 10,
-                          right: 10,
-                          child: Container(
-                              height: 30,
-                              width: 30,
-                              child: Icon(
-                                size: 30,
-                                Icons.camera_alt,
-                                color: Colors.red,
-                              )),
+                        SizedBox(height: 8),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: TextFormField(
+                            controller: controller.mobileNumber,
+                            keyboardType: TextInputType.number,
+                            obscureText: false,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(10)
+                            ],
+                            decoration: InputDecoration(
+                              prefixIcon: Container(
+                                  height: 5,
+                                  width: 5,
+                                  child: Center(
+                                    child: Image.asset(
+                                      'assets/indian_flag.png',
+                                    ),
+                                  )),
+                              prefixText: ' +91 ',
+                              prefixStyle: TextStyle(
+                                  color: Colors.grey[400], fontSize: 18),
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              border: InputBorder.none,
+                              hintText: "Enter Mobile Number",
+                              hintStyle: TextStyle(
+                                color: Colors.grey[400],
+                              ),
+                            ),
+                            onChanged: (value) {},
+
+                            // added validator function
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TextFieldWithTitle(
-                title: 'Party Title',
-                controller: controller.title,
-                inputType: TextInputType.name,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter an party title';
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-              TextFieldWithTitle(
-                title: 'Party Description',
-                controller: controller.description,
-                inputType: TextInputType.name,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter an party description';
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-              TextFieldWithTitle(
-                title: 'Mobile Number',
-                controller: controller.mobileNumber,
-                inputType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter mobile number';
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-              controller.isPopular.value == false
-                  ? Column(
-                      children: [
-                        Row(
+                  controller.isPopular.value == false
+                      ? Column(
                           children: [
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  controller.getStartDate(context);
-                                },
-                                child: TextFieldWithTitle(
-                                  title: 'Start Date',
-                                  passGesture: () {
-                                    controller.getStartDate(context);
-                                  },
-                                  controller: controller.startDate,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter an start date';
-                                    } else {
-                                      return null;
-                                    }
-                                  },
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      controller.getStartDate(context);
+                                    },
+                                    child: TextFieldWithTitle(
+                                      title: 'Start Date',
+                                      passGesture: () {
+                                        controller.getStartDate(context);
+                                      },
+                                      controller: controller.startDate,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter an start date';
+                                        } else {
+                                          return null;
+                                        }
+                                      },
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      controller.getEndDate(context);
+                                    },
+                                    child: TextFieldWithTitle(
+                                      title: 'End Date',
+                                      passGesture: () {
+                                        controller.getEndDate(context);
+                                      },
+                                      controller: controller.endDate,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter an end date';
+                                        } else {
+                                          return null;
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  controller.getEndDate(context);
-                                },
-                                child: TextFieldWithTitle(
-                                  title: 'End Date',
-                                  passGesture: () {
-                                    controller.getEndDate(context);
-                                  },
-                                  controller: controller.endDate,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter an end date';
-                                    } else {
-                                      return null;
-                                    }
-                                  },
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      controller.getStartTime(context);
+                                    },
+                                    child: TextFieldWithTitle(
+                                      passGesture: () {
+                                        controller.getStartTime(context);
+                                      },
+                                      title: 'Start Time',
+                                      controller: controller.startTime,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter an start time';
+                                        } else {
+                                          return null;
+                                        }
+                                      },
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      controller.getEndTime(context);
+                                    },
+                                    child: TextFieldWithTitle(
+                                      passGesture: () {
+                                        controller.getEndTime(context);
+                                      },
+                                      title: 'End Time',
+                                      controller: controller.endTime,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter an end time';
+                                        } else {
+                                          return null;
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  controller.getStartTime(context);
-                                },
-                                child: TextFieldWithTitle(
-                                  passGesture: () {
-                                    controller.getStartTime(context);
-                                  },
-                                  title: 'Start Time',
-                                  controller: controller.startTime,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter an start time';
-                                    } else {
-                                      return null;
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  controller.getEndTime(context);
-                                },
-                                child: TextFieldWithTitle(
-                                  passGesture: () {
-                                    controller.getEndTime(context);
-                                  },
-                                  title: 'End Time',
-                                  controller: controller.endTime,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter an end time';
-                                    } else {
-                                      return null;
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        )
+                      : Container(),
+                  LocationButton(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                    child: Text(
+                      'Who can join',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: 'malgun',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Center(
+                    child: GroupButton(
+                      isRadio: false,
+                      onSelected: (string, index, isSelected) {
+                        print('$index button is selected');
+                        print('$index button is selected');
+                        if (isSelected) {
+                          controller.genderList.add(string);
+                        } else {
+                          controller.genderList.remove(string);
+                        }
+                      },
+                      maxSelected: 4,
+                      buttons: [
+                        "Stag",
+                        "Ladies",
+                        "Couple",
+                        "Others",
                       ],
-                    )
-                  : Container(),
-              LocationButton(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28.0),
-                child: Text(
-                  'Gender',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: 'malgun',
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Center(
-                child: GroupButton(
-                  isRadio: false,
-                  onSelected: (string, index, isSelected) {
-                    print('$index button is selected');
-                    print('$index button is selected');
-                    if (isSelected) {
-                      controller.genderList.add(string);
-                    } else {
-                      controller.genderList.remove(string);
-                    }
-                  },
-                  maxSelected: 4,
-                  buttons: [
-                    "Stag",
-                    "Ladies",
-                    "Couple",
-                    "Others",
-                  ],
-                ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFieldWithTitle(
-                      title: 'Start Age',
-                      controller: controller.startPeopleAge,
-                      inputType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter an start age';
-                        } else {
-                          return null;
-                        }
-                      },
                     ),
                   ),
-                  Expanded(
-                    child: TextFieldWithTitle(
-                      title: 'End Age',
-                      inputType: TextInputType.number,
-                      controller: controller.endPeopleAge,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter an end age';
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFieldWithTitle(
+                          title: 'Start Age',
+                          controller: controller.startPeopleAge,
+                          inputType: TextInputType.number,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter an start age';
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: TextFieldWithTitle(
+                          title: 'End Age',
+                          inputType: TextInputType.number,
+                          controller: controller.endPeopleAge,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter an end age';
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  TextFieldWithTitle(
+                    title: 'Party People Limit',
+                    controller: controller.peopleLimit,
+                    inputType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter people limit';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  TextFieldWithTitle(
+                    title: 'Offers',
+                    controller: controller.offersText,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter offers';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFieldWithTitle(
+                          title: 'Ladies Fees',
+                          inputType: TextInputType.number,
+                          controller: controller.ladiesPrice,
+                          validator: (value) {},
+                        ),
+                      ),
+                      Expanded(
+                        child: TextFieldWithTitle(
+                          title: 'Stag Fees',
+                          controller: controller.stagPrice,
+                          inputType: TextInputType.number,
+                          validator: (value) {},
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFieldWithTitle(
+                          title: 'Couple Fees',
+                          inputType: TextInputType.number,
+                          controller: controller.couplesPrice,
+                          validator: (value) {},
+                        ),
+                      ),
+                      Expanded(
+                        child: TextFieldWithTitle(
+                          title: 'Others Fees',
+                          inputType: TextInputType.number,
+                          controller: controller.othersPrice,
+                          validator: (value) {},
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Center(child: AmenitiesButton()),
+                  SizedBox(
+                    height: 10,
                   ),
                 ],
               ),
-              TextFieldWithTitle(
-                title: 'Party People Limit',
-                controller: controller.peopleLimit,
-                inputType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter people limit';
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-              TextFieldWithTitle(
-                title: 'Offers',
-                controller: controller.offersText,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter offers';
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFieldWithTitle(
-                      title: 'Ladies Fees',
-                      inputType: TextInputType.number,
-                      controller: controller.ladiesPrice,
-                      validator: (value) {},
-                    ),
-                  ),
-                  Expanded(
-                    child: TextFieldWithTitle(
-                      title: 'Stag Fees',
-                      controller: controller.stagPrice,
-                      inputType: TextInputType.number,
-                      validator: (value) {},
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFieldWithTitle(
-                      title: 'Couple Fees',
-                      inputType: TextInputType.number,
-                      controller: controller.couplesPrice,
-                      validator: (value) {},
-                    ),
-                  ),
-                  Expanded(
-                    child: TextFieldWithTitle(
-                      title: 'Others Fees',
-                      inputType: TextInputType.number,
-                      controller: controller.othersPrice,
-                      validator: (value) {},
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Center(child: AmenitiesButton()),
-              SizedBox(
-                height: 10,
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
 
@@ -613,8 +628,6 @@ class AmenitiesButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: () {
-        // Get.to(AddAmenitiesParty(
-        //     isPopular: false, editProfileData: controller.getPrefiledData));
         Get.to(AmenitiesPartyScreen());
       },
       icon: Icon(
@@ -643,6 +656,7 @@ class AmenitiesButton extends StatelessWidget {
 class TextFieldWithTitle extends StatefulWidget {
   final String title;
   final TextEditingController controller;
+  final int? maxlength;
   final TextInputType inputType;
   final bool obscureText;
   final String? Function(String?)? validator;
@@ -651,6 +665,7 @@ class TextFieldWithTitle extends StatefulWidget {
   TextFieldWithTitle({
     required this.validator,
     this.passGesture,
+    this.maxlength,
     required this.title,
     required this.controller,
     this.inputType = TextInputType.text,
@@ -696,6 +711,7 @@ class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
             child: TextFormField(
               onTap: widget.passGesture,
               controller: widget.controller,
+              maxLength: widget.maxlength,
               keyboardType: widget.inputType,
               obscureText: widget.obscureText,
               style: TextStyle(
@@ -751,8 +767,6 @@ class LocationButton extends StatefulWidget {
 class _LocationButtonState extends State<LocationButton> {
   String _location = '';
   bool isLoading = false;
-  AddOrganizationsEventController controller =
-      Get.put(AddOrganizationsEventController());
 
   Future<void> _getAddressFromLatLng(Position position) async {
     await placemarkFromCoordinates(position!.latitude, position!.longitude)
@@ -761,7 +775,6 @@ class _LocationButtonState extends State<LocationButton> {
       setState(() {
         _location =
             '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
-        controller.location.text = _location;
         isLoading = false;
       });
     }).catchError((e) {
@@ -775,7 +788,7 @@ class _LocationButtonState extends State<LocationButton> {
         ? Center(
             child: CupertinoActivityIndicator(
             radius: 15,
-            color: Colors.white,
+            color: Colors.black,
           ))
         : Padding(
             padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 14),
@@ -792,7 +805,10 @@ class _LocationButtonState extends State<LocationButton> {
                         desiredAccuracy: LocationAccuracy.high);
                     _getAddressFromLatLng(position);
                   },
-                  child: Text('Get Location'),
+                  child: Icon(
+                    Icons.pin_drop,
+                    color: Colors.red,
+                  ),
                   style: ElevatedButton.styleFrom(
                     primary: Colors.white,
                     onPrimary: Colors.red,
@@ -800,7 +816,7 @@ class _LocationButtonState extends State<LocationButton> {
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     padding:
-                        EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
                   ),
                 ),
                 SizedBox(
@@ -837,7 +853,7 @@ class _LocationButtonState extends State<LocationButton> {
                                 fontSize: 18.0,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                        overflow: TextOverflow.fade,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),

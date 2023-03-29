@@ -1,7 +1,10 @@
 // ignore_for_file: must_be_immutable
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 import 'package:get/get.dart';
 import 'package:pertypeople/app/modules/subscription/views/subscription_view.dart';
+import 'package:pertypeople/cached_image_placeholder.dart';
 
 class PopularPartyPreview extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
@@ -20,6 +23,30 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
   var jsonAddAmenitiesData;
 
   List<String> allAmenities = [];
+  List<MultiSelectCard> listOfAmenities = [];
+
+  getAmenities() async {
+    setState(() {
+      var jsonAddAmenitiesData = widget.data['party_amenitie'];
+      listOfAmenities.clear();
+      for (var i = 0; i < jsonAddAmenitiesData.length; i++) {
+        setState(() {
+          listOfAmenities.add(MultiSelectCard(
+              value: jsonAddAmenitiesData[i]['id'],
+              enabled: true,
+              perpetualSelected: true,
+              selected: true,
+              label: jsonAddAmenitiesData[i]['name']));
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    getAmenities();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +63,25 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
               Container(
                 height: 250,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    color: Colors.red,
-                    image: DecorationImage(
-                        image: NetworkImage(
-                            'https://manage.partypeople.in/${widget.data['cover_photo']}'),
-                        fit: BoxFit.fill)),
+                  borderRadius: BorderRadius.circular(30),
+
+                ),
+                child: CachedNetworkImageWidget(
+                    imageUrl: '${widget.data['cover_photo']}',
+                    width: Get.width,
+                    height: 300,
+                    fit: BoxFit.fill,
+                    errorWidget: (context, url, error) =>
+                        Center(
+                          child: CupertinoActivityIndicator(
+                            radius: 15,
+                            color: Colors.black,
+                          ),
+                        ),
+                    placeholder: (context, url) =>
+                        Center(
+                            child: CupertinoActivityIndicator(
+                                color: Colors.black, radius: 15))),
                 width: Get.width,
               ),
               SizedBox(
@@ -88,7 +128,8 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
                   style: TextStyle(fontFamily: 'malgun', fontSize: 17),
                 ),
                 subtitle: Text(
-                    "${widget.data['start_time']} to ${widget.data['end_time']}"),
+                    "${widget.data['start_time']} to ${widget
+                        .data['end_time']}"),
               ),
               ListTile(
                 leading: Icon(
@@ -151,29 +192,51 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
                   style: TextStyle(fontFamily: 'malgun', fontSize: 17),
                 ),
                 subtitle: Text(
-                  "Ladies - ${widget.data['ladies']}\n Couples - ${widget.data['couples']}\n Stag - ${widget.data['stag']}\n Others - ${widget.data['others']}",
+                  "Ladies - ₹ ${widget.data['ladies']}\n Couples - ₹ ${widget
+                      .data['couples']}\n Stag - ₹ ${widget
+                      .data['stag']}\n Others - ₹ ${widget.data['others']}",
+                  textAlign: TextAlign.start,
+                ),
+              ),
+              Padding(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 28.0, vertical: 0),
+                child: Container(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Selected Amenities",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'malgun',
+                        fontSize: 18),
+                  ),
                 ),
               ),
               SizedBox(
                 height: 20,
               ),
-              // Padding(
-              //   padding:
-              //   const EdgeInsets.symmetric(horizontal: 28.0, vertical: 0),
-              //   child: Container(
-              //     alignment: Alignment.topLeft,
-              //     child: Text(
-              //       "Selected Amenities",
-              //       textAlign: TextAlign.left,
-              //       style: TextStyle(
-              //           color: Colors.black,
-              //           fontWeight: FontWeight.bold,
-              //           fontFamily: 'malgun',
-              //           fontSize: 18),
-              //     ),
-              //   ),
-              // ),
-
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Center(
+                  child: MultiSelectContainer(
+                    isMaxSelectableWithPerpetualSelects: true,
+                    controller: MultiSelectController(
+                        deSelectPerpetualSelectedItems: true),
+                    itemsDecoration: MultiSelectDecorations(),
+                    itemsPadding: EdgeInsets.all(10),
+                    maxSelectableCount: 0,
+                    prefix: MultiSelectPrefix(
+                        disabledPrefix: Icon(
+                          Icons.do_disturb_alt_sharp,
+                          size: 14,
+                        )),
+                    items: listOfAmenities,
+                    onChange: (List<dynamic> selectedItems, selectedItem) {},
+                  ),
+                ),
+              ),
               SizedBox(
                 height: 20,
               ),
@@ -206,10 +269,10 @@ class _OrganizationProfileButtonState extends State<OrganizationProfileButton>
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 500));
     _animation =
-        Tween<double>(begin: 1.0, end: 0.95).animate(_animationController)
-          ..addListener(() {
-            setState(() {});
-          });
+    Tween<double>(begin: 1.0, end: 0.95).animate(_animationController)
+      ..addListener(() {
+        setState(() {});
+      });
   }
 
   @override
