@@ -206,7 +206,7 @@ class AddOrganizationsEvent2Controller extends GetxController {
       'stag': stagPrice.text,
       'couples': couplesPrice.text,
       'others': othersPrice.text,
-      'party_id': '1,2,3',
+      'party_id': '${getPrefiledData['id']}',
       'cover_photo': timeline.value
       // 'organization_id': '1'
     });

@@ -195,9 +195,11 @@ class _AmenitiesPartyScreenState extends State<AmenitiesPartyScreen> {
                   },
                 ),
                 AmenitiesButton(() {
-                  controller.isEditable.value == true
-                      ? controller.sendEditParty()
-                      : controller.sendRequst();
+                  if (controller.isEditable.value == true) {
+                    controller.sendEditParty();
+                  } else {
+                    controller.sendRequst();
+                  }
                 })
               ],
             ),
