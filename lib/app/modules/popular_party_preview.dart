@@ -64,24 +64,21 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
                 height: 250,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
-
                 ),
                 child: CachedNetworkImageWidget(
                     imageUrl: '${widget.data['cover_photo']}',
                     width: Get.width,
                     height: 300,
                     fit: BoxFit.fill,
-                    errorWidget: (context, url, error) =>
-                        Center(
+                    errorWidget: (context, url, error) => Center(
                           child: CupertinoActivityIndicator(
                             radius: 15,
                             color: Colors.black,
                           ),
                         ),
-                    placeholder: (context, url) =>
-                        Center(
-                            child: CupertinoActivityIndicator(
-                                color: Colors.black, radius: 15))),
+                    placeholder: (context, url) => Center(
+                        child: CupertinoActivityIndicator(
+                            color: Colors.black, radius: 15))),
                 width: Get.width,
               ),
               SizedBox(
@@ -128,8 +125,7 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
                   style: TextStyle(fontFamily: 'malgun', fontSize: 17),
                 ),
                 subtitle: Text(
-                    "${widget.data['start_time']} to ${widget
-                        .data['end_time']}"),
+                    "${widget.data['start_time']} to ${widget.data['end_time']}"),
               ),
               ListTile(
                 leading: Icon(
@@ -191,16 +187,34 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
                   'Entry Fees',
                   style: TextStyle(fontFamily: 'malgun', fontSize: 17),
                 ),
-                subtitle: Text(
-                  "Ladies - ₹ ${widget.data['ladies']}\n Couples - ₹ ${widget
-                      .data['couples']}\n Stag - ₹ ${widget
-                      .data['stag']}\n Others - ₹ ${widget.data['others']}",
-                  textAlign: TextAlign.start,
+                subtitle: Container(
+                  padding: EdgeInsets.only(top: 4, bottom: 5),
+                  child: Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Ladies'),
+                          Text('Couples'),
+                          Text('Stag'),
+                          Text('Others'),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text("  - ₹ ${widget.data['ladies']}"),
+                          Text("  - ₹ ${widget.data['couples']}"),
+                          Text("  - ₹ ${widget.data['stag']}"),
+                          Text("  - ₹ ${widget.data['others']}"),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 28.0, vertical: 0),
+                    const EdgeInsets.symmetric(horizontal: 28.0, vertical: 0),
                 child: Container(
                   alignment: Alignment.topLeft,
                   child: Text(
@@ -229,9 +243,9 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
                     maxSelectableCount: 0,
                     prefix: MultiSelectPrefix(
                         disabledPrefix: Icon(
-                          Icons.do_disturb_alt_sharp,
-                          size: 14,
-                        )),
+                      Icons.do_disturb_alt_sharp,
+                      size: 14,
+                    )),
                     items: listOfAmenities,
                     onChange: (List<dynamic> selectedItems, selectedItem) {},
                   ),
@@ -269,10 +283,10 @@ class _OrganizationProfileButtonState extends State<OrganizationProfileButton>
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 500));
     _animation =
-    Tween<double>(begin: 1.0, end: 0.95).animate(_animationController)
-      ..addListener(() {
-        setState(() {});
-      });
+        Tween<double>(begin: 1.0, end: 0.95).animate(_animationController)
+          ..addListener(() {
+            setState(() {});
+          });
   }
 
   @override

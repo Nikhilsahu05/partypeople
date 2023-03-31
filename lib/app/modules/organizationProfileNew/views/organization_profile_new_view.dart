@@ -246,6 +246,10 @@ class _OrganizationProfileNewViewState
 
   @override
   void initState() {
+    for (int i = 0; i < 10; i++) {
+      print('Previous value');
+      print(organisationName.capitalizeFirst);
+    }
     Timer.periodic(const Duration(seconds: 3), (timer) {
       print('automatic refresh');
 // Here you can write your code
@@ -323,7 +327,7 @@ class _OrganizationProfileNewViewState
             backgroundColor: Colors.red.shade900,
             leading: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Colors.transparent,
+                backgroundColor: Colors.transparent,
                 elevation: 0,
               ),
               onPressed: () {
@@ -375,21 +379,13 @@ class _OrganizationProfileNewViewState
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(width: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (bluetick == '1')
-                      Icon(
-                        Icons.verified,
-                        color: Colors.blue,
-                        size: 15,
-                      ),
-                    if (bluetick == '1')
-                      SizedBox(
-                        width: 5,
-                      ),
+                    SizedBox(
+                      width: 15,
+                    ),
                     Flexible(
                       child: Text(
                         '${organisationName.capitalizeFirst}',
@@ -402,8 +398,26 @@ class _OrganizationProfileNewViewState
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
+                    bluetick == '1'
+                        ? Row(
+                            children: [
+                              SizedBox(
+                                width: 8,
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 8),
+                                child: Icon(
+                                  Icons.verified,
+                                  color: Colors.blue,
+                                  size: 17,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Container(),
                   ],
                 ),
+                SizedBox(height: 5),
                 SmoothStarRating(
                   allowHalfRating: false,
                   starCount: 5,

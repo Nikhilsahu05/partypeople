@@ -47,118 +47,120 @@ class _SubscriptionViewState extends State<SubscriptionView> {
               stops: [0.0, 0.564, 1.0],
             ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 50,
-              ),
-              Text(
-                'Get Subscriptions',
-                style: TextStyle(
-                  fontFamily: 'Oswald',
-                  fontSize: 30,
-                  color: const Color(0xffffffff),
-                  fontWeight: FontWeight.w600,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 50,
                 ),
-                softWrap: false,
-              ),
-              Text(
-                'For people who want to [see and search parties of other \ncities], [start chat - free for females],\n',
-                style: TextStyle(
-                  fontFamily: 'Oswald',
-                  fontSize: 14,
-                  color: const Color(0xffffffff),
-                ),
-                textAlign: TextAlign.center,
-                softWrap: false,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    color: Colors.white,
+                Text(
+                  'Get Subscriptions',
+                  style: TextStyle(
+                    fontFamily: 'Oswald',
+                    fontSize: 30,
+                    color: const Color(0xffffffff),
+                    fontWeight: FontWeight.w600,
                   ),
-                  height: Get.height * 0.23,
-                  width: Get.width * 0.3,
+                  softWrap: false,
+                ),
+                Text(
+                  'For people who want to [see and search parties of other \ncities], [start chat - free for females],\n',
+                  style: TextStyle(
+                    fontFamily: 'Oswald',
+                    fontSize: 14,
+                    color: const Color(0xffffffff),
+                  ),
+                  textAlign: TextAlign.center,
+                  softWrap: false,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: Colors.white,
+                    ),
+                    height: Get.height * 0.23,
+                    width: Get.width * 0.3,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          '1',
+                          style: TextStyle(
+                            fontFamily: 'malgun',
+                            fontSize: 30,
+                            color: Colors.red.shade900,
+                            letterSpacing: -0.88,
+                            fontWeight: FontWeight.w700,
+                            height: 0.38636363636363635,
+                          ),
+                          textHeightBehavior: TextHeightBehavior(
+                              applyHeightToFirstAscent: false),
+                          textAlign: TextAlign.center,
+                          softWrap: false,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'DAYS',
+                          style: TextStyle(
+                            fontFamily: 'malgun',
+                            fontSize: 20,
+                            color: Colors.red.shade900,
+                            letterSpacing: -0.44,
+                            height: 0.6363636363636364,
+                          ),
+                          textHeightBehavior: TextHeightBehavior(
+                              applyHeightToFirstAscent: false),
+                          textAlign: TextAlign.center,
+                          softWrap: false,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          '₹499',
+                          style: TextStyle(
+                            fontFamily: 'malgun',
+                            fontSize: 30,
+                            color: Colors.red.shade900,
+                            letterSpacing: -0.6,
+                            fontWeight: FontWeight.w700,
+                            height: 0.5,
+                          ),
+                          textHeightBehavior: TextHeightBehavior(
+                              applyHeightToFirstAscent: false),
+                          textAlign: TextAlign.center,
+                          softWrap: false,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  color: Colors.white,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        '1',
-                        style: TextStyle(
-                          fontFamily: 'malgun',
-                          fontSize: 30,
-                          color: Colors.red.shade900,
-                          letterSpacing: -0.88,
-                          fontWeight: FontWeight.w700,
-                          height: 0.38636363636363635,
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
                         ),
-                        textHeightBehavior:
-                            TextHeightBehavior(applyHeightToFirstAscent: false),
-                        textAlign: TextAlign.center,
-                        softWrap: false,
+                        child: LogoutOverlay(data: widget.data),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        'DAYS',
-                        style: TextStyle(
-                          fontFamily: 'malgun',
-                          fontSize: 20,
-                          color: Colors.red.shade900,
-                          letterSpacing: -0.44,
-                          height: 0.6363636363636364,
-                        ),
-                        textHeightBehavior:
-                            TextHeightBehavior(applyHeightToFirstAscent: false),
-                        textAlign: TextAlign.center,
-                        softWrap: false,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        '₹499',
-                        style: TextStyle(
-                          fontFamily: 'malgun',
-                          fontSize: 30,
-                          color: Colors.red.shade900,
-                          letterSpacing: -0.6,
-                          fontWeight: FontWeight.w700,
-                          height: 0.5,
-                        ),
-                        textHeightBehavior:
-                            TextHeightBehavior(applyHeightToFirstAscent: false),
-                        textAlign: TextAlign.center,
-                        softWrap: false,
-                      )
                     ],
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                color: Colors.white,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: LogoutOverlay(data: widget.data),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
