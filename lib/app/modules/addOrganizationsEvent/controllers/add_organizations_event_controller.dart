@@ -54,7 +54,7 @@ class AddOrganizationsEventController extends GetxController {
     fullOrganisationJsonData = jsonDecode(response.body);
     if (jsonDecode(response.body)['data'] != null) {
       name.text = jsonDecode(response.body)['data'][0]['name'];
-
+      branches.text = jsonDecode(response.body)['data'][0]['branch'];
       location.text = jsonDecode(response.body)['data'][0]['city_id'];
       description.text = jsonDecode(response.body)['data'][0]['description'];
       timeline.value =

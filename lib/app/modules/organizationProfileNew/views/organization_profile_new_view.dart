@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, unnecessary_null_comparison
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -178,7 +177,7 @@ class _OrganizationProfileNewViewState
                           controller.organisationName.value,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 18,
                             fontFamily: 'SegeoUI',
                           ),
                         ),

@@ -20,6 +20,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pertypeople/cached_image_placeholder.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../select_photo_options_screen.dart';
 import '../controllers/add_organizations_event_controller.dart';
@@ -304,7 +305,7 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                           : 'Profile',
                       style: TextStyle(
                         fontFamily: 'malgun',
-                        fontSize: 26,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.0,
                         color: Colors.white,
@@ -644,7 +645,7 @@ class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
           Text(
             widget.title,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 12.sp,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
@@ -668,7 +669,7 @@ class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
               keyboardType: widget.inputType,
               obscureText: widget.obscureText,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 13.sp,
                 color: Colors.black,
               ),
               decoration: InputDecoration(
