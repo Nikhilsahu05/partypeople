@@ -11,6 +11,7 @@ class OrganizationProfileNewController extends GetxController {
   RxString views = '0'.obs;
   RxString bluetick = '0'.obs;
   RxString going = '0'.obs;
+  var count = 0.obs;
   RxString token = ''.obs;
   RxString organisationName = 'Organisation Name'.obs;
   RxString organisationRating = '0'.obs;
@@ -35,6 +36,8 @@ class OrganizationProfileNewController extends GetxController {
 
   var jsonPartyOgranisationDataTomm;
 
+  var jsonPartyPopularData;
+
   var jsonPartyOgranisationDataUpcomming;
 
   RxInt popularPartyLength = 0.obs;
@@ -51,6 +54,8 @@ class OrganizationProfileNewController extends GetxController {
   //   );
   //   print("Sing ringtone");
   // }
+
+  ///TODO:Create A Separate List For Popular Parties
 
   getAPIOverview() async {
     isLoading.value = true;
@@ -106,10 +111,8 @@ class OrganizationProfileNewController extends GetxController {
         print('************ $lengthOfTodayParties');
         for (var i = 0; i < lengthOfTodayParties.value; i++) {
           if (jsonPartyOgranisationDataToday[i]['papular_status'] == "1") {
-            if (popularPartyLength.value != 0) {
-              popularPartyLength = popularPartyLength + 1;
-              print('Printing premium part length ::: $popularPartyLength');
-            }
+            jsonPartyPopularData = jsonPartyOgranisationDataToday;
+            popularPartyLength.value = jsonDecodedData['data'].length;
           }
         }
       }
@@ -137,10 +140,8 @@ class OrganizationProfileNewController extends GetxController {
     }
     for (var i = 0; i < lengthOfTommParties.value; i++) {
       if (jsonPartyOgranisationDataTomm[i]['papular_status'] == "1") {
-        if (popularPartyLength.value != 0) {
-          popularPartyLength = popularPartyLength + 1;
-          print('Printing premium part length ::: $popularPartyLength');
-        }
+        jsonPartyPopularData = jsonPartyOgranisationDataTomm;
+        popularPartyLength.value = jsonDecodedData['data'].length;
       }
     }
   }
@@ -165,10 +166,8 @@ class OrganizationProfileNewController extends GetxController {
     }
     for (var i = 0; i < lengthOfUpcomingParties.value; i++) {
       if (jsonPartyOgranisationDataUpcomming[i]['papular_status'] == "1") {
-        if (popularPartyLength.value != 0) {
-          popularPartyLength = popularPartyLength + 1;
-          print('Printing premium part length ::: $popularPartyLength');
-        }
+        jsonPartyPopularData = jsonPartyOgranisationDataUpcomming;
+        popularPartyLength.value = jsonDecodedData['data'].length;
       }
     }
   }
@@ -179,6 +178,13 @@ class OrganizationProfileNewController extends GetxController {
     getOrganisationDetailsToday();
     getOrganisationDetailsUpcomming();
     getOrganisationDetailsTom();
+    // Timer.periodic(Duration(seconds: 5), (timer) async {
+    //   await getAPIOverview();
+    //   await getOrganisationDetailsToday();
+    //   await getOrganisationDetailsUpcomming();
+    //   await getOrganisationDetailsTom();
+    // });
+
     super.onInit();
   }
 }

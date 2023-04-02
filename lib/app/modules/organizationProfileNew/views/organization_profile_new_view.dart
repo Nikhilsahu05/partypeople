@@ -2,7 +2,9 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -440,8 +442,7 @@ class _OrganizationProfileNewViewState
                                   color: Colors.white, fontSize: 18),
                             ),
                           ),
-                          controller.popularPartyLength.value == 0 ||
-                                  controller.lengthOfTodayParties.value == 0
+                          controller.jsonPartyPopularData == null
                               ? Container(
                                   padding: EdgeInsets.all(8),
                                   child: Text(
@@ -452,193 +453,211 @@ class _OrganizationProfileNewViewState
                                         fontWeight: FontWeight.w500),
                                   ),
                                 )
-                              : Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30)),
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.9,
-                                  child: ListView.builder(
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
+                              : Column(
+                                  children: [
+                                    CarouselSlider.builder(
                                       itemCount:
-                                          controller.lengthOfTodayParties.value,
-                                      itemBuilder: (context, index) {
-                                        if (controller
-                                                    .jsonPartyOgranisationDataToday[
-                                                index]['papular_status'] ==
-                                            '1') {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              Get.to(PopularPartyPreview(
-                                                isPopularParty: true,
-                                                data: controller
-                                                        .jsonPartyOgranisationDataToday[
-                                                    index],
-                                              ));
-                                            },
-                                            child: Stack(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(4.0),
-                                                  child: Container(
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.25,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.85,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                        Radius.circular(10),
-                                                      ),
-                                                      color: Colors.white,
+                                          controller.popularPartyLength.value,
+                                      itemBuilder: (BuildContext context,
+                                          int index, int pageViewIndex) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            Get.to(PopularPartyPreview(
+                                              isPopularParty: true,
+                                              data: controller
+                                                  .jsonPartyPopularData[index],
+                                            ));
+                                          },
+                                          child: Stack(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: Container(
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.25,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.85,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                      Radius.circular(10),
                                                     ),
-                                                    child: Stack(
-                                                      children: [
-                                                        Container(
-                                                          child: Row(
-                                                            children: [
-                                                              SizedBox(
-                                                                width: 20,
+                                                    color: Colors.white,
+                                                  ),
+                                                  child: Stack(
+                                                    children: [
+                                                      Container(
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            SizedBox(
+                                                              width: 20,
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      top:
+                                                                          18.0),
+                                                              child: Row(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceAround,
+                                                                children: [
+                                                                  Column(
+                                                                    children: [
+                                                                      Container(
+                                                                        height:
+                                                                            15,
+                                                                        child:
+                                                                            Center(
+                                                                          child:
+                                                                              Icon(
+                                                                            Icons.favorite,
+                                                                            size:
+                                                                                15,
+                                                                            color:
+                                                                                Colors.red.shade900,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height:
+                                                                            10,
+                                                                      ),
+                                                                      Text(
+                                                                        '${controller.jsonPartyPopularData[index]['like']}',
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.black,
+                                                                            fontSize: 8),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      Text(
+                                                                        'LIKE',
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.black,
+                                                                            fontSize: 8),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 8,
+                                                                  ),
+                                                                  Column(
+                                                                    children: [
+                                                                      Container(
+                                                                        height:
+                                                                            15,
+                                                                        child:
+                                                                            Center(
+                                                                          child:
+                                                                              Image.asset('assets/WhatsApp Image 2023-02-23 at 10.55.21 PM.jpeg'),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height:
+                                                                            10,
+                                                                      ),
+                                                                      Text(
+                                                                        '${controller.jsonPartyPopularData[index]['view']}',
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.black,
+                                                                            fontSize: 8),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      Text(
+                                                                        'VIEWS',
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.black,
+                                                                            fontSize: 8),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 8,
+                                                                  ),
+                                                                  Column(
+                                                                    children: [
+                                                                      Container(
+                                                                        height:
+                                                                            15,
+                                                                        child: Center(
+                                                                            child:
+                                                                                Image.asset('assets/WhatsApp Image 2023-02-23 at 10.55.22 PM.jpeg')),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height:
+                                                                            10,
+                                                                      ),
+                                                                      Text(
+                                                                        '${controller.jsonPartyPopularData[index]['ongoing']}',
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.black,
+                                                                            fontSize: 8),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        height:
+                                                                            5,
+                                                                      ),
+                                                                      Text(
+                                                                        'GOING',
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.black,
+                                                                            fontSize: 8),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ],
                                                               ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        top:
-                                                                            18.0),
-                                                                child: Row(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceAround,
-                                                                  children: [
-                                                                    Column(
-                                                                      children: [
-                                                                        Container(
-                                                                          height:
-                                                                              15,
-                                                                          child:
-                                                                              Center(
-                                                                            child:
-                                                                                Icon(
-                                                                              Icons.favorite,
-                                                                              size: 15,
-                                                                              color: Colors.red.shade900,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        SizedBox(
-                                                                          height:
-                                                                              10,
-                                                                        ),
-                                                                        Text(
-                                                                          '${controller.jsonPartyOgranisationDataToday[index]['like']}',
-                                                                          style: TextStyle(
-                                                                              color: Colors.black,
-                                                                              fontSize: 8),
-                                                                        ),
-                                                                        SizedBox(
-                                                                          height:
-                                                                              5,
-                                                                        ),
-                                                                        Text(
-                                                                          'LIKE',
-                                                                          style: TextStyle(
-                                                                              color: Colors.black,
-                                                                              fontSize: 8),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width: 8,
-                                                                    ),
-                                                                    Column(
-                                                                      children: [
-                                                                        Container(
-                                                                          height:
-                                                                              15,
-                                                                          child:
-                                                                              Center(
-                                                                            child:
-                                                                                Image.asset('assets/WhatsApp Image 2023-02-23 at 10.55.21 PM.jpeg'),
-                                                                          ),
-                                                                        ),
-                                                                        SizedBox(
-                                                                          height:
-                                                                              10,
-                                                                        ),
-                                                                        Text(
-                                                                          '${controller.jsonPartyOgranisationDataToday[index]['view']}',
-                                                                          style: TextStyle(
-                                                                              color: Colors.black,
-                                                                              fontSize: 8),
-                                                                        ),
-                                                                        SizedBox(
-                                                                          height:
-                                                                              5,
-                                                                        ),
-                                                                        Text(
-                                                                          'VIEWS',
-                                                                          style: TextStyle(
-                                                                              color: Colors.black,
-                                                                              fontSize: 8),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width: 8,
-                                                                    ),
-                                                                    Column(
-                                                                      children: [
-                                                                        Container(
-                                                                          height:
-                                                                              15,
-                                                                          child:
-                                                                              Center(child: Image.asset('assets/WhatsApp Image 2023-02-23 at 10.55.22 PM.jpeg')),
-                                                                        ),
-                                                                        SizedBox(
-                                                                          height:
-                                                                              10,
-                                                                        ),
-                                                                        Text(
-                                                                          '${controller.jsonPartyOgranisationDataToday[index]['ongoing']}',
-                                                                          style: TextStyle(
-                                                                              color: Colors.black,
-                                                                              fontSize: 8),
-                                                                        ),
-                                                                        SizedBox(
-                                                                          height:
-                                                                              5,
-                                                                        ),
-                                                                        Text(
-                                                                          'GOING',
-                                                                          style: TextStyle(
-                                                                              color: Colors.black,
-                                                                              fontSize: 8),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ],
+                                                            ),
+                                                            SizedBox(
+                                                              width: 30,
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .only(
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          12),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          12),
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          12),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          12),
                                                                 ),
-                                                              ),
-                                                              SizedBox(
-                                                                width: 30,
-                                                              ),
-                                                              Container(
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .all(
-                                                                              10),
+                                                                child:
+                                                                    Container(
                                                                   height:
                                                                       Get.height *
                                                                           0.5,
@@ -650,166 +669,234 @@ class _OrganizationProfileNewViewState
                                                                     fit: BoxFit
                                                                         .cover,
                                                                     imageUrl:
-                                                                        '${controller.jsonPartyOgranisationDataToday[index]['cover_photo']}',
+                                                                        '${controller.jsonPartyPopularData[index]['cover_photo']}',
                                                                   ),
                                                                   decoration:
                                                                       BoxDecoration(
-                                                                          borderRadius:
-                                                                              BorderRadius.all(
-                                                                    Radius
-                                                                        .circular(
-                                                                            30),
-                                                                  ))),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        Positioned(
-                                                          bottom: 5,
-                                                          child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .all(
-                                                                      10.0),
-                                                              child:
-
-                                                                  //
-                                                                  Stack(
-                                                                children: [
-                                                                  Container(
-                                                                    height: 100,
-                                                                    width: 180,
-                                                                    child: Card(
-                                                                      shape: RoundedRectangleBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(15)),
-                                                                      child:
-                                                                          Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            Column(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.spaceAround,
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.start,
-                                                                          children: [
-                                                                            Text(
-                                                                              '${controller.jsonPartyOgranisationDataToday[index]['title']}',
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                              style: TextStyle(fontSize: 16, fontFamily: 'malgun', fontWeight: FontWeight.bold),
-                                                                            ),
-                                                                            Text(
-                                                                              'Today ${controller.jsonPartyOgranisationDataToday[index]['start_time']}',
-                                                                              style: TextStyle(fontSize: 14, fontFamily: 'malgun'),
-                                                                            ),
-                                                                            SmoothStarRating(
-                                                                              allowHalfRating: false,
-                                                                              starCount: 5,
-                                                                              rating: double.parse(controller.organisationRating.value),
-                                                                              size: 20.0,
-                                                                              color: Colors.orange,
-                                                                              borderColor: Colors.orange,
-                                                                              filledIconData: Icons.star,
-                                                                              halfFilledIconData: Icons.star_half,
-                                                                              defaultIconData: Icons.star_border,
-                                                                              spacing: .5,
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                      elevation:
-                                                                          18,
-                                                                      color: Colors
-                                                                          .white,
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              12),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              12),
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              12),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              12),
                                                                     ),
                                                                   ),
-                                                                  Positioned(
-                                                                    right: 0,
-                                                                    bottom: 5,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Positioned(
+                                                        bottom: 5,
+                                                        child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(10.0),
+                                                            child:
+
+                                                                //
+                                                                Stack(
+                                                              children: [
+                                                                Container(
+                                                                  height: 100,
+                                                                  width: 180,
+                                                                  child: Card(
+                                                                    shape: RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(15)),
                                                                     child:
-                                                                        Container(
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .bottomRight,
+                                                                        Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
-                                                                          ElevatedButton(
-                                                                        onPressed:
-                                                                            () {
-                                                                          addOrganizationsEvent2Controller
-                                                                              .isEditable
-                                                                              .value = true;
-                                                                          addOrganizationsEvent2Controller.getPrefiledData =
-                                                                              controller.jsonPartyOgranisationDataToday[index];
-                                                                          addOrganizationsEvent2Controller
-                                                                              .isPopular
-                                                                              .value = true;
-                                                                          Get.toNamed(
-                                                                              Routes.ADD_ORGANIZATIONS_EVENT2);
-                                                                        },
-                                                                        child:
-                                                                            Container(
-                                                                          padding:
-                                                                              EdgeInsets.zero,
-                                                                          width:
-                                                                              30,
-                                                                          height:
-                                                                              30,
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(20),
+                                                                          Column(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceAround,
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.start,
+                                                                        children: [
+                                                                          Text(
+                                                                            '${controller.jsonPartyPopularData[index]['title']}',
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            style: TextStyle(
+                                                                                fontSize: 16,
+                                                                                fontFamily: 'malgun',
+                                                                                fontWeight: FontWeight.bold),
+                                                                          ),
+                                                                          Text(
+                                                                            'Today ${controller.jsonPartyPopularData[index]['start_time']}',
+                                                                            style:
+                                                                                TextStyle(fontSize: 14, fontFamily: 'malgun'),
+                                                                          ),
+                                                                          SmoothStarRating(
+                                                                            allowHalfRating:
+                                                                                false,
+                                                                            starCount:
+                                                                                5,
+                                                                            rating:
+                                                                                double.parse(controller.organisationRating.value),
+                                                                            size:
+                                                                                20.0,
                                                                             color:
                                                                                 Colors.orange,
+                                                                            borderColor:
+                                                                                Colors.orange,
+                                                                            filledIconData:
+                                                                                Icons.star,
+                                                                            halfFilledIconData:
+                                                                                Icons.star_half,
+                                                                            defaultIconData:
+                                                                                Icons.star_border,
+                                                                            spacing:
+                                                                                .5,
                                                                           ),
-                                                                          child:
-                                                                              Center(
-                                                                            child:
-                                                                                Icon(
-                                                                              Icons.edit,
-                                                                              color: Colors.white,
-                                                                              size: 14,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        style: ElevatedButton.styleFrom(
-                                                                            padding: EdgeInsets
-                                                                                .zero,
-                                                                            elevation:
-                                                                                0,
-                                                                            backgroundColor:
-                                                                                Colors.transparent),
+                                                                        ],
                                                                       ),
                                                                     ),
-                                                                  )
-                                                                ],
-                                                              )),
-                                                        ),
-                                                      ],
-                                                    ),
+                                                                    elevation:
+                                                                        18,
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                ),
+                                                                Positioned(
+                                                                  right: 0,
+                                                                  bottom: 5,
+                                                                  child:
+                                                                      Container(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .bottomRight,
+                                                                    child:
+                                                                        ElevatedButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        addOrganizationsEvent2Controller
+                                                                            .isEditable
+                                                                            .value = true;
+                                                                        addOrganizationsEvent2Controller
+                                                                            .getPrefiledData = controller
+                                                                                .jsonPartyOgranisationDataToday[
+                                                                            index];
+                                                                        addOrganizationsEvent2Controller
+                                                                            .isPopular
+                                                                            .value = true;
+                                                                        Get.toNamed(
+                                                                            Routes.ADD_ORGANIZATIONS_EVENT2);
+                                                                      },
+                                                                      child:
+                                                                          Container(
+                                                                        padding:
+                                                                            EdgeInsets.zero,
+                                                                        width:
+                                                                            30,
+                                                                        height:
+                                                                            30,
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(20),
+                                                                          color:
+                                                                              Colors.orange,
+                                                                        ),
+                                                                        child:
+                                                                            Center(
+                                                                          child:
+                                                                              Icon(
+                                                                            Icons.edit,
+                                                                            color:
+                                                                                Colors.white,
+                                                                            size:
+                                                                                14,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      style: ElevatedButton.styleFrom(
+                                                                          padding: EdgeInsets
+                                                                              .zero,
+                                                                          elevation:
+                                                                              0,
+                                                                          backgroundColor:
+                                                                              Colors.transparent),
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            )),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                                Positioned(
-                                                    left: MediaQuery.of(context)
-                                                            .size
-                                                            .width *
-                                                        0.38,
-                                                    bottom:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.09,
-                                                    child: Container(
-                                                        height: 60,
-                                                        width: 60,
-                                                        child: Image.asset(
-                                                            'assets/excellence.png'))),
-                                              ],
-                                            ),
-                                          );
-                                        } else {
-                                          return Container();
-                                        }
-                                      }),
+                                              ),
+                                              Positioned(
+                                                  left: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.38,
+                                                  bottom: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.12,
+                                                  child: Container(
+                                                      height: 60,
+                                                      width: 60,
+                                                      child: Image.asset(
+                                                          'assets/excellence.png'))),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                      options: CarouselOptions(
+                                        height: 200,
+                                        aspectRatio: 16 / 9,
+                                        onPageChanged: (i, r) {
+                                          setState(() {
+                                            controller.count.value = i;
+                                          });
+                                        },
+                                        viewportFraction: 0.96,
+                                        initialPage: 0,
+                                        enableInfiniteScroll: false,
+                                        reverse: false,
+                                        autoPlay: false,
+                                        autoPlayInterval: Duration(seconds: 3),
+                                        autoPlayAnimationDuration:
+                                            Duration(milliseconds: 800),
+                                        autoPlayCurve: Curves.fastOutSlowIn,
+                                        enlargeCenterPage: true,
+                                        enlargeFactor: 0.3,
+                                        // onPageChanged: callbackFunction,
+                                        scrollDirection: Axis.horizontal,
+                                      ),
+                                    ),
+                                    Container(
+                                        child: DotsIndicator(
+                                      dotsCount:
+                                          controller.popularPartyLength.value,
+                                      position: double.parse(
+                                          controller.count.value.toString()),
+                                      decorator: DotsDecorator(
+                                        size: const Size.square(9.0),
+                                        activeSize: const Size(28.0, 9.0),
+                                        activeColor: Colors.orange,
+                                        activeShape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5.0)),
+                                      ),
+                                    ))
+                                  ],
                                 ),
                           SizedBox(
                             height: 20,
