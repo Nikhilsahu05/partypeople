@@ -36,10 +36,10 @@ class ProfileType extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(
-              height: 160,
+              height: Get.height * 0.12,
             ),
             Expanded(
-                flex: 5,
+                flex: 6,
                 child: GestureDetector(
                   onTap: () {
                     _onBasicWaitingAlertPressed(context);
@@ -68,13 +68,13 @@ class ProfileType extends StatelessWidget {
               height: 20,
             ),
             Expanded(
-                flex: 5,
+                flex: 6,
                 child: GestureDetector(
                   onTap: () {
                     Get.toNamed(Routes.ADD_ORGANIZATIONS_EVENT);
                   },
                   child: Container(
-                    height: 100,
+                    height: 150,
                     width: 200,
                     child: Card(
                       shape: RoundedRectangleBorder(
@@ -93,7 +93,7 @@ class ProfileType extends StatelessWidget {
                   color: Colors.white),
             ),
             SizedBox(
-              height: 160,
+              height: Get.height * 0.12,
             ),
           ],
         ),

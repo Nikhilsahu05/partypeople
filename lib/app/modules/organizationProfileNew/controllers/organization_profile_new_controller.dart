@@ -32,6 +32,7 @@ class OrganizationProfileNewController extends GetxController {
   RxInt lengthOfTodayParties = 0.obs;
   RxInt lengthOfTommParties = 0.obs;
   RxInt lengthOfUpcomingParties = 0.obs;
+  RxString phoneNumber = ''.obs;
   var jsonPartyOgranisationDataToday;
 
   var jsonPartyOgranisationDataTomm;
@@ -63,9 +64,9 @@ class OrganizationProfileNewController extends GetxController {
       Uri.parse('https://manage.partypeople.in/v1/party/organization_details'),
       headers: {'x-access-token': '${GetStorage().read("token")}'},
     );
-    print("response of Organization ${jsonDecode(response.body)['data'][0]}");
 
     fullOrganizationData = jsonDecode(response.body)['data'][0];
+    phoneNumber.value = jsonDecode(response.body)['user_phone_number'];
     notificationCount.value =
         jsonDecode(response.body)['notification_count'].toString();
 

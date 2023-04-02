@@ -1,10 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart' as http;
+import 'package:pertypeople/app/modules/addOrganizationsEvent/controllers/add_organizations_event_controller.dart';
+import 'package:pertypeople/app/routes/app_pages.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 
 class SettingsView extends StatefulWidget {
   const SettingsView({Key? key}) : super(key: key);
@@ -17,6 +21,33 @@ class _SettingsViewState extends State<SettingsView> {
   TextStyle headingStyle = const TextStyle(
       fontSize: 16, fontWeight: FontWeight.w600, color: Colors.red);
 
+  AddOrganizationsEventController addOrganizationsEventController = Get.find();
+
+  deleteAccountAPICall() async {
+    http.Response response = await http.post(
+        Uri.parse('https://manage.partypeople.in/v1/party/delete_organization'),
+        headers: {
+          'x-access-token': '${GetStorage().read('token')}'
+        },
+        body: {
+          'organization_id':
+              addOrganizationsEventController.organisationID.value
+        });
+    print(response.body);
+    if (response.statusCode == 200) {
+      print(jsonDecode(response.body)['status']);
+      if (jsonDecode(response.body)['status'] == 1) {
+        Get.snackbar(
+            'You\'r request for account deactivation has successfully saved',
+            '',
+            colorText: Colors.white);
+
+        Get.offAllNamed(Routes.LOGIN);
+        GetStorage().write('token', null);
+      }
+    }
+  }
+
   showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = TextButton(
@@ -28,13 +59,8 @@ class _SettingsViewState extends State<SettingsView> {
     Widget continueButton = TextButton(
       child: Text("Request"),
       onPressed: () {
+        deleteAccountAPICall();
         Navigator.pop(context);
-        Future.delayed(Duration(seconds: 2)).then((value) {
-          print('Show snackbar');
-          Get.snackbar(
-              'You\'r request for account deactivation has successfully saved',
-              '');
-        });
       },
     );
 
@@ -60,16 +86,15 @@ class _SettingsViewState extends State<SettingsView> {
   final Uri paramsForMail = Uri(
     scheme: 'mailto',
     path: 'partypeople03112022@gmail.com',
-    query: 'subject=Contact Party People&body=App Version 3.23', //add subject and body here
+    query:
+        'subject=Contact Party People&body=App Version 3.23', //add subject and body here
   );
 
-
-  final Uri linkForTerms = Uri.parse(
-      'https://www.partypeople.in/terms-conditions.html');
+  final Uri linkForTerms =
+      Uri.parse('https://www.partypeople.in/terms-conditions.html');
   final Uri linkForAbout = Uri.parse('https://www.partypeople.in/About.html');
-  final Uri linkForPrivacy = Uri.parse(
-      'https://www.partypeople.in/privacy-policy.html');
-
+  final Uri linkForPrivacy =
+      Uri.parse('https://www.partypeople.in/privacy-policy.html');
 
   bool lockAppSwitchVal = true;
   bool like = true;
@@ -89,532 +114,537 @@ class _SettingsViewState extends State<SettingsView> {
   Widget build(BuildContext context) {
     return (Platform.isAndroid)
         ? MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: Colors.redAccent,
-          secondary: Colors.redAccent,
-        ),
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-
-          title: const Text("Settings"),
-        ),
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.all(12),
-            alignment: Alignment.center,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text("Notifications", style: headingStyle),
-                  ],
-                ),
-                ListTile(
-                  leading: const Icon(Icons.notifications),
-                  title: const Text("Like"),
-                  trailing: Switch(
-                      value: like,
-                      activeColor: Colors.redAccent,
-                      onChanged: (val) {
-                        setState(() {
-                          like = val;
-                        });
-                      }),
-                ),
-                const Divider(), ListTile(
-                  leading: const Icon(Icons.notifications),
-                  title: const Text("Party Subscribed"),
-                  trailing: Switch(
-                      value: partyPosted,
-                      activeColor: Colors.redAccent,
-                      onChanged: (val) {
-                        setState(() {
-                          partyPosted = val;
-                        });
-                      }),
-                ),
-                const Divider(), ListTile(
-                  onTap: () {
-                    Get.snackbar(
-                        'You will get notified, Once you\'r post will be approved',
-                        '');
-                  },
-                  leading: const Icon(Icons.post_add_sharp),
-                  title: const Text("Post Approved"),
-
-                ),
-                const Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text("Account", style: headingStyle),
-                  ],
-                ),
-                ListTile(
-                  onTap: () {
-                    Get.snackbar(
-                        'Transaction History is currently in review', '');
-                  },
-                  leading: Icon(Icons.money),
-                  title: Text("Transaction History"),
-                ),
-                const Divider(),
-                ListTile(
-                  onTap: () {
-                    showAlertDialog(context);
-                  },
-                  leading: Icon(Icons.account_box, color: Colors.red,),
-                  title: Text("Delete Account", style: TextStyle(
-                      color: Colors.red, fontWeight: FontWeight.bold),),
-                ),
-                const Divider(),
-                //  ListTile(
-                //   leading: Icon(Icons.exit_to_app),
-                //   title: Text("Sign Out"),
-                //   onTap: (){
-                //     GetStorage().remove('token');
-                //     Get.offAllNamed(Routes.HOME);
-                //   },
-                // ),
-
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text("Misc", style: headingStyle),
-                  ],
-                ),
-                ListTile(
-                  onTap: () async {
-                    var url = linkForTerms.toString();
-                    if (await canLaunchUrl(Uri.parse(url))) {
-                      await launchUrl(Uri.parse(url));
-                    } else {
-                      throw 'Could not launch $url';
-                    }
-                  },
-                  leading: Icon(Icons.file_open_outlined),
-                  title: Text("Terms of Service"),
-                ),
-                const Divider(),
-                ListTile(
-                  onTap: () async {
-                    var url = paramsForMail.toString();
-                    if (await canLaunchUrl(Uri.parse(url))) {
-                      await launchUrl(Uri.parse(url));
-                    } else {
-                      throw 'Could not launch $url';
-                    }
-                  },
-                  leading: Icon(Icons.file_copy_outlined),
-                  title: Text("Contact Us"),
-                ),
-                const Divider(),
-
-                ListTile(
-                  onTap: () async {
-                    var url = linkForAbout.toString();
-                    if (await canLaunchUrl(Uri.parse(url))) {
-                      await launchUrl(Uri.parse(url));
-                    } else {
-                      throw 'Could not launch $url';
-                    }
-                  },
-                  leading: Icon(Icons.file_open_outlined),
-                  title: Text("About us"),
-                ),
-                const Divider(),
-                ListTile(
-                  onTap: () async {
-                    var url = linkForPrivacy.toString();
-                    if (await canLaunchUrl(Uri.parse(url))) {
-                      await launchUrl(Uri.parse(url));
-                    } else {
-                      throw 'Could not launch $url';
-                    }
-                  },
-                  leading: Icon(Icons.file_copy_outlined),
-                  title: Text("Privacy Policy"),
-                ),
-              ],
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSwatch().copyWith(
+                primary: Colors.redAccent,
+                secondary: Colors.redAccent,
+              ),
             ),
-          ),
-        ),
-      ),
-    )
+            home: Scaffold(
+              appBar: AppBar(
+                title: const Text("Settings"),
+              ),
+              body: SingleChildScrollView(
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  alignment: Alignment.center,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text("Notifications", style: headingStyle),
+                        ],
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.notifications),
+                        title: const Text("Like"),
+                        trailing: Switch(
+                            value: like,
+                            activeColor: Colors.redAccent,
+                            onChanged: (val) {
+                              setState(() {
+                                like = val;
+                              });
+                            }),
+                      ),
+                      const Divider(),
+                      ListTile(
+                        leading: const Icon(Icons.notifications),
+                        title: const Text("Party Subscribed"),
+                        trailing: Switch(
+                            value: partyPosted,
+                            activeColor: Colors.redAccent,
+                            onChanged: (val) {
+                              setState(() {
+                                partyPosted = val;
+                              });
+                            }),
+                      ),
+                      const Divider(),
+                      ListTile(
+                        onTap: () {
+                          Get.snackbar(
+                              'You will get notified, Once you\'r post will be approved',
+                              '');
+                        },
+                        leading: const Icon(Icons.post_add_sharp),
+                        title: const Text("Post Approved"),
+                      ),
+                      const Divider(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text("Account", style: headingStyle),
+                        ],
+                      ),
+                      ListTile(
+                        onTap: () {
+                          Get.snackbar(
+                              'Transaction History is currently in review', '');
+                        },
+                        leading: Icon(Icons.money),
+                        title: Text("Transaction History"),
+                      ),
+                      const Divider(),
+                      ListTile(
+                        onTap: () {
+                          showAlertDialog(context);
+                        },
+                        leading: Icon(
+                          Icons.account_box,
+                          color: Colors.red,
+                        ),
+                        title: Text(
+                          "Delete Account",
+                          style: TextStyle(
+                              color: Colors.red, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const Divider(),
+                      //  ListTile(
+                      //   leading: Icon(Icons.exit_to_app),
+                      //   title: Text("Sign Out"),
+                      //   onTap: (){
+                      //     GetStorage().remove('token');
+                      //     Get.offAllNamed(Routes.HOME);
+                      //   },
+                      // ),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text("Misc", style: headingStyle),
+                        ],
+                      ),
+                      ListTile(
+                        onTap: () async {
+                          var url = linkForTerms.toString();
+                          if (await canLaunchUrl(Uri.parse(url))) {
+                            await launchUrl(Uri.parse(url));
+                          } else {
+                            throw 'Could not launch $url';
+                          }
+                        },
+                        leading: Icon(Icons.file_open_outlined),
+                        title: Text("Terms of Service"),
+                      ),
+                      const Divider(),
+                      ListTile(
+                        onTap: () async {
+                          var url = paramsForMail.toString();
+                          if (await canLaunchUrl(Uri.parse(url))) {
+                            await launchUrl(Uri.parse(url));
+                          } else {
+                            throw 'Could not launch $url';
+                          }
+                        },
+                        leading: Icon(Icons.file_copy_outlined),
+                        title: Text("Contact Us"),
+                      ),
+                      const Divider(),
+
+                      ListTile(
+                        onTap: () async {
+                          var url = linkForAbout.toString();
+                          if (await canLaunchUrl(Uri.parse(url))) {
+                            await launchUrl(Uri.parse(url));
+                          } else {
+                            throw 'Could not launch $url';
+                          }
+                        },
+                        leading: Icon(Icons.file_open_outlined),
+                        title: Text("About us"),
+                      ),
+                      const Divider(),
+                      ListTile(
+                        onTap: () async {
+                          var url = linkForPrivacy.toString();
+                          if (await canLaunchUrl(Uri.parse(url))) {
+                            await launchUrl(Uri.parse(url));
+                          } else {
+                            throw 'Could not launch $url';
+                          }
+                        },
+                        leading: Icon(Icons.file_copy_outlined),
+                        title: Text("Privacy Policy"),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          )
         : CupertinoApp(
-      debugShowCheckedModeBanner: false,
-      home: CupertinoPageScaffold(
-        navigationBar: const CupertinoNavigationBar(
-          backgroundColor: CupertinoColors.destructiveRed,
-          middle: Text("Settings UI"),
-        ),
-        child: Container(
-          height: double.infinity,
-          width: double.infinity,
-          color: CupertinoColors.extraLightBackgroundGray,
-          child: Column(
-            children: [
-              //Common
-              const SizedBox(height: 14),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(width: 12),
-                  Text(
-                    "Common",
-                    style: headingStyleIOS,
-                  ),
-                ],
+            debugShowCheckedModeBanner: false,
+            home: CupertinoPageScaffold(
+              navigationBar: const CupertinoNavigationBar(
+                backgroundColor: CupertinoColors.destructiveRed,
+                middle: Text("Settings UI"),
               ),
-              const SizedBox(height: 8),
-              Container(
+              child: Container(
+                height: double.infinity,
                 width: double.infinity,
-                color: CupertinoColors.white,
+                color: CupertinoColors.extraLightBackgroundGray,
                 child: Column(
                   children: [
+                    //Common
+                    const SizedBox(height: 14),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(width: 12),
+                        Text(
+                          "Common",
+                          style: headingStyleIOS,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
                     Container(
-                      alignment: Alignment.center,
                       width: double.infinity,
-                      height: 38,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      color: CupertinoColors.white,
+                      child: Column(
                         children: [
-                          const SizedBox(width: 12),
-                          const Icon(
-                            Icons.language,
-                            color: Colors.grey,
+                          Container(
+                            alignment: Alignment.center,
+                            width: double.infinity,
+                            height: 38,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SizedBox(width: 12),
+                                const Icon(
+                                  Icons.language,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(width: 12),
+                                const Text("Language"),
+                                const Spacer(),
+                                Text(
+                                  "English",
+                                  style: descStyleIOS,
+                                ),
+                                const SizedBox(width: 5),
+                                const Icon(
+                                  CupertinoIcons.right_chevron,
+                                  color: CupertinoColors.inactiveGray,
+                                ),
+                                const SizedBox(width: 8),
+                              ],
+                            ),
                           ),
-                          const SizedBox(width: 12),
-                          const Text("Language"),
-                          const Spacer(),
-                          Text(
-                            "English",
-                            style: descStyleIOS,
+                          const Divider(),
+                          Container(
+                            width: double.infinity,
+                            height: 38,
+                            alignment: Alignment.center,
+                            child: Row(
+                              children: [
+                                const SizedBox(width: 12),
+                                const Icon(
+                                  Icons.cloud,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(width: 12),
+                                const Text("Environment"),
+                                const Spacer(),
+                                Text(
+                                  "Production",
+                                  style: descStyleIOS,
+                                ),
+                                const SizedBox(width: 5),
+                                const Icon(
+                                  CupertinoIcons.right_chevron,
+                                  color: CupertinoColors.inactiveGray,
+                                ),
+                                const SizedBox(width: 8),
+                              ],
+                            ),
                           ),
-                          const SizedBox(width: 5),
-                          const Icon(
-                            CupertinoIcons.right_chevron,
-                            color: CupertinoColors.inactiveGray,
-                          ),
-                          const SizedBox(width: 8),
                         ],
                       ),
                     ),
-                    const Divider(),
+                    //Account
+                    const SizedBox(height: 14),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(width: 12),
+                        Text(
+                          "Account",
+                          style: headingStyleIOS,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
                     Container(
                       width: double.infinity,
-                      height: 38,
-                      alignment: Alignment.center,
-                      child: Row(
+                      color: CupertinoColors.white,
+                      child: Column(
                         children: [
-                          const SizedBox(width: 12),
-                          const Icon(
-                            Icons.cloud,
-                            color: Colors.grey,
+                          Container(
+                            alignment: Alignment.center,
+                            width: double.infinity,
+                            height: 38,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                SizedBox(width: 12),
+                                Icon(
+                                  Icons.phone,
+                                  color: Colors.grey,
+                                ),
+                                SizedBox(width: 12),
+                                Text("Phone Number"),
+                                Spacer(),
+                                Icon(
+                                  CupertinoIcons.right_chevron,
+                                  color: CupertinoColors.inactiveGray,
+                                ),
+                                SizedBox(width: 8),
+                              ],
+                            ),
                           ),
-                          const SizedBox(width: 12),
-                          const Text("Environment"),
-                          const Spacer(),
-                          Text(
-                            "Production",
-                            style: descStyleIOS,
+                          const Divider(),
+                          Container(
+                            alignment: Alignment.center,
+                            width: double.infinity,
+                            height: 38,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                SizedBox(width: 12),
+                                Icon(
+                                  Icons.mail,
+                                  color: Colors.grey,
+                                ),
+                                SizedBox(width: 12),
+                                Text("Email"),
+                                Spacer(),
+                                Icon(
+                                  CupertinoIcons.right_chevron,
+                                  color: CupertinoColors.inactiveGray,
+                                ),
+                                SizedBox(width: 8),
+                              ],
+                            ),
                           ),
-                          const SizedBox(width: 5),
-                          const Icon(
-                            CupertinoIcons.right_chevron,
-                            color: CupertinoColors.inactiveGray,
+                          const Divider(),
+                          // Container(
+                          //   alignment: Alignment.center,
+                          //   width: double.infinity,
+                          //   height: 38,
+                          //   child: Row(
+                          //     crossAxisAlignment: CrossAxisAlignment.center,
+                          //     mainAxisAlignment: MainAxisAlignment.center,
+                          //     children: const [
+                          //       SizedBox(width: 12),
+                          //       Icon(
+                          //         Icons.exit_to_app,
+                          //         color: Colors.grey,
+                          //       ),
+                          //       SizedBox(width: 12),
+                          //       Text("Sign Out"),
+                          //       Spacer(),
+                          //       Icon(
+                          //         CupertinoIcons.right_chevron,
+                          //         color: CupertinoColors.inactiveGray,
+                          //       ),
+                          //       SizedBox(width: 8),
+                          //     ],
+                          //   ),
+                          // ),
+                        ],
+                      ),
+                    ),
+                    //Security
+                    const SizedBox(height: 14),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(width: 12),
+                        Text(
+                          "Security",
+                          style: headingStyleIOS,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      width: double.infinity,
+                      color: CupertinoColors.white,
+                      child: Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            width: double.infinity,
+                            height: 38,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SizedBox(width: 12),
+                                const Icon(
+                                  Icons.phonelink_lock_outlined,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(width: 12),
+                                const Text("Lock app in Background"),
+                                const Spacer(),
+                                CupertinoSwitch(
+                                    value: lockAppSwitchVal,
+                                    activeColor: CupertinoColors.destructiveRed,
+                                    onChanged: (val) {
+                                      setState(() {
+                                        lockAppSwitchVal = val;
+                                      });
+                                    }),
+                                const SizedBox(width: 8),
+                              ],
+                            ),
                           ),
-                          const SizedBox(width: 8),
+                          const Divider(),
+                          Container(
+                            alignment: Alignment.center,
+                            width: double.infinity,
+                            height: 38,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SizedBox(width: 12),
+                                const Icon(
+                                  Icons.fingerprint,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(width: 12),
+                                const Text("Use Fingerprint"),
+                                const Spacer(),
+                                CupertinoSwitch(
+                                  value: fingerprintSwitchVal,
+                                  onChanged: (val) {
+                                    setState(() {
+                                      fingerprintSwitchVal = val;
+                                    });
+                                  },
+                                ),
+                                const SizedBox(width: 8),
+                              ],
+                            ),
+                          ),
+                          const Divider(),
+                          Container(
+                            alignment: Alignment.center,
+                            width: double.infinity,
+                            height: 38,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SizedBox(width: 12),
+                                const Icon(
+                                  Icons.lock,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(width: 12),
+                                const Text("Change Password"),
+                                const Spacer(),
+                                CupertinoSwitch(
+                                  value: changePassSwitchVal,
+                                  activeColor: CupertinoColors.destructiveRed,
+                                  onChanged: (val) {
+                                    setState(() {
+                                      changePassSwitchVal = val;
+                                    });
+                                  },
+                                ),
+                                const SizedBox(width: 8),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    //Misc
+                    const SizedBox(height: 14),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(width: 12),
+                        Text(
+                          "Misc",
+                          style: headingStyleIOS,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      width: double.infinity,
+                      color: CupertinoColors.white,
+                      child: Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            width: double.infinity,
+                            height: 38,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                SizedBox(width: 12),
+                                Icon(
+                                  Icons.file_open_sharp,
+                                  color: Colors.grey,
+                                ),
+                                SizedBox(width: 12),
+                                Text("Terms of Service"),
+                                Spacer(),
+                                Icon(
+                                  CupertinoIcons.right_chevron,
+                                  color: CupertinoColors.inactiveGray,
+                                ),
+                                SizedBox(width: 8),
+                              ],
+                            ),
+                          ),
+                          const Divider(),
+                          Container(
+                            alignment: Alignment.center,
+                            width: double.infinity,
+                            height: 38,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                SizedBox(width: 12),
+                                Icon(
+                                  Icons.file_copy_sharp,
+                                  color: Colors.grey,
+                                ),
+                                SizedBox(width: 12),
+                                Text("Open Source Licenses"),
+                                Spacer(),
+                                Icon(
+                                  CupertinoIcons.right_chevron,
+                                  color: CupertinoColors.inactiveGray,
+                                ),
+                                SizedBox(width: 8),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
               ),
-              //Account
-              const SizedBox(height: 14),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(width: 12),
-                  Text(
-                    "Account",
-                    style: headingStyleIOS,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Container(
-                width: double.infinity,
-                color: CupertinoColors.white,
-                child: Column(
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      height: 38,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          SizedBox(width: 12),
-                          Icon(
-                            Icons.phone,
-                            color: Colors.grey,
-                          ),
-                          SizedBox(width: 12),
-                          Text("Phone Number"),
-                          Spacer(),
-                          Icon(
-                            CupertinoIcons.right_chevron,
-                            color: CupertinoColors.inactiveGray,
-                          ),
-                          SizedBox(width: 8),
-                        ],
-                      ),
-                    ),
-                    const Divider(),
-                    Container(
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      height: 38,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          SizedBox(width: 12),
-                          Icon(
-                            Icons.mail,
-                            color: Colors.grey,
-                          ),
-                          SizedBox(width: 12),
-                          Text("Email"),
-                          Spacer(),
-                          Icon(
-                            CupertinoIcons.right_chevron,
-                            color: CupertinoColors.inactiveGray,
-                          ),
-                          SizedBox(width: 8),
-                        ],
-                      ),
-                    ),
-                    const Divider(),
-                    // Container(
-                    //   alignment: Alignment.center,
-                    //   width: double.infinity,
-                    //   height: 38,
-                    //   child: Row(
-                    //     crossAxisAlignment: CrossAxisAlignment.center,
-                    //     mainAxisAlignment: MainAxisAlignment.center,
-                    //     children: const [
-                    //       SizedBox(width: 12),
-                    //       Icon(
-                    //         Icons.exit_to_app,
-                    //         color: Colors.grey,
-                    //       ),
-                    //       SizedBox(width: 12),
-                    //       Text("Sign Out"),
-                    //       Spacer(),
-                    //       Icon(
-                    //         CupertinoIcons.right_chevron,
-                    //         color: CupertinoColors.inactiveGray,
-                    //       ),
-                    //       SizedBox(width: 8),
-                    //     ],
-                    //   ),
-                    // ),
-                  ],
-                ),
-              ),
-              //Security
-              const SizedBox(height: 14),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(width: 12),
-                  Text(
-                    "Security",
-                    style: headingStyleIOS,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Container(
-                width: double.infinity,
-                color: CupertinoColors.white,
-                child: Column(
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      height: 38,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(width: 12),
-                          const Icon(
-                            Icons.phonelink_lock_outlined,
-                            color: Colors.grey,
-                          ),
-                          const SizedBox(width: 12),
-                          const Text("Lock app in Background"),
-                          const Spacer(),
-                          CupertinoSwitch(
-                              value: lockAppSwitchVal,
-                              activeColor: CupertinoColors.destructiveRed,
-                              onChanged: (val) {
-                                setState(() {
-                                  lockAppSwitchVal = val;
-                                });
-                              }),
-                          const SizedBox(width: 8),
-                        ],
-                      ),
-                    ),
-                    const Divider(),
-                    Container(
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      height: 38,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(width: 12),
-                          const Icon(
-                            Icons.fingerprint,
-                            color: Colors.grey,
-                          ),
-                          const SizedBox(width: 12),
-                          const Text("Use Fingerprint"),
-                          const Spacer(),
-                          CupertinoSwitch(
-                            value: fingerprintSwitchVal,
-                            onChanged: (val) {
-                              setState(() {
-                                fingerprintSwitchVal = val;
-                              });
-                            },
-                          ),
-                          const SizedBox(width: 8),
-                        ],
-                      ),
-                    ),
-                    const Divider(),
-                    Container(
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      height: 38,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(width: 12),
-                          const Icon(
-                            Icons.lock,
-                            color: Colors.grey,
-                          ),
-                          const SizedBox(width: 12),
-                          const Text("Change Password"),
-                          const Spacer(),
-                          CupertinoSwitch(
-                            value: changePassSwitchVal,
-                            activeColor: CupertinoColors.destructiveRed,
-                            onChanged: (val) {
-                              setState(() {
-                                changePassSwitchVal = val;
-                              });
-                            },
-                          ),
-                          const SizedBox(width: 8),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              //Misc
-              const SizedBox(height: 14),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(width: 12),
-                  Text(
-                    "Misc",
-                    style: headingStyleIOS,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Container(
-                width: double.infinity,
-                color: CupertinoColors.white,
-                child: Column(
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      height: 38,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          SizedBox(width: 12),
-                          Icon(
-                            Icons.file_open_sharp,
-                            color: Colors.grey,
-                          ),
-                          SizedBox(width: 12),
-                          Text("Terms of Service"),
-                          Spacer(),
-                          Icon(
-                            CupertinoIcons.right_chevron,
-                            color: CupertinoColors.inactiveGray,
-                          ),
-                          SizedBox(width: 8),
-                        ],
-                      ),
-                    ),
-                    const Divider(),
-                    Container(
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      height: 38,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          SizedBox(width: 12),
-                          Icon(
-                            Icons.file_copy_sharp,
-                            color: Colors.grey,
-                          ),
-                          SizedBox(width: 12),
-                          Text("Open Source Licenses"),
-                          Spacer(),
-                          Icon(
-                            CupertinoIcons.right_chevron,
-                            color: CupertinoColors.inactiveGray,
-                          ),
-                          SizedBox(width: 8),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }

@@ -201,6 +201,8 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
     setState(() {
       controller.isLoading.value = true;
     });
+
+    // Get organization details
     final organizationResponse = await http.post(
       Uri.parse('https://manage.partypeople.in/v1/party/organization_details'),
       headers: {
@@ -209,17 +211,23 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
     );
     final organizationData = await jsonDecode(organizationResponse.body)['data']
         [0]['organization_amenities'];
+
+    // Add all amenities to the selected list and create MultiSelectCard for each amenity
     for (final amenityData in organizationData) {
       controller.selectedAmenitiesListID.add(amenityData['id']);
-      print(controller.selectedAmenitiesListID);
       ameList.add(
         MultiSelectCard(
           value: amenityData['id'],
+          enabled: true,
           selected: true,
           label: amenityData['name'],
         ),
       );
     }
+
+    setState(() {
+      controller.isLoading.value = false;
+    });
   }
 
   Future<void> getAmenities() async {
@@ -484,12 +492,12 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Center(
                     child: MultiSelectContainer(
-                        itemsPadding: EdgeInsets.all(10),
+                        itemsPadding: EdgeInsets.all(12),
                         prefix: MultiSelectPrefix(
                             selectedPrefix: Icon(
                               Icons.check,
                               color: Colors.white,
-                              size: 14,
+                              size: 22,
                             ),
                             disabledPrefix: Icon(
                               Icons.do_disturb_alt_sharp,
@@ -498,15 +506,22 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                         items: ameList,
                         onChange: (allSelectedItems, selectedItem) {
                           setState(() {
-                            if (ameList.contains(selectedItem)) {
+                            if (controller.selectedAmenitiesListID
+                                .contains(selectedItem)) {
+                              // If the item is already selected, remove it only if it is being deselected
+                              if (!allSelectedItems.contains(selectedItem)) {
+                                controller.selectedAmenitiesListID
+                                    .remove(selectedItem);
+                              }
                             } else {
-                              controller.selectedAmenitiesListID
-                                  .add(selectedItem);
+                              // If the item is not selected, add it only if it is being selected
+                              if (allSelectedItems.contains(selectedItem)) {
+                                controller.selectedAmenitiesListID
+                                    .add(selectedItem);
+                              }
                             }
-
                             print(selectedItem);
-                            print(
-                                "All Selected Items List ==> ${controller.selectedAmenitiesListID}");
+                            print(controller.selectedAmenitiesListID.value);
                           });
                         }),
                   ),

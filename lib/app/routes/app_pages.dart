@@ -151,6 +151,7 @@ class AppPages {
     GetPage(
       name: _Paths.CUST_PROFILE,
       page: () => CustProfileView(
+        phoneNumber: '',
         organizationData: {},
       ),
       binding: CustProfileBinding(),

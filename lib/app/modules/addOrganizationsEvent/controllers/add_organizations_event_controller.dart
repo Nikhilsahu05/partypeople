@@ -37,6 +37,7 @@ class AddOrganizationsEventController extends GetxController {
   Set<Marker> markers = {};
   RxString organisationID = ''.obs;
   var fullOrganisationJsonData;
+
   getAPIOverview() async {
     http.Response response = await http.post(
         Uri.parse(
@@ -46,13 +47,13 @@ class AddOrganizationsEventController extends GetxController {
         });
     print("response of Organization ${response.body}");
     organisationID.value = jsonDecode(response.body)['data'][0]['id'];
-    print('Getting ID Of Organisation ::: ${jsonDecode(response.body)['data'][0]['id']}');
-    print( organisationID.value);
+    print(
+        'Getting ID Of Organisation ::: ${jsonDecode(response.body)['data'][0]['id']}');
+    print(organisationID.value);
     print("Print for test");
     fullOrganisationJsonData = jsonDecode(response.body);
     if (jsonDecode(response.body)['data'] != null) {
       name.text = jsonDecode(response.body)['data'][0]['name'];
-
 
       location.text = jsonDecode(response.body)['data'][0]['city_id'];
       description.text = jsonDecode(response.body)['data'][0]['description'];
@@ -163,6 +164,7 @@ class AddOrganizationsEventController extends GetxController {
           .replaceAll(']', ''),
       'city_id': location.text,
       'description': description.text,
+      'branch': branches.text,
       'name': name.text.toUpperCase(),
       'latitude': latitude.toString(),
       'longitude': longitude.toString(),
@@ -215,6 +217,7 @@ class AddOrganizationsEventController extends GetxController {
           .replaceAll(']', ''),
       'city_id': location.text,
       'description': description.text,
+      'branch': branches.text,
       'name': name.text.toUpperCase(),
       'latitude': latitude.toString(),
       'longitude': longitude.toString(),

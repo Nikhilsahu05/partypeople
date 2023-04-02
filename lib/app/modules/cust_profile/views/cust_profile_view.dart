@@ -11,8 +11,9 @@ import '../controllers/cust_profile_controller.dart';
 
 class CustProfileView extends StatefulWidget {
   var organizationData;
+  String phoneNumber;
 
-  CustProfileView({required this.organizationData});
+  CustProfileView({required this.organizationData, required this.phoneNumber});
 
   @override
   State<CustProfileView> createState() => _CustProfileViewState();
@@ -62,7 +63,7 @@ class _CustProfileViewState extends State<CustProfileView> {
               child: CachedNetworkImageWidget(
                 imageUrl: '${widget.organizationData['timeline_pic']}',
                 fit: BoxFit.fill,
-                height: 300,
+                height: 200,
                 width: Get.width,
                 errorWidget: (context, url, error) => Icon(Icons.error_outline),
                 placeholder: (context, url) => Center(
@@ -102,7 +103,6 @@ class _CustProfileViewState extends State<CustProfileView> {
                     "${widget.organizationData['name']}",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'malgun',
@@ -134,6 +134,28 @@ class _CustProfileViewState extends State<CustProfileView> {
                     halfFilledIconData: Icons.star_half,
                     defaultIconData: Icons.star_border,
                     spacing: .5,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    widget.phoneNumber,
+                    style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'malgun'),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    widget.organizationData['branch'],
+                    style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'malgun'),
                   ),
                   SizedBox(
                     height: 20,

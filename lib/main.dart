@@ -23,6 +23,7 @@ Future<void> main() async {
 
   await Firebase.initializeApp();
   await GetStorage.init();
+  print(GetStorage().read('token'));
   runApp(
     App(),
   );

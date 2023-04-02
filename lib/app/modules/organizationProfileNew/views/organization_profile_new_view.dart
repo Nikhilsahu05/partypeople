@@ -180,9 +180,7 @@ class _OrganizationProfileNewViewState
                           style: TextStyle(
                             fontSize: 20,
                             fontFamily: 'SegeoUI',
-                            overflow: TextOverflow.ellipsis,
                           ),
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       controller.bluetick.value == '1'
@@ -192,7 +190,7 @@ class _OrganizationProfileNewViewState
                                   width: 8,
                                 ),
                                 Container(
-                                  margin: EdgeInsets.only(top: 8),
+                                  margin: EdgeInsets.only(top: 2),
                                   child: Icon(
                                     Icons.verified,
                                     color: Colors.blue,
@@ -252,6 +250,7 @@ class _OrganizationProfileNewViewState
                     GestureDetector(
                         onTap: () {
                           Get.to(CustProfileView(
+                            phoneNumber: controller.phoneNumber.value,
                             organizationData: controller.fullOrganizationData,
                           ));
                         },
@@ -728,10 +727,9 @@ class _OrganizationProfileNewViewState
                                                                         children: [
                                                                           Text(
                                                                             '${controller.jsonPartyPopularData[index]['title']}',
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
                                                                             style: TextStyle(
                                                                                 fontSize: 16,
+                                                                                overflow: TextOverflow.ellipsis,
                                                                                 fontFamily: 'malgun',
                                                                                 fontWeight: FontWeight.bold),
                                                                           ),
@@ -868,7 +866,6 @@ class _OrganizationProfileNewViewState
                                         },
                                         viewportFraction: 0.96,
                                         initialPage: 0,
-                                        enableInfiniteScroll: false,
                                         reverse: false,
                                         autoPlay: false,
                                         autoPlayInterval: Duration(seconds: 3),
