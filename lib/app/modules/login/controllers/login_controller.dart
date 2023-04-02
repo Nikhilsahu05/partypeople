@@ -9,6 +9,8 @@ import 'package:http/http.dart' as http;
 import 'package:pertypeople/app/modules/global_header_id_controller.dart';
 import 'package:pertypeople/app/routes/app_pages.dart';
 
+import '../../profile_type.dart';
+
 class LoginController extends GetxController {
   //TODO: Implement LoginController
   static var token = "";
@@ -62,8 +64,7 @@ class LoginController extends GetxController {
         //token = json['token'];
 
         if (json['data']['first_time'] == '1') {
-          Get.offAllNamed(Routes.ADD_ORGANIZATIONS_EVENT,
-              arguments: json['data']);
+          Get.offAll(ProfileType());
         } else {
           Get.offAllNamed(Routes.ORGANIZATION_PROFILE_NEW);
         }
@@ -129,7 +130,7 @@ class LoginController extends GetxController {
       Get.offAllNamed(Routes.ORGANIZATION_PROFILE_NEW);
     } else {
       isLoading.value = false;
-      Get.offAllNamed(Routes.ADD_ORGANIZATIONS_EVENT);
+      Get.offAll(ProfileType());
     }
     isLoading.value = false;
   }

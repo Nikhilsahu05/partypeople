@@ -57,7 +57,7 @@ class SplashscreenTwoView extends GetView<SplashscreenTwoController> {
                 Container(
                   width: 200,
                   child: Text(
-                      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry\'s standard dummy text ever',
+                      'Join the party with PartyNow! Meet new people and find the hottest parties in town with just a few taps.',
                       style: GoogleFonts.oswald(
                         fontSize: 12,
                         color: Colors.white,

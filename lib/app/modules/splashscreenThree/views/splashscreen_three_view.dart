@@ -57,7 +57,7 @@ class SplashscreenThreeView extends GetView<SplashscreenThreeController> {
                 Container(
                   width: 200,
                   child: Text(
-                      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry\'s standard dummy text ever',
+                      'Make new friends and party like never before with PartyConnect. Find exciting events and connect with strangers who share your love for partying.',
                       style: GoogleFonts.oswald(
                         fontSize: 12,
                         color: Colors.white,

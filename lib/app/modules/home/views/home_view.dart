@@ -64,7 +64,7 @@ class HomeView extends GetView<HomeController> {
                   Container(
                     width: 200,
                     child: Text(
-                        'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry\'s standard dummy text ever',
+                        'Discover the ultimate partying experience with PartyMate. Connect with strangers and have an unforgettable time!',
                         style: GoogleFonts.oswald(
                           fontSize: 12,
                           color: Colors.white,

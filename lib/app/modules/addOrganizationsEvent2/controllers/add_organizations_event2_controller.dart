@@ -21,10 +21,13 @@ class AddOrganizationsEvent2Controller extends GetxController {
   RxList selectedAmenities = [].obs;
   static final count = false.obs;
   static var address = "";
-  static File? picture;
+
   var date = TextEditingController();
   var mobileNumber = TextEditingController();
   final title = TextEditingController();
+  var name = '';
+  var genderList = [];
+  RxString timeline = ''.obs;
   final description = TextEditingController();
   final startDate = TextEditingController();
   final endDate = TextEditingController();
@@ -47,20 +50,9 @@ class AddOrganizationsEvent2Controller extends GetxController {
   RxBool isPopular = false.obs;
   SingingCharacter character = SingingCharacter.Full;
   var partyStatusChange = "".obs;
-  var name = '';
-  var genderList = [];
-  RxString timeline = ''.obs;
+
   var getPrefiledData;
   RxBool isEditable = false.obs;
-
-  @override
-  void onClose() {
-    if (picture != null) {
-      print("get picture");
-      picture?.delete();
-      picture = null;
-    }
-  }
 
   getEndDate(BuildContext context) async {
     DateTime selectedDate = DateTime.now();
@@ -256,7 +248,7 @@ class AddOrganizationsEvent2Controller extends GetxController {
       'x-access-token': GetStorage().read("token").toString(),
       // 'Cookie': 'ci_session=f72b54d682c45ebf19fcc0fd54cef39508588d0c'
     };
-    print("file size ${picture?.lengthSync()}");
+
     var request = http.MultipartRequest(
         'POST', Uri.parse('https://manage.partypeople.in/v1/party/add'));
     request.fields.addAll({

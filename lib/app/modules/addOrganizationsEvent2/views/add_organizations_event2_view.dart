@@ -218,64 +218,80 @@ class _AddOrganizationsEvent2ViewState
                     children: [
                       GestureDetector(
                         onTap: () => _showSelectPhotoOptionsProfile(context),
-                        child: Stack(
-                          children: [
-                            Container(
-                              height: 200,
-                              width: double.maxFinite,
-                              child: controller.timeline.value != ''
-                                  ? Card(
-                                      child: CachedNetworkImageWidget(
-                                          imageUrl: controller.timeline.value,
-                                          width: Get.width,
-                                          height: 300,
-                                          fit: BoxFit.fill,
-                                          errorWidget: (context, url, error) =>
-                                              Center(
-                                                child:
-                                                    CupertinoActivityIndicator(
-                                                  radius: 15,
-                                                  color: Colors.black,
-                                                ),
+                        child: Obx(
+                          () => Stack(
+                            children: [
+                              controller.isLoading.value == false
+                                  ? Container(
+                                      height: 200,
+                                      width: double.maxFinite,
+                                      child: controller.timeline.value != ''
+                                          ? Card(
+                                              child: CachedNetworkImageWidget(
+                                                  imageUrl: controller
+                                                      .timeline.value,
+                                                  width: Get.width,
+                                                  height: 300,
+                                                  fit: BoxFit.fill,
+                                                  errorWidget: (context, url,
+                                                          error) =>
+                                                      Center(
+                                                        child:
+                                                            CupertinoActivityIndicator(
+                                                          radius: 15,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                  placeholder: (context, url) =>
+                                                      Center(
+                                                          child:
+                                                              CupertinoActivityIndicator(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  radius: 15))))
+                                          : Card(
+                                              child: Lottie.asset(
+                                                'assets/127619-photo-click.json',
                                               ),
-                                          placeholder: (context, url) => Center(
-                                              child: CupertinoActivityIndicator(
-                                                  color: Colors.black,
-                                                  radius: 15))))
-                                  : Card(
-                                      child: Lottie.asset(
-                                        'assets/127619-photo-click.json',
+                                            ),
+                                    )
+                                  : Container(
+                                      child: Center(
+                                        child: CupertinoActivityIndicator(
+                                          radius: 15,
+                                          color: Colors.black,
+                                        ),
                                       ),
                                     ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                child: IconButton(
-                                  onPressed: () {
-                                    _showSelectPhotoOptionsProfile(context);
-                                  },
-                                  icon: Icon(
-                                    Icons.camera_alt,
-                                    color: Colors.white,
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: Container(
+                                  child: IconButton(
+                                    onPressed: () {
+                                      _showSelectPhotoOptionsProfile(context);
+                                    },
+                                    icon: Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Positioned(
-                              bottom: 10,
-                              right: 10,
-                              child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  child: Icon(
-                                    size: 30,
-                                    Icons.camera_alt,
-                                    color: Colors.red,
-                                  )),
-                            ),
-                          ],
+                              Positioned(
+                                bottom: 10,
+                                right: 10,
+                                child: Container(
+                                    height: 30,
+                                    width: 30,
+                                    child: Icon(
+                                      size: 30,
+                                      Icons.camera_alt,
+                                      color: Colors.red,
+                                    )),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -628,7 +644,41 @@ class AmenitiesButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: () {
-        Get.to(AmenitiesPartyScreen());
+        List<Map<String, String>> fieldsToValidate = [
+          {'Party Image': controller.timeline.value},
+          {'Party Title': controller.title.text},
+          {'Party Description': controller.description.text},
+          {'Party Start Date': controller.startDate.text},
+          {'Party End Date': controller.endDate.text},
+          {'Party Start Time': controller.startTime.text},
+          {'Party End Time': controller.endTime.text},
+          {'Party Start Age': controller.startPeopleAge.text},
+          {'Party End Age': controller.endPeopleAge.text},
+          {'Party People Limit': controller.peopleLimit.text},
+          {'Party Offers': controller.offersText.text},
+        ];
+
+        bool hasEmptyField = false;
+        String emptyFieldTitle = '';
+        String emptyFieldMessage = '';
+
+        for (var field in fieldsToValidate) {
+          String title = field.keys.first;
+          String value = field.values.first;
+
+          if (value.isEmpty) {
+            hasEmptyField = true;
+            emptyFieldTitle = title;
+            emptyFieldMessage = 'Field Is Empty';
+            break;
+          }
+        }
+
+        if (hasEmptyField) {
+          Get.snackbar(emptyFieldTitle, emptyFieldMessage);
+        } else {
+          Get.to(AmenitiesPartyScreen());
+        }
       },
       icon: Icon(
         Icons.grid_view,

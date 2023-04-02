@@ -216,8 +216,8 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
       ameList.add(
         MultiSelectCard(
           value: amenityData['id'],
-          enabled: true,
           selected: true,
+
           label: amenityData['name'],
         ),
       );

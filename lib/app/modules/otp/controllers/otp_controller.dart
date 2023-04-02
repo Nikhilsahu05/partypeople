@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-import '../../../routes/app_pages.dart';
+import '../../profile_type.dart';
 
 class OtpController extends GetxController {
   //TODO: Implement OtpController
@@ -61,8 +61,7 @@ class OtpController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
       );
       if (response.data['status'] == 1) {
-        print('number verified, moving to add events');
-        Get.toNamed(Routes.ADD_EVENT);
+        Get.offAll(ProfileType());
       } else {}
     } catch (e) {
       print(e);
@@ -79,7 +78,6 @@ class OtpController extends GetxController {
       print(response);
 
       if (response.data['status'] == 1) {
-        // Get.toNamed('/add-event');
       } else {}
     } catch (e) {
       print(e);

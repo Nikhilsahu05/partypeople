@@ -36,6 +36,7 @@ class AddOrganizationsEventController extends GetxController {
   var longitude;
   Set<Marker> markers = {};
   RxString organisationID = ''.obs;
+  var fullOrganisationJsonData;
   getAPIOverview() async {
     http.Response response = await http.post(
         Uri.parse(
@@ -44,14 +45,22 @@ class AddOrganizationsEventController extends GetxController {
           'x-access-token': '${GetStorage().read("token")}',
         });
     print("response of Organization ${response.body}");
+    organisationID.value = jsonDecode(response.body)['data'][0]['id'];
+    print('Getting ID Of Organisation ::: ${jsonDecode(response.body)['data'][0]['id']}');
+    print( organisationID.value);
+    print("Print for test");
+    fullOrganisationJsonData = jsonDecode(response.body);
     if (jsonDecode(response.body)['data'] != null) {
       name.text = jsonDecode(response.body)['data'][0]['name'];
-      organisationID = jsonDecode(response.body)['data'][0]['id'];
+
+
       location.text = jsonDecode(response.body)['data'][0]['city_id'];
       description.text = jsonDecode(response.body)['data'][0]['description'];
       timeline.value =
           "${jsonDecode(response.body)['data'][0]['timeline_pic']}";
       profile.value = "${jsonDecode(response.body)['data'][0]['profile_pic']}";
+      update();
+      refresh();
     }
 
     update();
