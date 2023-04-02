@@ -35,7 +35,7 @@ class AddOrganizationsEventController extends GetxController {
   RxBool isEditable = false.obs;
   var longitude;
   Set<Marker> markers = {};
-
+  RxString organisationID = ''.obs;
   getAPIOverview() async {
     http.Response response = await http.post(
         Uri.parse(
@@ -46,6 +46,7 @@ class AddOrganizationsEventController extends GetxController {
     print("response of Organization ${response.body}");
     if (jsonDecode(response.body)['data'] != null) {
       name.text = jsonDecode(response.body)['data'][0]['name'];
+      organisationID = jsonDecode(response.body)['data'][0]['id'];
       location.text = jsonDecode(response.body)['data'][0]['city_id'];
       description.text = jsonDecode(response.body)['data'][0]['description'];
       timeline.value =
@@ -156,7 +157,7 @@ class AddOrganizationsEventController extends GetxController {
       'name': name.text.toUpperCase(),
       'latitude': latitude.toString(),
       'longitude': longitude.toString(),
-      'organization_id': '1',
+      'organization_id': organisationID.value,
       'type': '1',
       'profile_pic': profile.value,
       'timeline_pic': timeline.value,
