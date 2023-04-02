@@ -38,9 +38,6 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
   Future<String?> savePhotoToFirebase(
       String tokenId, File photo, String imageName) async {
     try {
-      setState(() {
-        controller.isLoading.value = true;
-      });
       await FirebaseAuth.instance.signInAnonymously();
 
       // Initialize Firebase Storage
@@ -55,7 +52,9 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
 
       // Get the download URL for the photo
       String downloadURL = await photoRef.getDownloadURL();
-
+      setState(() {
+        controller.isLoading.value = false;
+      });
       return downloadURL;
     } catch (e) {
       print('Error saving photo to Firebase Storage: $e');
@@ -92,10 +91,10 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
       File? img = File(image.path);
       img = await _cropImage(imageFile: img);
       setState(() {
+        controller.isLoading.value = true;
         savePhotoToFirebase(GetStorage().read('token'), img!, 'profileImage')
             .then((value) {
           controller.profile.value = value!;
-          controller.isLoading.value = false;
         });
         Navigator.of(context).pop();
       });
@@ -217,7 +216,6 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
         MultiSelectCard(
           value: amenityData['id'],
           selected: true,
-
           label: amenityData['name'],
         ),
       );
@@ -311,58 +309,74 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                   children: [
                     GestureDetector(
                       onTap: () => _showSelectPhotoOptionsTimeline(context),
-                      child: Stack(
-                        children: [
-                          Container(
-                            height: 200,
-                            width: double.maxFinite,
-                            child: controller.timeline.value != ''
-                                ? Card(
-                                    child: CachedNetworkImageWidget(
-                                        imageUrl: controller.timeline.value,
-                                        width: Get.width,
-                                        height: 200,
-                                        fit: BoxFit.fill,
-                                        errorWidget: (context, url, error) =>
-                                            Icon(Icons.error_outline),
-                                        placeholder: (context, url) => Center(
-                                            child: CupertinoActivityIndicator(
-                                                color: Colors.black,
-                                                radius: 15))))
-                                : Card(
-                                    child: Lottie.asset(
-                                      'assets/127619-photo-click.json',
+                      child: Obx(
+                        () => Stack(
+                          children: [
+                            controller.isLoading.value == false
+                                ? Container(
+                                    height: 200,
+                                    width: double.maxFinite,
+                                    child: controller.timeline.value != ''
+                                        ? Card(
+                                            child: CachedNetworkImageWidget(
+                                                imageUrl:
+                                                    controller.timeline.value,
+                                                width: Get.width,
+                                                height: 200,
+                                                fit: BoxFit.fill,
+                                                errorWidget: (context, url,
+                                                        error) =>
+                                                    Icon(Icons.error_outline),
+                                                placeholder: (context, url) =>
+                                                    Center(
+                                                        child:
+                                                            CupertinoActivityIndicator(
+                                                                color: Colors
+                                                                    .black,
+                                                                radius: 15))))
+                                        : Card(
+                                            child: Lottie.asset(
+                                              'assets/127619-photo-click.json',
+                                            ),
+                                          ),
+                                  )
+                                : Container(
+                                    child: Center(
+                                      child: CupertinoActivityIndicator(
+                                        radius: 15,
+                                        color: Colors.black,
+                                      ),
                                     ),
                                   ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              child: IconButton(
-                                onPressed: () {
-                                  _showSelectPhotoOptionsTimeline(context);
-                                },
-                                icon: Icon(
-                                  Icons.camera_alt,
-                                  color: Colors.white,
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                child: IconButton(
+                                  onPressed: () {
+                                    _showSelectPhotoOptionsTimeline(context);
+                                  },
+                                  icon: Icon(
+                                    Icons.camera_alt,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Positioned(
-                            bottom: 10,
-                            right: 10,
-                            child: Container(
-                                height: 30,
-                                width: 30,
-                                child: Icon(
-                                  size: 30,
-                                  Icons.camera_alt,
-                                  color: Colors.red,
-                                )),
-                          ),
-                        ],
+                            Positioned(
+                              bottom: 10,
+                              right: 10,
+                              child: Container(
+                                  height: 30,
+                                  width: 30,
+                                  child: Icon(
+                                    size: 30,
+                                    Icons.camera_alt,
+                                    color: Colors.red,
+                                  )),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
 
