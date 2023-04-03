@@ -45,7 +45,7 @@ class _DrawerViewState extends State<DrawerView> {
           title: Text(
             "My Profile",
             style: TextStyle(
-              fontSize: 17.sp,
+              fontSize: 13.sp,
             ),
           ),
           iconTheme: IconThemeData(
@@ -352,7 +352,7 @@ class CustomOptionWidget extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                size: 28.0,
+                size: 24.0,
                 color: Colors.red.shade900,
               ),
               SizedBox(width: 16.0),
@@ -360,7 +360,7 @@ class CustomOptionWidget extends StatelessWidget {
                 child: Text(
                   title,
                   style: TextStyle(
-                    fontSize: 15.sp,
+                    fontSize: 13.sp,
                     fontWeight: FontWeight.w600,
                     color: Colors.grey[800],
                   ),
@@ -368,7 +368,7 @@ class CustomOptionWidget extends StatelessWidget {
               ),
               Icon(
                 Icons.arrow_forward_ios_outlined,
-                size: 20.0,
+                size: 16.0,
                 color: Colors.grey[500],
               ),
             ],

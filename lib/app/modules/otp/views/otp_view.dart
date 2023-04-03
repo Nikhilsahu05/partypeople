@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../login/controllers/login_controller.dart';
 
 class OTPView extends StatefulWidget {
@@ -49,13 +50,13 @@ class _OTPViewState extends State<OTPView> {
               padding: const EdgeInsets.symmetric(horizontal: 28.0),
               child: Column(
                 children: [
-                  const Align(
+                  Align(
                     alignment: Alignment.topLeft,
                     child: Text(
                       'Phone Verification',
                       style: TextStyle(
                         fontFamily: 'malgun',
-                        fontSize: 18,
+                        fontSize: 13.sp,
                         color: Color(0xffFFA914),
                         letterSpacing: -0.42,
                         fontWeight: FontWeight.w700,
@@ -65,13 +66,13 @@ class _OTPViewState extends State<OTPView> {
                           TextHeightBehavior(applyHeightToFirstAscent: false),
                     ),
                   ),
-                  const Align(
+                  Align(
                     alignment: Alignment.topLeft,
                     child: Text(
                       'OTP code',
                       style: TextStyle(
                         fontFamily: 'malgun',
-                        fontSize: 43,
+                        fontSize: 26.sp,
                         color: Color.fromARGB(255, 248, 248, 248),
                         letterSpacing: -0.86,
                         fontWeight: FontWeight.w700,
@@ -82,14 +83,14 @@ class _OTPViewState extends State<OTPView> {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 15),
                   Align(
                       alignment: Alignment.topLeft,
                       child: Text.rich(
                         TextSpan(
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'malgun',
-                            fontSize: 14,
+                            fontSize: 12.sp,
                             color: Color(0xffB8A9A9),
                             letterSpacing: -0.28,
                             height: 1.2142857142857142,
@@ -124,7 +125,7 @@ class _OTPViewState extends State<OTPView> {
               child: DottedLine(dashLength: 8, dashColor: Color(0xffD9D3D3)),
             ),
             const SizedBox(
-              height: 50,
+              height: 35,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 55.0),
@@ -157,17 +158,17 @@ class _OTPViewState extends State<OTPView> {
                   }),
             ),
             const SizedBox(
-              height: 75,
+              height: 35,
             ),
             GestureDetector(
               onTap: () {
                 controller.verifyPhone();
               },
-              child: const Text.rich(
+              child: Text.rich(
                 TextSpan(
                   style: TextStyle(
                     fontFamily: 'malgun',
-                    fontSize: 18,
+                    fontSize: 12.sp,
                     color: Color.fromARGB(255, 255, 255, 255),
                     letterSpacing: -0.36,
                     height: 0.8333333333333334,
@@ -184,7 +185,7 @@ class _OTPViewState extends State<OTPView> {
                     ),
                     TextSpan(
                       text: ' RESEND OTP',
-                      style: TextStyle(color: Colors.yellow, fontSize: 16),
+                      style: TextStyle(color: Colors.yellow, fontSize: 13.sp),
                     ),
                   ],
                 ),
@@ -285,10 +286,10 @@ class _OrganizationProfileButtonState extends State<OrganizationProfileButton>
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Text(
-                'VERIFY OTP'.toUpperCase(),
+                'Verify OTP'.toUpperCase(),
                 style: TextStyle(
                   fontFamily: 'malgun',
-                  fontSize: 20,
+                  fontSize: 13.sp,
                   color: const Color(0xffffffff),
                   letterSpacing: -0.36,
                   fontWeight: FontWeight.bold,

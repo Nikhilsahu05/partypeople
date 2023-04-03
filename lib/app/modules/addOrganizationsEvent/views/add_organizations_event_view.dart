@@ -305,14 +305,14 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                           : 'Profile',
                       style: TextStyle(
                         fontFamily: 'malgun',
-                        fontSize: 16.sp,
+                        fontSize: 13.sp,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.0,
                         color: Colors.white,
                       )),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Stack(
                   children: [
@@ -433,9 +433,6 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 30,
-                ),
                 TextFieldWithTitle(
                   title: 'Organization Name *',
                   controller: controller.name,
@@ -480,25 +477,25 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                   child: Text('Select Amenities *',
                       style: TextStyle(
                         fontFamily: 'malgun',
-                        fontSize: 15.sp,
+                        fontSize: 13.sp,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.0,
                         color: Colors.white,
                       )),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Center(
                     child: MultiSelectContainer(
-                        itemsPadding: EdgeInsets.all(12),
+                        itemsPadding: EdgeInsets.all(8),
                         prefix: MultiSelectPrefix(
                             selectedPrefix: Icon(
                               Icons.check,
                               color: Colors.white,
-                              size: 22,
+                              size: 14,
                             ),
                             disabledPrefix: Icon(
                               Icons.do_disturb_alt_sharp,
@@ -527,6 +524,9 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                         }),
                   ),
                 ),
+                SizedBox(
+                  height: 20,
+                ),
                 Center(
                     child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -550,11 +550,11 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                               controller.isEditable.value == false
                                   ? Text(
                                       'Create Organization Profile',
-                                      style: TextStyle(fontSize: 14.sp),
+                                      style: TextStyle(fontSize: 12.sp),
                                     )
                                   : Text(
                                       'Update Organization Profile',
-                                      style: TextStyle(fontSize: 14.sp),
+                                      style: TextStyle(fontSize: 12.sp),
                                     )
                             ],
                           ),
@@ -638,14 +638,14 @@ class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             widget.title,
             style: TextStyle(
-              fontSize: 12.sp,
+              fontSize: 13.sp,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
@@ -669,7 +669,7 @@ class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
               keyboardType: widget.inputType,
               obscureText: widget.obscureText,
               style: TextStyle(
-                fontSize: 13.sp,
+                fontSize: 12.sp,
                 color: Colors.black,
               ),
               decoration: InputDecoration(
@@ -677,11 +677,10 @@ class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
                   horizontal: 16,
                   vertical: 12,
                 ),
+                counterText: '',
                 border: InputBorder.none,
                 hintText: "Enter ${widget.title}",
-                hintStyle: TextStyle(
-                  color: Colors.grey[400],
-                ),
+                hintStyle: TextStyle(color: Colors.grey[400], fontSize: 12.sp),
               ),
               onChanged: (value) {
                 if (widget.validator != null) {
@@ -748,7 +747,7 @@ class _LocationButtonState extends State<LocationButton> {
             color: Colors.white,
           ))
         : Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -810,12 +809,12 @@ class _LocationButtonState extends State<LocationButton> {
                         style: _location == ''
                             ? TextStyle(
                                 color: Colors.grey[400],
-                                fontSize: 15.sp,
+                                fontSize: 12.sp,
                                 overflow: TextOverflow.fade,
                               )
                             : TextStyle(
                                 color: Colors.black,
-                                fontSize: 15.sp,
+                                fontSize: 12.sp,
                                 overflow: TextOverflow.fade,
                               ),
                         overflow: TextOverflow.ellipsis,

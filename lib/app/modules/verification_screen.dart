@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class VerificationScreen extends StatefulWidget {
@@ -41,6 +42,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
           title: Text(
             "Verification",
             style: TextStyle(
+              fontSize: 13.sp,
               color: Colors.white,
             ),
           ),
@@ -53,14 +55,14 @@ class _VerificationScreenState extends State<VerificationScreen> {
             children: [
               Center(
                 child: SizedBox(
-                  height: Get.height * 0.3,
+                  height: Get.height * 0.20,
                   child: Lottie.asset("assets/120628-verification.json"),
                 ),
               ),
               Text(
                 "Thank you for choosing our app for your needs. To ensure the safety and security of our users, we require all users to complete a verification process.",
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -70,7 +72,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
               Text(
                 "As a part of this process, we need you to sign and seal the attached agreement and upload a scanned copy of the same.",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 12.sp,
                 ),
               ),
               SizedBox(
@@ -79,7 +81,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
               Text(
                 "This agreement outlines the terms and conditions of using our app, and we highly recommend that you read it thoroughly before signing. By signing this agreement, you agree to comply with all the terms and conditions mentioned herein.",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 12.sp,
                 ),
               ),
               SizedBox(
@@ -87,7 +89,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
               ),
               Center(
                 child: Container(
-                  width: 250,
+                  width: 60.w,
                   child: ElevatedButton(
                     onPressed: () {
                       launchUrl(_url);
@@ -101,7 +103,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                       ),
                       elevation: 8,
                       textStyle: TextStyle(
-                        fontSize: 16,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -110,13 +112,14 @@ class _VerificationScreenState extends State<VerificationScreen> {
                       children: [
                         Icon(
                           Icons.download,
-                          size: 20,
+                          size: 14,
                           color: Colors.white,
                         ),
                         SizedBox(width: 8),
                         Text(
                           "Download PDF",
                           style: TextStyle(
+                            fontSize: 10.sp,
                             color: Colors.white,
                           ),
                         ),
@@ -130,7 +133,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
               ),
               Center(
                 child: Container(
-                  width: 250,
+                  width: 60.w,
                   child: ElevatedButton(
                     onPressed: () async {
                       FilePickerResult? result = await FilePicker.platform
@@ -170,7 +173,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                       ),
                       elevation: 8,
                       textStyle: TextStyle(
-                        fontSize: 16,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -179,13 +182,14 @@ class _VerificationScreenState extends State<VerificationScreen> {
                       children: [
                         Icon(
                           Icons.upload,
-                          size: 20,
+                          size: 14,
                           color: Colors.white,
                         ),
                         SizedBox(width: 8),
                         Text(
                           "Upload PDF",
                           style: TextStyle(
+                            fontSize: 10.sp,
                             color: Colors.white,
                           ),
                         ),

@@ -1,56 +1,3 @@
-// // ignore_for_file: prefer_typing_uninitialized_variables
-//
-// import 'dart:convert';
-//
-// import 'package:flutter/material.dart';
-// import 'package:get_storage/get_storage.dart';
-// import 'package:http/http.dart' as http;
-//
-// class NotificationScreen extends StatefulWidget {
-//   const NotificationScreen({Key? key}) : super(key: key);
-//
-//   @override
-//   State<NotificationScreen> createState() => _NotificationScreenState();
-// }
-//
-// class _NotificationScreenState extends State<NotificationScreen> {
-
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("Notification"),
-//         backgroundColor: Colors.red.shade900,
-//       ),
-//       body: isNotification == false
-//           ? Container(
-//               child: Center(
-//                 child: Text("No Notification Found"),
-//               ),
-//             )
-//           : data['data'].length == 0
-//               ? Center(child: CircularProgressIndicator())
-//               : ListView.builder(
-//                   itemCount: data['data'].length,
-//                   shrinkWrap: true,
-//                   itemBuilder: (context, index) {
-//                     return Padding(
-//                       padding: const EdgeInsets.all(12.0),
-//                       child: ListTile(
-//                         leading: Icon(Icons.notifications),
-//                         title: Text(
-//                             '${data['data'][index]['notification_title']}'),
-//                         subtitle: Text(
-//                             '${data['data'][index]['notification_message']}'),
-//                         tileColor: Colors.grey.shade200,
-//                       ),
-//                     );
-//                   }),
-//     );
-//   }
-// }
-
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -58,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:sizer/sizer.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({Key? key}) : super(key: key);
@@ -67,14 +15,6 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-  List<String> _notifications = [
-    "John Doe liked your post.",
-    "Jane Smith commented on your photo.",
-    "Tom Brown mentioned you in a post.",
-    "Mary Green started following you.",
-    "David Lee shared a post with you.",
-  ];
-
   var data;
   bool isNotification = false;
 
@@ -112,7 +52,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Notifications"),
+        title: Text(
+          "Notifications",
+          style: TextStyle(fontSize: 13.sp),
+        ),
       ),
       body: data == null
           ? Center(
@@ -121,7 +64,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               ),
             )
           : ListView.separated(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
+              padding: EdgeInsets.symmetric(vertical: 8.0),
               itemBuilder: (BuildContext context, int index) {
                 DateTime notificationCreatedOn = DateTime.parse(
                     data['data'][index]['notification_created_on']);
@@ -132,7 +75,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     ? Container(
                         alignment: Alignment.topCenter,
                         padding: EdgeInsets.symmetric(
-                            vertical: 12.0, horizontal: 16.0),
+                            vertical: 4.0, horizontal: 16.0),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(16.0),
@@ -151,13 +94,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               foregroundColor: Colors.grey[800],
                               child: Icon(
                                 Icons.notifications,
-                                size: 28.0,
+                                size: 22.0,
                               ),
                             ),
                             SizedBox(width: 16.0),
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(4.0),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,7 +109,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                       '${data['data'][index]['notification_title']}',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontSize: 18.0,
+                                        fontSize: 12.sp,
                                         fontFamily: 'malgun',
                                         fontWeight: FontWeight.w600,
                                         color: Colors.grey[800],
@@ -177,7 +120,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                       '${data['data'][index]['notification_message']}',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontSize: 16.0,
+                                        fontSize: 10.sp,
                                         fontFamily: 'malgun',
                                         fontWeight: FontWeight.w300,
                                         color: Colors.grey[700],
@@ -188,7 +131,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                       '$formattedDateTime',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        fontSize: 16.0,
+                                        fontSize: 10.sp,
                                         fontFamily: 'malgun',
                                         fontWeight: FontWeight.w300,
                                         color: Colors.grey[700],

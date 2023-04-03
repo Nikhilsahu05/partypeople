@@ -8,6 +8,7 @@ import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:sizer/sizer.dart';
 
 import 'addOrganizationsEvent2/controllers/add_organizations_event2_controller.dart';
 import 'addamenities/controllers/addamenitiescontroller.dart';
@@ -32,10 +33,15 @@ class _AddAmenitiesPartyState extends State<AddAmenitiesParty> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: widget.isPopular == true
-              ? Text("Edit Amenities")
-              : Text("Select Amenities"),
-        ),
+            title: widget.isPopular == true
+                ? Text(
+                    "Edit Amenities",
+                    style: TextStyle(fontSize: 13.sp),
+                  )
+                : Text(
+                    "Select Amenities",
+                    style: TextStyle(fontSize: 13.sp),
+                  )),
         body: Obx(
           () => SafeArea(
             child: controller.isLoading.value == true

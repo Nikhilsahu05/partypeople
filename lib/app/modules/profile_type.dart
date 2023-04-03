@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:sizer/sizer.dart';
 
 import '../routes/app_pages.dart';
 
@@ -59,7 +60,7 @@ class ProfileType extends StatelessWidget {
             Text(
               "Individual",
               style: GoogleFonts.oswald(
-                  fontSize: 35,
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.w200,
                   letterSpacing: 1.5,
                   color: Colors.white),
@@ -87,7 +88,7 @@ class ProfileType extends StatelessWidget {
             Text(
               "Organizations",
               style: GoogleFonts.oswald(
-                  fontSize: 35,
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.w200,
                   letterSpacing: 1.5,
                   color: Colors.white),

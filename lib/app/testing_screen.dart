@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:sizer/sizer.dart';
 
 import 'modules/addOrganizationsEvent2/controllers/add_organizations_event2_controller.dart';
 
@@ -138,9 +139,12 @@ class _AmenitiesPartyScreenState extends State<AmenitiesPartyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Category List'),
+        title: Text(
+          'Select Parties Amenities',
+          style: TextStyle(fontSize: 13.sp),
+        ),
       ),
-      body: _categoryLists.length == 0
+      body: _categoryLists.isEmpty
           ? Container(
               child: Center(
                 child: CupertinoActivityIndicator(
@@ -151,6 +155,9 @@ class _AmenitiesPartyScreenState extends State<AmenitiesPartyScreen> {
             )
           : Column(
               children: [
+                SizedBox(
+                  height: 20,
+                ),
                 ListView.builder(
                   shrinkWrap: true,
                   itemCount: _categoryLists.length,
@@ -164,7 +171,7 @@ class _AmenitiesPartyScreenState extends State<AmenitiesPartyScreen> {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(categoryList.title,
                               style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 13.sp,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black)),
                         ),
@@ -180,6 +187,7 @@ class _AmenitiesPartyScreenState extends State<AmenitiesPartyScreen> {
                                     amenity.name,
                                     style: TextStyle(
                                         color: Colors.white,
+                                        fontSize: 13.sp,
                                         fontFamily: 'malgun'),
                                   ),
                                   backgroundColor: amenity.selected
@@ -194,13 +202,17 @@ class _AmenitiesPartyScreenState extends State<AmenitiesPartyScreen> {
                     );
                   },
                 ),
+                Spacer(),
                 AmenitiesButton(() {
                   if (controller.isEditable.value == true) {
                     controller.sendEditParty();
                   } else {
                     controller.sendRequst();
                   }
-                })
+                }),
+                SizedBox(
+                  height: 25,
+                ),
               ],
             ),
     );

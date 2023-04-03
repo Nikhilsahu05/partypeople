@@ -5,6 +5,7 @@ import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 import 'package:get/get.dart';
 import 'package:pertypeople/app/modules/subscription/views/subscription_view.dart';
 import 'package:pertypeople/cached_image_placeholder.dart';
+import 'package:sizer/sizer.dart';
 
 class PopularPartyPreview extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
@@ -61,14 +62,15 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
                 height: 50,
               ),
               Container(
-                height: 250,
+                padding: EdgeInsets.zero,
+                height: 160,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: CachedNetworkImageWidget(
                     imageUrl: '${widget.data['cover_photo']}',
                     width: Get.width,
-                    height: 300,
+                    height: 160,
                     fit: BoxFit.fill,
                     errorWidget: (context, url, error) => Center(
                           child: CupertinoActivityIndicator(
@@ -89,7 +91,7 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     fontFamily: 'malgun',
-                    fontSize: 30,
+                    fontSize: 16.sp,
                     color: Colors.black,
                     fontWeight: FontWeight.w600),
               ),
@@ -101,7 +103,7 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontFamily: 'malgun',
-                  fontSize: 16,
+                  fontSize: 12.sp,
                   color: Color(0xff7D7373),
                 ),
               ),

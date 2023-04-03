@@ -51,17 +51,11 @@ class App extends StatelessWidget {
             'MapScreen': (p0) => MapScreen(),
             'MapScreen2': (p0) => MapScreen2(),
           },
-          initialRoute: Routes.HOME,
-          //home: SplashScreenMain(),
-          //initialRoute:
-          // GetStorage().read('token') == null
-          //     ?
-          // AppPages.INITIAL
-          //     :
-          // Routes.ADD_ORGANIZATIONS_EVENT,
-          // home: (),
-          // home: AddAmenities(),
-          // initialRoute: Routes.LOGIN,
+          // initialRoute: GetStorage().read('token') == null
+          //     ? AppPages.INITIAL
+          //     : Routes.OTP,
+          // home: Subsc
+          initialRoute: Routes.ORGANIZATION_PROFILE_NEW,
           getPages: AppPages.routes,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(

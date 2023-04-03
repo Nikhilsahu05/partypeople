@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
+
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
@@ -41,7 +42,7 @@ class LoginView extends GetView<LoginController> {
                           'User Name',
                           style: TextStyle(
                             fontFamily: 'malgun',
-                            fontSize: 16.sp,
+                            fontSize: 13.sp,
                             color: Color.fromARGB(255, 255, 255, 255),
                             letterSpacing: -0.36.sp,
                             fontWeight: FontWeight.w700,
@@ -86,7 +87,7 @@ class LoginView extends GetView<LoginController> {
                               hintStyle: TextStyle(
                                   fontFamily: 'malgun',
                                   letterSpacing: -0.36.sp,
-                                  fontSize: 14.sp),
+                                  fontSize: 12.sp),
                             ),
                           ),
                         ),
@@ -100,7 +101,7 @@ class LoginView extends GetView<LoginController> {
                           'Mobile Number',
                           style: TextStyle(
                             fontFamily: 'malgun',
-                            fontSize: 16.sp,
+                            fontSize: 13.sp,
                             color: Color.fromARGB(255, 255, 255, 255),
                             letterSpacing: -0.36,
                             fontWeight: FontWeight.w700,
@@ -149,13 +150,13 @@ class LoginView extends GetView<LoginController> {
                               hintStyle: TextStyle(
                                   fontFamily: 'malgun',
                                   letterSpacing: -0.36.sp,
-                                  fontSize: 14.sp),
+                                  fontSize: 12.sp),
                             ),
                           ),
                         ),
                       ),
                       SizedBox(
-                        height: 50,
+                        height: 35,
                       ),
                       controller.isLoading.value == true
                           ? Container(
@@ -184,7 +185,7 @@ class LoginView extends GetView<LoginController> {
                         'Prefer to login with social media',
                         style: TextStyle(
                           fontFamily: 'malgun',
-                          fontSize: 14.sp,
+                          fontSize: 13.sp,
                           color: Color.fromARGB(255, 255, 255, 255),
                           letterSpacing: -0.36,
                           height: 0.8333333333333334,
@@ -225,7 +226,7 @@ class LoginView extends GetView<LoginController> {
                                 },
                                 child: Image.asset(
                                   'assets/googleLogo.png',
-                                  height: 45,
+                                  height: 35,
                                 ),
                               ),
                             ],
@@ -324,7 +325,7 @@ class _OrganizationProfileButtonState extends State<OrganizationProfileButton>
                 'Get OTP'.toUpperCase(),
                 style: TextStyle(
                   fontFamily: 'malgun',
-                  fontSize: 17.sp,
+                  fontSize: 13.sp,
                   color: const Color(0xffffffff),
                   letterSpacing: -0.36,
                   fontWeight: FontWeight.bold,

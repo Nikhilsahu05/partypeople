@@ -64,7 +64,7 @@ class _CustProfileViewState extends State<CustProfileView> {
               child: CachedNetworkImageWidget(
                 imageUrl: '${widget.organizationData['timeline_pic']}',
                 fit: BoxFit.fill,
-                height: 200,
+                height: 180,
                 width: Get.width,
                 errorWidget: (context, url, error) => Icon(Icons.error_outline),
                 placeholder: (context, url) => Center(
@@ -74,13 +74,13 @@ class _CustProfileViewState extends State<CustProfileView> {
             ),
             Positioned(
               bottom: 0,
-              left: Get.width * 0.35,
+              left: Get.width * 0.4,
               child: ClipOval(
                 child: CachedNetworkImageWidget(
                   imageUrl: '${widget.organizationData['profile_pic']}',
                   fit: BoxFit.fill,
-                  height: 120,
-                  width: 120,
+                  height: 100,
+                  width: 100,
                   errorWidget: (context, url, error) =>
                       Icon(Icons.error_outline),
                   placeholder: (context, url) => Center(
@@ -91,7 +91,7 @@ class _CustProfileViewState extends State<CustProfileView> {
             ),
           ]),
           SizedBox(
-            height: 20,
+            height: 10,
           ),
           SingleChildScrollView(
             child: Padding(
@@ -107,7 +107,7 @@ class _CustProfileViewState extends State<CustProfileView> {
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'malgun',
-                        fontSize: 28.sp),
+                        fontSize: 18.sp),
                   ),
                   Container(
                     width: Get.width * 0.8,
@@ -117,7 +117,7 @@ class _CustProfileViewState extends State<CustProfileView> {
                       style: TextStyle(
                           color: Colors.black,
                           letterSpacing: 1.01,
-                          fontSize: 15.sp,
+                          fontSize: 14.sp,
                           fontFamily: 'malgun'),
                     ),
                   ),
@@ -128,7 +128,7 @@ class _CustProfileViewState extends State<CustProfileView> {
                     allowHalfRating: false,
                     starCount: 5,
                     rating: double.parse(widget.organizationData['rating']),
-                    size: 17.sp,
+                    size: 18.sp,
                     color: Colors.orange,
                     borderColor: Colors.orange,
                     filledIconData: Icons.star,
@@ -143,7 +143,7 @@ class _CustProfileViewState extends State<CustProfileView> {
                     widget.phoneNumber,
                     style: TextStyle(
                         color: Colors.grey[600],
-                        fontSize: 15.sp,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'malgun'),
                   ),
@@ -151,15 +151,14 @@ class _CustProfileViewState extends State<CustProfileView> {
                     height: 10,
                   ),
                   Text(
-                    widget.organizationData['branch'] ?? '',
+                    widget.organizationData['branch'] == ''
+                        ? 'No Branches'
+                        : widget.organizationData['branch'],
                     style: TextStyle(
                         color: Colors.grey[600],
-                        fontSize: 15.sp,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'malgun'),
-                  ),
-                  SizedBox(
-                    height: 20,
                   ),
                   LikesAndViewsWidget(
                       likes: int.parse(widget.organizationData['like']),
@@ -168,10 +167,12 @@ class _CustProfileViewState extends State<CustProfileView> {
                     height: 20,
                   ),
                   Text(
-                    "${widget.organizationData['city_id']}",
+                    widget.organizationData['city_id'] == '-'
+                        ? ''
+                        : "${widget.organizationData['city_id']}",
                     style: TextStyle(
                         color: Colors.grey[600],
-                        fontSize: 15.sp,
+                        fontSize: 14.sp,
                         fontFamily: 'malgun'),
                   ),
                   SizedBox(
@@ -196,28 +197,26 @@ class _CustProfileViewState extends State<CustProfileView> {
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'malgun',
-                          fontSize: 15.sp),
+                          fontSize: 13.sp),
                     ),
                   ),
                   SizedBox(
                     height: 20,
                   ),
-                  Center(
-                    child: MultiSelectContainer(
-                      isMaxSelectableWithPerpetualSelects: true,
-                      controller: MultiSelectController(
-                          deSelectPerpetualSelectedItems: true),
-                      itemsDecoration: MultiSelectDecorations(),
-                      itemsPadding: EdgeInsets.all(10),
-                      maxSelectableCount: 0,
-                      prefix: MultiSelectPrefix(
-                          disabledPrefix: Icon(
-                        Icons.do_disturb_alt_sharp,
-                        size: 14,
-                      )),
-                      items: listOfAmenities,
-                      onChange: (List<dynamic> selectedItems, selectedItem) {},
-                    ),
+                  MultiSelectContainer(
+                    isMaxSelectableWithPerpetualSelects: true,
+                    controller: MultiSelectController(
+                        deSelectPerpetualSelectedItems: true),
+                    itemsDecoration: MultiSelectDecorations(),
+                    itemsPadding: EdgeInsets.all(10),
+                    maxSelectableCount: 0,
+                    prefix: MultiSelectPrefix(
+                        disabledPrefix: Icon(
+                      Icons.do_disturb_alt_sharp,
+                      size: 14,
+                    )),
+                    items: listOfAmenities,
+                    onChange: (List<dynamic> selectedItems, selectedItem) {},
                   ),
                   SizedBox(
                     height: 20,

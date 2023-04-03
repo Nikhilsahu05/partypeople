@@ -184,9 +184,13 @@ class _AddOrganizationsEvent2ViewState
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          title: Text(
+            "Host New Event",
+            style: TextStyle(fontSize: 13.sp),
+          ),
           toolbarHeight: 50,
           elevation: 0,
-          iconTheme: IconThemeData(color: Colors.black),
+          iconTheme: IconThemeData(color: Colors.white),
         ),
         body: Obx(
           () => SingleChildScrollView(
@@ -205,7 +209,7 @@ class _AddOrganizationsEvent2ViewState
                             'Host New Event',
                             style: TextStyle(
                               fontFamily: 'Oswald',
-                              fontSize: 18.sp,
+                              fontSize: 14.sp,
                               color: const Color(0xffc40d0d),
                               fontWeight: FontWeight.w600,
                             ),
@@ -224,7 +228,7 @@ class _AddOrganizationsEvent2ViewState
                             children: [
                               controller.isLoading.value == false
                                   ? Container(
-                                      height: 200,
+                                      height: 160,
                                       width: double.maxFinite,
                                       child: controller.timeline.value != ''
                                           ? Card(
@@ -232,7 +236,7 @@ class _AddOrganizationsEvent2ViewState
                                                   imageUrl: controller
                                                       .timeline.value,
                                                   width: Get.width,
-                                                  height: 300,
+                                                  height: 160,
                                                   fit: BoxFit.fill,
                                                   errorWidget: (context, url,
                                                           error) =>
@@ -333,7 +337,7 @@ class _AddOrganizationsEvent2ViewState
                         Text(
                           'Mobile Number',
                           style: TextStyle(
-                            fontSize: 15.sp,
+                            fontSize: 13.sp,
                             fontFamily: 'malgun',
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
@@ -357,7 +361,7 @@ class _AddOrganizationsEvent2ViewState
                             keyboardType: TextInputType.number,
                             obscureText: false,
                             style: TextStyle(
-                              fontSize: 14.sp,
+                              fontSize: 12.sp,
                               color: Colors.black,
                             ),
                             inputFormatters: [
@@ -382,8 +386,7 @@ class _AddOrganizationsEvent2ViewState
                               border: InputBorder.none,
                               hintText: "Enter Mobile Number",
                               hintStyle: TextStyle(
-                                color: Colors.grey[400],
-                              ),
+                                  color: Colors.grey[400], fontSize: 12.sp),
                             ),
                             onChanged: (value) {},
 
@@ -688,7 +691,7 @@ class AmenitiesButton extends StatelessWidget {
       label: Text(
         'Select Amenities',
         style: TextStyle(
-          fontSize: 14.sp,
+          fontSize: 12.sp,
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
@@ -740,7 +743,7 @@ class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
           Text(
             widget.title,
             style: TextStyle(
-              fontSize: 15.sp,
+              fontSize: 13.sp,
               fontFamily: 'malgun',
               fontWeight: FontWeight.bold,
               color: Colors.black,
@@ -766,7 +769,7 @@ class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
               keyboardType: widget.inputType,
               obscureText: widget.obscureText,
               style: TextStyle(
-                fontSize: 14.sp,
+                fontSize: 12.sp,
                 color: Colors.black,
               ),
               decoration: InputDecoration(
