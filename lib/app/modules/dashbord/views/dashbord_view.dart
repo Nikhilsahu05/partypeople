@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pertypeople/app/routes/app_pages.dart';
+import 'package:sizer/sizer.dart';
 
 import '../controllers/dashbord_controller.dart';
 
@@ -121,7 +122,7 @@ class DashbordView extends GetView<DashbordController> {
                                                     .toUpperCase(),
                                                 style: TextStyle(
                                                   fontFamily: 'malgun',
-                                                  fontSize: 10,
+                                                  fontSize: 7.sp,
                                                   color: Color.fromARGB(
                                                       255, 255, 255, 255),
                                                   height: 1.25,
@@ -188,7 +189,7 @@ class DashbordView extends GetView<DashbordController> {
                                                     .toUpperCase(),
                                                 style: TextStyle(
                                                   fontFamily: 'malgun',
-                                                  fontSize: 10,
+                                                  fontSize: 7.sp,
                                                   color: Color.fromARGB(
                                                       255, 255, 255, 255),
                                                   height: 1.25,
@@ -211,7 +212,7 @@ class DashbordView extends GetView<DashbordController> {
                         'People nearby ',
                         style: TextStyle(
                           fontFamily: 'Oswald',
-                          fontSize: 18,
+                          fontSize: 15.sp,
                           color: const Color(0xffffffff),
                           fontWeight: FontWeight.w500,
                         ),
@@ -262,7 +263,7 @@ class DashbordView extends GetView<DashbordController> {
                                                 .toUpperCase(),
                                             style: TextStyle(
                                               fontFamily: 'malgun',
-                                              fontSize: 10,
+                                              fontSize: 7.sp,
                                               color: Color.fromARGB(
                                                   255, 255, 255, 255),
                                               height: 1.25,
@@ -312,7 +313,7 @@ class DashbordView extends GetView<DashbordController> {
                                               'Individuals',
                                               style: TextStyle(
                                                 fontFamily: 'Oswald',
-                                                fontSize: 18,
+                                                fontSize: 15.sp,
                                                 color: const Color(0xff3a3732),
                                                 fontWeight: FontWeight.w500,
                                               ),
@@ -333,7 +334,7 @@ class DashbordView extends GetView<DashbordController> {
                                                   'Organizations',
                                                   style: TextStyle(
                                                     fontFamily: 'Oswald',
-                                                    fontSize: 18,
+                                                    fontSize: 15.sp,
                                                     color:
                                                         const Color(0xfffffdfb),
                                                     fontWeight: FontWeight.w500,
@@ -364,7 +365,7 @@ class DashbordView extends GetView<DashbordController> {
                                                   'Individuals',
                                                   style: TextStyle(
                                                     fontFamily: 'Oswald',
-                                                    fontSize: 18,
+                                                    fontSize: 15.sp,
                                                     color:
                                                         const Color(0xfffffdfb),
                                                     fontWeight: FontWeight.w500,
@@ -388,7 +389,7 @@ class DashbordView extends GetView<DashbordController> {
                                               'Organizations',
                                               style: TextStyle(
                                                 fontFamily: 'Oswald',
-                                                fontSize: 18,
+                                                fontSize: 15.sp,
                                                 color: const Color(0xff3a3732),
                                                 fontWeight: FontWeight.w500,
                                               ),
@@ -407,7 +408,7 @@ class DashbordView extends GetView<DashbordController> {
                         'TODAY',
                         style: TextStyle(
                           fontFamily: 'Oswald',
-                          fontSize: 18,
+                          fontSize: 15.sp,
                           color: const Color(0xffffffff),
                           fontWeight: FontWeight.w500,
                         ),
@@ -428,7 +429,7 @@ class DashbordView extends GetView<DashbordController> {
                         'TOMORROW',
                         style: TextStyle(
                           fontFamily: 'Oswald',
-                          fontSize: 18,
+                          fontSize: 15.sp,
                           color: const Color(0xffffffff),
                           fontWeight: FontWeight.w500,
                         ),
@@ -449,7 +450,7 @@ class DashbordView extends GetView<DashbordController> {
                         'My Party',
                         style: TextStyle(
                           fontFamily: 'Oswald',
-                          fontSize: 18,
+                          fontSize: 15.sp,
                           color: const Color(0xffffffff),
                           fontWeight: FontWeight.w500,
                         ),
@@ -516,7 +517,7 @@ class DashbordView extends GetView<DashbordController> {
                       ),
                       label: Text(
                         "Home".tr,
-                        style: TextStyle(color: Colors.white, fontSize: 8),
+                        style: TextStyle(color: Colors.white, fontSize: 6.sp),
                       )),
                 ),
               ),
@@ -528,7 +529,7 @@ class DashbordView extends GetView<DashbordController> {
                   ),
                   label: Text(
                     "".tr,
-                    style: TextStyle(color: Colors.white, fontSize: 10),
+                    style: TextStyle(color: Colors.white, fontSize: 7.sp),
                   )),
               SizedBox(
                 width: 10,
@@ -541,7 +542,7 @@ class DashbordView extends GetView<DashbordController> {
                   ),
                   label: Text(
                     "".tr,
-                    style: TextStyle(color: Colors.white, fontSize: 10),
+                    style: TextStyle(color: Colors.white, fontSize: 7.sp),
                   )),
               TextButton.icon(
                   onPressed: () {
@@ -553,7 +554,7 @@ class DashbordView extends GetView<DashbordController> {
                   ),
                   label: Text(
                     "".tr,
-                    style: TextStyle(color: Colors.white, fontSize: 10),
+                    style: TextStyle(color: Colors.white, fontSize: 7.sp),
                   )),
             ],
           ),
@@ -645,7 +646,7 @@ class UserData extends StatelessWidget {
                                     TextSpan(
                                       style: TextStyle(
                                         fontFamily: 'Segoe UI',
-                                        fontSize: 9,
+                                        fontSize: 6.sp,
                                         color: const Color(0xff564d4d),
                                       ),
                                       children: [
@@ -680,7 +681,7 @@ class UserData extends StatelessWidget {
                                             .getGrupData!.data[index].title,
                                     style: TextStyle(
                                       fontFamily: 'Oswald',
-                                      fontSize: 16,
+                                      fontSize: 13.sp,
                                       color: const Color(0xff564d4d),
                                       height: 1.25,
                                     ),
@@ -718,7 +719,7 @@ class UserData extends StatelessWidget {
                                   'Join',
                                   style: TextStyle(
                                     fontFamily: 'Oswald',
-                                    fontSize: 12,
+                                    fontSize: 9.sp,
                                     color: const Color(0xffffffff),
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -815,7 +816,7 @@ class TodayData extends StatelessWidget {
                                           TextSpan(
                                             style: TextStyle(
                                               fontFamily: 'Segoe UI',
-                                              fontSize: 9,
+                                              fontSize: 7.sp,
                                               color: const Color(0xff564d4d),
                                             ),
                                             children: [
@@ -860,7 +861,7 @@ class TodayData extends StatelessWidget {
                                                   .title,
                                           style: TextStyle(
                                             fontFamily: 'Oswald',
-                                            fontSize: 16,
+                                            fontSize: 13.sp,
                                             color: const Color(0xff564d4d),
                                             height: 1.25,
                                           ),
@@ -902,7 +903,7 @@ class TodayData extends StatelessWidget {
                                         'Join',
                                         style: TextStyle(
                                           fontFamily: 'Oswald',
-                                          fontSize: 12,
+                                          fontSize: 9.sp,
                                           color: const Color(0xffffffff),
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -925,7 +926,7 @@ class TodayData extends StatelessWidget {
             child: Text("No Event Found",
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: 12,
+                    fontSize: 9.sp,
                     fontWeight: FontWeight.bold)),
           );
   }
@@ -976,7 +977,7 @@ class NearByCitys extends StatelessWidget {
                                 .toUpperCase(),
                             style: TextStyle(
                               fontFamily: 'Oswald',
-                              fontSize: 14,
+                              fontSize: 11.sp,
                               color: Color.fromARGB(255, 255, 255, 255),
                               height: 1.25,
                             ),
@@ -1076,7 +1077,7 @@ class TommarowData extends StatelessWidget {
                                           TextSpan(
                                             style: TextStyle(
                                               fontFamily: 'Segoe UI',
-                                              fontSize: 9,
+                                              fontSize: 7.sp,
                                               color: const Color(0xff564d4d),
                                             ),
                                             children: [
@@ -1123,7 +1124,7 @@ class TommarowData extends StatelessWidget {
                                                   .title,
                                           style: TextStyle(
                                             fontFamily: 'Oswald',
-                                            fontSize: 16,
+                                            fontSize: 13.sp,
                                             color: const Color(0xff564d4d),
                                             height: 1.25,
                                           ),
@@ -1165,7 +1166,7 @@ class TommarowData extends StatelessWidget {
                                         'Join',
                                         style: TextStyle(
                                           fontFamily: 'Oswald',
-                                          fontSize: 12,
+                                          fontSize: 9.sp,
                                           color: const Color(0xffffffff),
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -1188,7 +1189,7 @@ class TommarowData extends StatelessWidget {
             child: Text("No Event Found",
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: 12,
+                    fontSize: 9.sp,
                     fontWeight: FontWeight.bold)),
           );
   }

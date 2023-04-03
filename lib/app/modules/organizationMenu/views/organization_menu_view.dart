@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/organization_menu_controller.dart';
@@ -38,7 +39,7 @@ class OrganizationMenuView extends GetView<OrganizationMenuController> {
                   GetStorage().read('full_name') ?? "",
                   style: TextStyle(
                     fontFamily: 'malgun',
-                    fontSize: 27,
+                    fontSize: 23.sp,
                     color: const Color(0xffffffff),
                     letterSpacing: -0.54,
                     height: 1.2222222222222223,
@@ -78,7 +79,7 @@ class OrganizationMenuView extends GetView<OrganizationMenuController> {
                             ' Total Events',
                             style: TextStyle(
                               fontFamily: 'Segoe UI',
-                              fontSize: 18,
+                              fontSize: 15.sp,
                               color: const Color(0xff7d7373),
                               fontWeight: FontWeight.w600,
                             ),
@@ -97,7 +98,7 @@ class OrganizationMenuView extends GetView<OrganizationMenuController> {
                             '0 likes',
                             style: TextStyle(
                               fontFamily: 'Segoe UI',
-                              fontSize: 18,
+                              fontSize: 15.sp,
                               color: const Color(0xff7d7373),
                               fontWeight: FontWeight.w600,
                             ),
@@ -115,7 +116,7 @@ class OrganizationMenuView extends GetView<OrganizationMenuController> {
                             'No active Plan',
                             style: TextStyle(
                               fontFamily: 'Segoe UI',
-                              fontSize: 18,
+                              fontSize: 15.sp,
                               color: const Color(0xff7d7373),
                               fontWeight: FontWeight.w600,
                             ),
@@ -203,7 +204,7 @@ class OrganizationMenuView extends GetView<OrganizationMenuController> {
                         title,
                         style: TextStyle(
                           fontFamily: 'Segoe UI',
-                          fontSize: 19,
+                          fontSize: 15.sp,
                           color: const Color(0xff525252),
                           letterSpacing: -0.38,
                           fontWeight: FontWeight.w600,

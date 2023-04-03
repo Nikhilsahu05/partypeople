@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/view_event_controller.dart';
@@ -102,7 +103,7 @@ class ViewEventView extends GetView<ViewEventController> {
                         'Join',
                         style: TextStyle(
                           fontFamily: 'Segoe UI',
-                          fontSize: 25,
+                          fontSize: 22.sp,
                           color: const Color(0xffffffff),
                           fontWeight: FontWeight.w600,
                         ),
@@ -125,7 +126,7 @@ class ViewEventView extends GetView<ViewEventController> {
                     controller.event!.title,
                     style: TextStyle(
                       fontFamily: 'Segoe UI',
-                      fontSize: 30,
+                      fontSize: 26.sp,
                       color: const Color(0xff564d4d),
                       fontWeight: FontWeight.w600,
                     ),
@@ -138,7 +139,7 @@ class ViewEventView extends GetView<ViewEventController> {
                     controller.event!.description,
                     style: TextStyle(
                       fontFamily: 'Segoe UI',
-                      fontSize: 16,
+                      fontSize: 13.sp,
                       color: const Color(0xff7d7373),
                     ),
                     softWrap: false,
@@ -150,7 +151,7 @@ class ViewEventView extends GetView<ViewEventController> {
                     '${controller.event!.startDate} to ${controller.event!.endDate}',
                     style: TextStyle(
                       fontFamily: 'Segoe UI',
-                      fontSize: 17,
+                      fontSize: 13.sp,
                       color: const Color(0xff035dc4),
                       fontWeight: FontWeight.w600,
                     ),
@@ -163,7 +164,7 @@ class ViewEventView extends GetView<ViewEventController> {
                     '${controller.event!.startTime} to ${controller.event!.endTime}',
                     style: TextStyle(
                       fontFamily: 'Segoe UI',
-                      fontSize: 12,
+                      fontSize: 9.sp,
                       color: const Color(0xff929292),
                     ),
                     softWrap: false,
@@ -195,7 +196,7 @@ class ViewEventView extends GetView<ViewEventController> {
                             "",
                             style: TextStyle(
                               fontFamily: 'Segoe UI',
-                              fontSize: 14,
+                              fontSize: 11.sp,
                               color: const Color(0xff7d7373),
                               fontWeight: FontWeight.w600,
                             ),
@@ -205,7 +206,7 @@ class ViewEventView extends GetView<ViewEventController> {
                             'Organizer',
                             style: TextStyle(
                               fontFamily: 'Segoe UI',
-                              fontSize: 12,
+                              fontSize: 10.sp,
                               color: const Color(0xff929292),
                             ),
                             softWrap: true,
@@ -253,7 +254,7 @@ class ViewEventView extends GetView<ViewEventController> {
                               'Call',
                               style: TextStyle(
                                 fontFamily: 'Segoe UI',
-                                fontSize: 16,
+                                fontSize: 13.sp,
                                 color: const Color(0xff7d7373),
                                 fontWeight: FontWeight.w600,
                               ),
@@ -284,7 +285,7 @@ class ViewEventView extends GetView<ViewEventController> {
                               'Direction',
                               style: TextStyle(
                                 fontFamily: 'Segoe UI',
-                                fontSize: 16,
+                                fontSize: 13.sp,
                                 color: const Color(0xff7d7373),
                                 fontWeight: FontWeight.w600,
                               ),
@@ -315,7 +316,7 @@ class ViewEventView extends GetView<ViewEventController> {
                               'Chat',
                               style: TextStyle(
                                 fontFamily: 'Segoe UI',
-                                fontSize: 16,
+                                fontSize: 13.sp,
                                 color: const Color(0xff7d7373),
                                 fontWeight: FontWeight.w600,
                               ),
@@ -336,7 +337,7 @@ class ViewEventView extends GetView<ViewEventController> {
                         'Member',
                         style: TextStyle(
                           fontFamily: 'Segoe UI',
-                          fontSize: 18,
+                          fontSize: 15.sp,
                           color: const Color(0xff7d7373),
                           fontWeight: FontWeight.w600,
                         ),
@@ -358,7 +359,7 @@ class ViewEventView extends GetView<ViewEventController> {
                             'invite',
                             style: TextStyle(
                               fontFamily: 'Segoe UI',
-                              fontSize: 13,
+                              fontSize: 10.sp,
                               color: const Color(0xffffffff),
                             ),
                             softWrap: false,

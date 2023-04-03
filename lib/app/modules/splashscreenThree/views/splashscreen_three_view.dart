@@ -2,7 +2,7 @@ import 'package:adobe_xd/adobe_xd.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:sizer/sizer.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/splashscreen_three_controller.dart';
 
@@ -45,7 +45,7 @@ class SplashscreenThreeView extends GetView<SplashscreenThreeController> {
               children: [
                 Text('Find Best Club',
                     style: GoogleFonts.oswald(
-                      fontSize: 35,
+                      fontSize: 29.sp,
                       color: Colors.white,
                       letterSpacing: -0.7000000000000001,
                       fontWeight: FontWeight.w600,
@@ -59,7 +59,7 @@ class SplashscreenThreeView extends GetView<SplashscreenThreeController> {
                   child: Text(
                       'Make new friends and party like never before with PartyConnect. Find exciting events and connect with strangers who share your love for partying.',
                       style: GoogleFonts.oswald(
-                        fontSize: 12,
+                        fontSize: 11.sp,
                         color: Colors.white,
                       )),
                 ),
@@ -77,7 +77,7 @@ class SplashscreenThreeView extends GetView<SplashscreenThreeController> {
                 'Skip\n ',
                 style: TextStyle(
                   fontFamily: 'malgun',
-                  fontSize: 12,
+                  fontSize: 11.sp,
                   color: const Color(0xffffffff),
                   letterSpacing: -0.24,
                   height: 1.6666666666666667,

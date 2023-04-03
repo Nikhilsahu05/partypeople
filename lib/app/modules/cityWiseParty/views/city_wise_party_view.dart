@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/city_wise_party_controller.dart';
@@ -87,7 +88,7 @@ class CityWisePartyView extends GetView<CityWisePartyController> {
                       'DELHI (NCR) TODAY',
                       style: TextStyle(
                         fontFamily: 'Segoe UI',
-                        fontSize: 16,
+                        fontSize: 13.sp,
                         color: const Color(0xffffffff),
                         letterSpacing: 0.16,
                         height: 1.375,
@@ -125,7 +126,7 @@ class CityWisePartyView extends GetView<CityWisePartyController> {
                                       'Sports Meet in Galaxy Field',
                                       style: TextStyle(
                                         fontFamily: 'Muli',
-                                        fontSize: 14,
+                                        fontSize: 11.sp,
                                         color: const Color(0xffffffff),
                                         fontWeight: FontWeight.w700,
                                       ),
@@ -146,7 +147,7 @@ class CityWisePartyView extends GetView<CityWisePartyController> {
                                           'Jan 12, 2019',
                                           style: TextStyle(
                                             fontFamily: 'Muli',
-                                            fontSize: 9,
+                                            fontSize: 7.sp,
                                             color: const Color(0xffffffff),
                                           ),
                                           softWrap: false,
@@ -168,7 +169,7 @@ class CityWisePartyView extends GetView<CityWisePartyController> {
                                           'Greenfields, Sector 42, Faridabad',
                                           style: TextStyle(
                                             fontFamily: 'Muli',
-                                            fontSize: 9,
+                                            fontSize: 7.sp,
                                             color: const Color(0xffffffff),
                                           ),
                                           softWrap: false,
@@ -246,7 +247,8 @@ class CityWisePartyView extends GetView<CityWisePartyController> {
                       icon: Icon(Icons.home, color: Color(0xff7D7373)),
                       label: Text(
                         "Home".tr,
-                        style: TextStyle(color: Color(0xff7D7373), fontSize: 8),
+                        style:
+                            TextStyle(color: Color(0xff7D7373), fontSize: 7.sp),
                       )),
                 ),
               ),
@@ -258,7 +260,7 @@ class CityWisePartyView extends GetView<CityWisePartyController> {
                   ),
                   label: Text(
                     "".tr,
-                    style: TextStyle(color: Colors.white, fontSize: 10),
+                    style: TextStyle(color: Colors.white, fontSize: 7.sp),
                   )),
               SizedBox(
                 width: 10,
@@ -271,7 +273,7 @@ class CityWisePartyView extends GetView<CityWisePartyController> {
                   ),
                   label: Text(
                     "".tr,
-                    style: TextStyle(color: Colors.white, fontSize: 10),
+                    style: TextStyle(color: Colors.white, fontSize: 7.sp),
                   )),
               TextButton.icon(
                   onPressed: () {
@@ -283,7 +285,7 @@ class CityWisePartyView extends GetView<CityWisePartyController> {
                   ),
                   label: Text(
                     "".tr,
-                    style: TextStyle(color: Colors.white, fontSize: 10),
+                    style: TextStyle(color: Colors.white, fontSize: 7.sp),
                   )),
             ],
           ),

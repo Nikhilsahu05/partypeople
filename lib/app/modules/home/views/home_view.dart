@@ -2,7 +2,7 @@ import 'package:adobe_xd/adobe_xd.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:sizer/sizer.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
@@ -52,7 +52,7 @@ class HomeView extends GetView<HomeController> {
                 children: [
                   Text('Find Your Partner',
                       style: GoogleFonts.oswald(
-                        fontSize: 35,
+                        fontSize: 29.sp,
                         color: Colors.white,
                         letterSpacing: -0.7000000000000001,
                         fontWeight: FontWeight.w600,
@@ -66,7 +66,7 @@ class HomeView extends GetView<HomeController> {
                     child: Text(
                         'Discover the ultimate partying experience with PartyMate. Connect with strangers and have an unforgettable time!',
                         style: GoogleFonts.oswald(
-                          fontSize: 12,
+                          fontSize: 11.sp,
                           color: Colors.white,
                         )),
                   ),
@@ -84,7 +84,7 @@ class HomeView extends GetView<HomeController> {
                   'Skip\n ',
                   style: TextStyle(
                     fontFamily: 'malgun',
-                    fontSize: 12,
+                    fontSize: 11.sp,
                     color: Colors.white,
                     letterSpacing: -0.24,
                     height: 1.6666666666666667,

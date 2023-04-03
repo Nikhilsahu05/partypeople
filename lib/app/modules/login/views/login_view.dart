@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
+import 'package:sizer/sizer.dart';
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
@@ -41,9 +41,9 @@ class LoginView extends GetView<LoginController> {
                           'User Name',
                           style: TextStyle(
                             fontFamily: 'malgun',
-                            fontSize: 18,
+                            fontSize: 16.sp,
                             color: Color.fromARGB(255, 255, 255, 255),
-                            letterSpacing: -0.36,
+                            letterSpacing: -0.36.sp,
                             fontWeight: FontWeight.w700,
                             height: 0.9444444444444444,
                           ),
@@ -82,15 +82,11 @@ class LoginView extends GetView<LoginController> {
                                 color: const Color(0xff707070),
                               ),
                               border: InputBorder.none,
-                              label: Text('Enter Username'),
+                              hintText: 'Enter Username',
                               hintStyle: TextStyle(
-                                fontFamily: 'malgun',
-                                fontSize: 18,
-                                color: const Color(0xff4b4444),
-                                letterSpacing: -0.36,
-                                fontWeight: FontWeight.w700,
-                                height: 0.9444444444444444,
-                              ),
+                                  fontFamily: 'malgun',
+                                  letterSpacing: -0.36.sp,
+                                  fontSize: 14.sp),
                             ),
                           ),
                         ),
@@ -104,7 +100,7 @@ class LoginView extends GetView<LoginController> {
                           'Mobile Number',
                           style: TextStyle(
                             fontFamily: 'malgun',
-                            fontSize: 18,
+                            fontSize: 16.sp,
                             color: Color.fromARGB(255, 255, 255, 255),
                             letterSpacing: -0.36,
                             fontWeight: FontWeight.w700,
@@ -149,15 +145,11 @@ class LoginView extends GetView<LoginController> {
                                 color: const Color(0xff707070),
                               ),
                               border: InputBorder.none,
-                              label: Text('Enter Mobile Number'),
+                              hintText: 'Enter Mobile Number',
                               hintStyle: TextStyle(
-                                fontFamily: 'malgun',
-                                fontSize: 18,
-                                color: const Color(0xff4b4444),
-                                letterSpacing: -0.36,
-                                fontWeight: FontWeight.w700,
-                                height: 0.9444444444444444,
-                              ),
+                                  fontFamily: 'malgun',
+                                  letterSpacing: -0.36.sp,
+                                  fontSize: 14.sp),
                             ),
                           ),
                         ),
@@ -192,7 +184,7 @@ class LoginView extends GetView<LoginController> {
                         'Prefer to login with social media',
                         style: TextStyle(
                           fontFamily: 'malgun',
-                          fontSize: 18,
+                          fontSize: 14.sp,
                           color: Color.fromARGB(255, 255, 255, 255),
                           letterSpacing: -0.36,
                           height: 0.8333333333333334,
@@ -202,7 +194,7 @@ class LoginView extends GetView<LoginController> {
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(
-                        height: 20,
+                        height: MediaQuery.of(context).size.height * 0.02,
                       ),
                       Column(
                         children: [
@@ -245,7 +237,7 @@ class LoginView extends GetView<LoginController> {
                             'By creating an account, you agree to our \nTerms of Service and Privacy Policy',
                             style: TextStyle(
                               fontFamily: 'malgun',
-                              fontSize: 10,
+                              fontSize: 8.sp,
                               color: Colors.grey.shade300,
                               letterSpacing: -0.2,
                               height: 1.4,
@@ -332,7 +324,7 @@ class _OrganizationProfileButtonState extends State<OrganizationProfileButton>
                 'Get OTP'.toUpperCase(),
                 style: TextStyle(
                   fontFamily: 'malgun',
-                  fontSize: 20,
+                  fontSize: 17.sp,
                   color: const Color(0xffffffff),
                   letterSpacing: -0.36,
                   fontWeight: FontWeight.bold,

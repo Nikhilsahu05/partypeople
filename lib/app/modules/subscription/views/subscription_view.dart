@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:input_quantity/input_quantity.dart';
 import 'package:pertypeople/app/modules/addOrganizationsEvent2/controllers/add_organizations_event2_controller.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/subscription_controller.dart';
@@ -58,7 +59,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                   'Get Subscriptions',
                   style: TextStyle(
                     fontFamily: 'Oswald',
-                    fontSize: 30,
+                    fontSize: 26.sp,
                     color: const Color(0xffffffff),
                     fontWeight: FontWeight.w600,
                   ),
@@ -68,7 +69,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                   'For people who want to [see and search parties of other \ncities], [start chat - free for females],\n',
                   style: TextStyle(
                     fontFamily: 'Oswald',
-                    fontSize: 14,
+                    fontSize: 11.sp,
                     color: const Color(0xffffffff),
                   ),
                   textAlign: TextAlign.center,
@@ -92,7 +93,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                           '1',
                           style: TextStyle(
                             fontFamily: 'malgun',
-                            fontSize: 30,
+                            fontSize: 26.sp,
                             color: Colors.red.shade900,
                             letterSpacing: -0.88,
                             fontWeight: FontWeight.w700,
@@ -110,7 +111,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                           'DAYS',
                           style: TextStyle(
                             fontFamily: 'malgun',
-                            fontSize: 20,
+                            fontSize: 17.sp,
                             color: Colors.red.shade900,
                             letterSpacing: -0.44,
                             height: 0.6363636363636364,
@@ -127,7 +128,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                           '₹499',
                           style: TextStyle(
                             fontFamily: 'malgun',
-                            fontSize: 30,
+                            fontSize: 26.sp,
                             color: Colors.red.shade900,
                             letterSpacing: -0.6,
                             fontWeight: FontWeight.w700,
@@ -218,7 +219,7 @@ class _SubCardState extends State<SubCard> {
                       Text(
                         widget.month,
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 26.sp,
                           color: Colors.white,
                           fontFamily: 'malgun',
                           fontWeight: FontWeight.bold,
@@ -228,7 +229,7 @@ class _SubCardState extends State<SubCard> {
                         "month",
                         style: TextStyle(
                           fontFamily: 'malgun',
-                          fontSize: 18,
+                          fontSize: 15.sp,
                           color: Colors.grey,
                           fontWeight: FontWeight.bold,
                         ),
@@ -240,7 +241,7 @@ class _SubCardState extends State<SubCard> {
                         //rupee symbol
                         "\u20B9${widget.price}/mo",
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -303,7 +304,7 @@ class LogoutOverlayState extends State<LogoutOverlay> {
                   color: Colors.black,
                   fontFamily: 'malgun',
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: 15.sp,
                 ),
               ),
               SizedBox(height: 20),
@@ -313,7 +314,7 @@ class LogoutOverlayState extends State<LogoutOverlay> {
                       color: Colors.black,
                       fontFamily: 'malgun',
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 15.sp,
                     ),
                   )),
               SizedBox(height: 10),
@@ -323,7 +324,7 @@ class LogoutOverlayState extends State<LogoutOverlay> {
                       color: Colors.black,
                       fontFamily: 'malgun',
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 15.sp,
                     ),
                   )),
               InputQty(
@@ -430,7 +431,7 @@ class LogoutOverlayState extends State<LogoutOverlay> {
                             "Boost Post".toUpperCase(),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                                fontSize: 13.sp,
                                 fontFamily: 'malgun',
                                 color: Colors.white),
                           ),
@@ -480,7 +481,7 @@ class FeatureWidget extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 15.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -488,7 +489,7 @@ class FeatureWidget extends StatelessWidget {
           Text(
             description,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 13.sp,
             ),
             textAlign: TextAlign.start,
           ),

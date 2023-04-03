@@ -2,7 +2,7 @@ import 'package:adobe_xd/adobe_xd.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:sizer/sizer.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/splashscreen_two_controller.dart';
 
@@ -45,7 +45,7 @@ class SplashscreenTwoView extends GetView<SplashscreenTwoController> {
               children: [
                 Text('Find Chillout Place',
                     style: GoogleFonts.oswald(
-                      fontSize: 35,
+                      fontSize: 29.sp,
                       color: Colors.white,
                       letterSpacing: -0.7000000000000001,
                       fontWeight: FontWeight.w600,
@@ -59,7 +59,7 @@ class SplashscreenTwoView extends GetView<SplashscreenTwoController> {
                   child: Text(
                       'Join the party with PartyNow! Meet new people and find the hottest parties in town with just a few taps.',
                       style: GoogleFonts.oswald(
-                        fontSize: 12,
+                        fontSize: 11.sp,
                         color: Colors.white,
                       )),
                 ),
@@ -77,7 +77,7 @@ class SplashscreenTwoView extends GetView<SplashscreenTwoController> {
                 'Skip\n ',
                 style: TextStyle(
                   fontFamily: 'malgun',
-                  fontSize: 14,
+                  fontSize: 11.sp,
                   color: const Color(0xffffffff),
                   letterSpacing: -0.24,
                   height: 1.6666666666666667,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 import '../controllers/city_list_controller.dart';
 
@@ -15,7 +16,7 @@ class CityListView extends GetView<CityListController> {
       body: Center(
         child: Text(
           'CityListView is working',
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 17.sp),
         ),
       ),
     );

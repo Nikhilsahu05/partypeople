@@ -17,6 +17,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pertypeople/app/select_photo_options_screen.dart';
 import 'package:pertypeople/cached_image_placeholder.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../testing_screen.dart';
 import '../controllers/add_organizations_event2_controller.dart';
@@ -204,7 +205,7 @@ class _AddOrganizationsEvent2ViewState
                             'Host New Event',
                             style: TextStyle(
                               fontFamily: 'Oswald',
-                              fontSize: 22,
+                              fontSize: 18.sp,
                               color: const Color(0xffc40d0d),
                               fontWeight: FontWeight.w600,
                             ),
@@ -332,7 +333,7 @@ class _AddOrganizationsEvent2ViewState
                         Text(
                           'Mobile Number',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 15.sp,
                             fontFamily: 'malgun',
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
@@ -356,7 +357,7 @@ class _AddOrganizationsEvent2ViewState
                             keyboardType: TextInputType.number,
                             obscureText: false,
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 14.sp,
                               color: Colors.black,
                             ),
                             inputFormatters: [
@@ -373,7 +374,7 @@ class _AddOrganizationsEvent2ViewState
                                   )),
                               prefixText: ' +91 ',
                               prefixStyle: TextStyle(
-                                  color: Colors.grey[400], fontSize: 18),
+                                  color: Colors.grey[400], fontSize: 15.sp),
                               contentPadding: EdgeInsets.symmetric(
                                 horizontal: 16,
                                 vertical: 12,
@@ -496,7 +497,7 @@ class _AddOrganizationsEvent2ViewState
                     child: Text(
                       'Who can join',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 15.sp,
                         fontFamily: 'malgun',
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
@@ -687,7 +688,7 @@ class AmenitiesButton extends StatelessWidget {
       label: Text(
         'Select Amenities',
         style: TextStyle(
-          fontSize: 16,
+          fontSize: 14.sp,
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
@@ -739,7 +740,7 @@ class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
           Text(
             widget.title,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 15.sp,
               fontFamily: 'malgun',
               fontWeight: FontWeight.bold,
               color: Colors.black,
@@ -765,7 +766,7 @@ class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
               keyboardType: widget.inputType,
               obscureText: widget.obscureText,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 14.sp,
                 color: Colors.black,
               ),
               decoration: InputDecoration(
@@ -895,12 +896,12 @@ class _LocationButtonState extends State<LocationButton> {
                         style: _location == ''
                             ? TextStyle(
                                 color: Colors.grey[400],
-                                fontSize: 18.0,
+                                fontSize: 15.sp,
                                 overflow: TextOverflow.ellipsis,
                               )
                             : TextStyle(
                                 color: Colors.black,
-                                fontSize: 18.0,
+                                fontSize: 15.sp,
                                 overflow: TextOverflow.ellipsis,
                               ),
                         overflow: TextOverflow.ellipsis,

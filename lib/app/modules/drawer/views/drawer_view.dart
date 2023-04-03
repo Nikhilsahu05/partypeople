@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:pertypeople/app/modules/addOrganizationsEvent/controllers/add_organizations_event_controller.dart';
 import 'package:pertypeople/app/modules/verification_screen.dart';
 import 'package:pertypeople/app/settings_view.dart';
+import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../routes/app_pages.dart';
@@ -41,7 +42,12 @@ class _DrawerViewState extends State<DrawerView> {
         appBar: AppBar(
           backgroundColor: Colors.red.shade900,
           elevation: 0,
-          title: Text("My Profile"),
+          title: Text(
+            "My Profile",
+            style: TextStyle(
+              fontSize: 17.sp,
+            ),
+          ),
           iconTheme: IconThemeData(
             color: Colors.white, //change your color here
           ),
@@ -157,7 +163,7 @@ class _DrawerViewState extends State<DrawerView> {
                         title,
                         style: TextStyle(
                           fontFamily: 'Segoe UI',
-                          fontSize: 19,
+                          fontSize: 16.sp,
                           color: const Color(0xff525252),
                           letterSpacing: -0.38,
                           fontWeight: FontWeight.w600,
@@ -274,7 +280,7 @@ class LikesAndViewsWidget extends StatelessWidget {
               Text(
                 likes.toString(),
                 style: TextStyle(
-                  fontSize: 20.0,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                   color: Colors.grey[800],
                 ),
@@ -297,7 +303,7 @@ class LikesAndViewsWidget extends StatelessWidget {
               Text(
                 views.toString(),
                 style: TextStyle(
-                  fontSize: 20.0,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                   color: Colors.grey[800],
                 ),
@@ -354,7 +360,7 @@ class CustomOptionWidget extends StatelessWidget {
                 child: Text(
                   title,
                   style: TextStyle(
-                    fontSize: 20.0,
+                    fontSize: 15.sp,
                     fontWeight: FontWeight.w600,
                     color: Colors.grey[800],
                   ),

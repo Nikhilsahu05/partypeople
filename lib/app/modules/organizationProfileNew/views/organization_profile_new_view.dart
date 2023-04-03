@@ -18,6 +18,7 @@ import 'package:pertypeople/app/modules/global_header_id_controller.dart';
 import 'package:pertypeople/app/modules/organizationProfileNew/controllers/organization_profile_new_controller.dart';
 import 'package:pertypeople/app/modules/popular_party_preview.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:sizer/sizer.dart';
 import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 
 import '../../../routes/app_pages.dart';
@@ -177,7 +178,7 @@ class _OrganizationProfileNewViewState
                           controller.organisationName.value,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 16.sp,
                             fontFamily: 'SegeoUI',
                           ),
                         ),
@@ -336,7 +337,7 @@ class _OrganizationProfileNewViewState
                                               "Your account is not verified yet.",
                                               style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 16.0,
+                                                fontSize: 13.sp,
                                                 fontWeight: FontWeight.w500,
                                               ),
                                             ),
@@ -372,14 +373,14 @@ class _OrganizationProfileNewViewState
                                     controller.likes.value,
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 24,
+                                        fontSize: 20.sp,
                                         fontFamily: 'malgun'),
                                   ),
                                   Text(
                                     'LIKES',
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 14,
+                                        fontSize: 12.sp,
                                         fontFamily: 'SegeoUI'),
                                   ),
                                 ],
@@ -393,14 +394,14 @@ class _OrganizationProfileNewViewState
                                     controller.views.value,
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 24,
+                                        fontSize: 21.sp,
                                         fontFamily: 'malgun'),
                                   ),
                                   Text(
                                     'VIEWS',
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 14,
+                                        fontSize: 12.sp,
                                         fontFamily: 'SegeoUI'),
                                   ),
                                 ],
@@ -414,14 +415,14 @@ class _OrganizationProfileNewViewState
                                     controller.going.value,
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 24,
+                                        fontSize: 21.sp,
                                         fontFamily: 'malgun'),
                                   ),
                                   Text(
                                     'GOING',
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 14,
+                                        fontSize: 12.sp,
                                         fontFamily: 'SegeoUI'),
                                   ),
                                 ],
@@ -432,17 +433,18 @@ class _OrganizationProfileNewViewState
                             height: 25,
                           ),
                           Container(
-                            padding: EdgeInsets.only(left: 25),
+                            padding: EdgeInsets.only(left: 30),
                             alignment: Alignment.bottomLeft,
                             child: Text(
                               'POPULAR EVENTS',
                               style: GoogleFonts.oswald(
-                                  color: Colors.white, fontSize: 18),
+                                  color: Colors.white, fontSize: 15.sp),
                             ),
                           ),
                           controller.jsonPartyPopularData == null
                               ? Container(
-                                  padding: EdgeInsets.all(8),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10.sp, vertical: 5.sp),
                                   child: Text(
                                     "Sorry, there are no parties available at this time. Please try again later or check back for updates.",
                                     textAlign: TextAlign.center,
@@ -538,7 +540,7 @@ class _OrganizationProfileNewViewState
                                                                         style: TextStyle(
                                                                             color:
                                                                                 Colors.black,
-                                                                            fontSize: 8),
+                                                                            fontSize: 6.sp),
                                                                       ),
                                                                       SizedBox(
                                                                         height:
@@ -549,7 +551,7 @@ class _OrganizationProfileNewViewState
                                                                         style: TextStyle(
                                                                             color:
                                                                                 Colors.black,
-                                                                            fontSize: 8),
+                                                                            fontSize: 6.sp),
                                                                       ),
                                                                     ],
                                                                   ),
@@ -576,7 +578,7 @@ class _OrganizationProfileNewViewState
                                                                         style: TextStyle(
                                                                             color:
                                                                                 Colors.black,
-                                                                            fontSize: 8),
+                                                                            fontSize: 6.sp),
                                                                       ),
                                                                       SizedBox(
                                                                         height:
@@ -587,7 +589,7 @@ class _OrganizationProfileNewViewState
                                                                         style: TextStyle(
                                                                             color:
                                                                                 Colors.black,
-                                                                            fontSize: 8),
+                                                                            fontSize: 6.sp),
                                                                       ),
                                                                     ],
                                                                   ),
@@ -612,7 +614,7 @@ class _OrganizationProfileNewViewState
                                                                         style: TextStyle(
                                                                             color:
                                                                                 Colors.black,
-                                                                            fontSize: 8),
+                                                                            fontSize: 6.sp),
                                                                       ),
                                                                       SizedBox(
                                                                         height:
@@ -623,7 +625,7 @@ class _OrganizationProfileNewViewState
                                                                         style: TextStyle(
                                                                             color:
                                                                                 Colors.black,
-                                                                            fontSize: 8),
+                                                                            fontSize: 6.sp),
                                                                       ),
                                                                     ],
                                                                   ),
@@ -727,7 +729,7 @@ class _OrganizationProfileNewViewState
                                                                           Text(
                                                                             '${controller.jsonPartyPopularData[index]['title']}',
                                                                             style: TextStyle(
-                                                                                fontSize: 16,
+                                                                                fontSize: 13.sp,
                                                                                 overflow: TextOverflow.ellipsis,
                                                                                 fontFamily: 'malgun',
                                                                                 fontWeight: FontWeight.bold),
@@ -735,7 +737,7 @@ class _OrganizationProfileNewViewState
                                                                           Text(
                                                                             'Today ${controller.jsonPartyPopularData[index]['start_time']}',
                                                                             style:
-                                                                                TextStyle(fontSize: 14, fontFamily: 'malgun'),
+                                                                                TextStyle(fontSize: 11.sp, fontFamily: 'malgun'),
                                                                           ),
                                                                           SmoothStarRating(
                                                                             allowHalfRating:
@@ -903,12 +905,13 @@ class _OrganizationProfileNewViewState
                             child: Text(
                               'TODAY',
                               style: GoogleFonts.oswald(
-                                  color: Colors.white, fontSize: 18),
+                                  color: Colors.white, fontSize: 15.sp),
                             ),
                           ),
                           controller.lengthOfTodayParties.value == 0
                               ? Container(
-                                  padding: EdgeInsets.all(8),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10.sp, vertical: 5.sp),
                                   child: Text(
                                     "Sorry, there are no parties available at this time. Please try again later or check back for updates.",
                                     textAlign: TextAlign.center,
@@ -1042,7 +1045,7 @@ class _OrganizationProfileNewViewState
                                                                                   overflow: TextOverflow.ellipsis,
                                                                                   fontWeight: FontWeight.bold,
                                                                                   fontFamily: 'malgun',
-                                                                                  fontSize: 16,
+                                                                                  fontSize: 13.sp,
                                                                                   color: const Color(0xff564d4d),
                                                                                   height: 1.25,
                                                                                 ),
@@ -1056,7 +1059,7 @@ class _OrganizationProfileNewViewState
                                                                                 '${controller.jsonPartyOgranisationDataToday[index]['start_time']}',
                                                                                 style: TextStyle(
                                                                                   fontFamily: 'malgun',
-                                                                                  fontSize: 16,
+                                                                                  fontSize: 13.sp,
                                                                                   color: const Color(0xffc40d0d),
                                                                                 ),
                                                                               ),
@@ -1168,12 +1171,13 @@ class _OrganizationProfileNewViewState
                             child: Text(
                               'TOMORROW',
                               style: GoogleFonts.oswald(
-                                  color: Colors.white, fontSize: 18),
+                                  color: Colors.white, fontSize: 15.sp),
                             ),
                           ),
                           controller.lengthOfTommParties.value == 0
                               ? Container(
-                                  padding: EdgeInsets.all(8),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10.sp, vertical: 5.sp),
                                   child: Text(
                                     "Sorry, there are no parties available at this time. Please try again later or check back for updates.",
                                     textAlign: TextAlign.center,
@@ -1308,7 +1312,7 @@ class _OrganizationProfileNewViewState
                                                                               overflow: TextOverflow.ellipsis,
                                                                               fontWeight: FontWeight.bold,
                                                                               fontFamily: 'malgun',
-                                                                              fontSize: 16,
+                                                                              fontSize: 13.sp,
                                                                               color: const Color(0xff564d4d),
                                                                               height: 1.25,
                                                                             ),
@@ -1326,7 +1330,7 @@ class _OrganizationProfileNewViewState
                                                                             style:
                                                                                 TextStyle(
                                                                               fontFamily: 'malgun',
-                                                                              fontSize: 16,
+                                                                              fontSize: 13.sp,
                                                                               color: const Color(0xffc40d0d),
                                                                             ),
                                                                           ),
@@ -1449,12 +1453,13 @@ class _OrganizationProfileNewViewState
                             child: Text(
                               'UPCOMING',
                               style: GoogleFonts.oswald(
-                                  color: Colors.white, fontSize: 18),
+                                  color: Colors.white, fontSize: 15.sp),
                             ),
                           ),
                           controller.lengthOfUpcomingParties.value == 0
                               ? Container(
-                                  padding: EdgeInsets.all(8),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10.sp, vertical: 5.sp),
                                   child: Text(
                                     "Sorry, there are no parties available at this time. Please try again later or check back for updates.",
                                     textAlign: TextAlign.center,
@@ -1589,7 +1594,7 @@ class _OrganizationProfileNewViewState
                                                                               overflow: TextOverflow.ellipsis,
                                                                               fontWeight: FontWeight.bold,
                                                                               fontFamily: 'malgun',
-                                                                              fontSize: 16,
+                                                                              fontSize: 13.sp,
                                                                               color: const Color(0xff564d4d),
                                                                               height: 1.25,
                                                                             ),
@@ -1607,14 +1612,14 @@ class _OrganizationProfileNewViewState
                                                                               Text(
                                                                                 DateFormat.yMEd().format(DateTime.parse(controller.jsonPartyOgranisationDataUpcomming[index]['start_date'])),
                                                                                 style: TextStyle(
-                                                                                  fontSize: 14,
+                                                                                  fontSize: 11.sp,
                                                                                   color: const Color(0xffc40d0d),
                                                                                 ),
                                                                               ),
                                                                               Text(
                                                                                 '${controller.jsonPartyOgranisationDataUpcomming[index]['start_time']}',
                                                                                 style: TextStyle(
-                                                                                  fontSize: 14,
+                                                                                  fontSize: 11.sp,
                                                                                   color: const Color(0xffc40d0d),
                                                                                 ),
                                                                               ),

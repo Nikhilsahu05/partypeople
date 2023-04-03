@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
-
+import 'package:sizer/sizer.dart';
 import '../../login/controllers/login_controller.dart';
 
 class OTPView extends StatefulWidget {
@@ -55,7 +55,7 @@ class _OTPViewState extends State<OTPView> {
                       'Phone Verification',
                       style: TextStyle(
                         fontFamily: 'malgun',
-                        fontSize: 21,
+                        fontSize: 18,
                         color: Color(0xffFFA914),
                         letterSpacing: -0.42,
                         fontWeight: FontWeight.w700,

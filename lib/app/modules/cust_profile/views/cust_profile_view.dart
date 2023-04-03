@@ -4,6 +4,7 @@ import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 import 'package:get/get.dart';
 import 'package:pertypeople/app/modules/addOrganizationsEvent/controllers/add_organizations_event_controller.dart';
 import 'package:pertypeople/cached_image_placeholder.dart';
+import 'package:sizer/sizer.dart';
 import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 
 import '../../../routes/app_pages.dart';
@@ -106,7 +107,7 @@ class _CustProfileViewState extends State<CustProfileView> {
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'malgun',
-                        fontSize: 32),
+                        fontSize: 28.sp),
                   ),
                   Container(
                     width: Get.width * 0.8,
@@ -116,7 +117,7 @@ class _CustProfileViewState extends State<CustProfileView> {
                       style: TextStyle(
                           color: Colors.black,
                           letterSpacing: 1.01,
-                          fontSize: 18,
+                          fontSize: 15.sp,
                           fontFamily: 'malgun'),
                     ),
                   ),
@@ -127,7 +128,7 @@ class _CustProfileViewState extends State<CustProfileView> {
                     allowHalfRating: false,
                     starCount: 5,
                     rating: double.parse(widget.organizationData['rating']),
-                    size: 20.0,
+                    size: 17.sp,
                     color: Colors.orange,
                     borderColor: Colors.orange,
                     filledIconData: Icons.star,
@@ -142,7 +143,7 @@ class _CustProfileViewState extends State<CustProfileView> {
                     widget.phoneNumber,
                     style: TextStyle(
                         color: Colors.grey[600],
-                        fontSize: 18,
+                        fontSize: 15.sp,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'malgun'),
                   ),
@@ -153,7 +154,7 @@ class _CustProfileViewState extends State<CustProfileView> {
                     widget.organizationData['branch'] ?? '',
                     style: TextStyle(
                         color: Colors.grey[600],
-                        fontSize: 18,
+                        fontSize: 15.sp,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'malgun'),
                   ),
@@ -170,7 +171,7 @@ class _CustProfileViewState extends State<CustProfileView> {
                     "${widget.organizationData['city_id']}",
                     style: TextStyle(
                         color: Colors.grey[600],
-                        fontSize: 18,
+                        fontSize: 15.sp,
                         fontFamily: 'malgun'),
                   ),
                   SizedBox(
@@ -195,7 +196,7 @@ class _CustProfileViewState extends State<CustProfileView> {
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'malgun',
-                          fontSize: 18),
+                          fontSize: 15.sp),
                     ),
                   ),
                   SizedBox(
@@ -308,7 +309,7 @@ class _OrganizationProfileButtonState extends State<OrganizationProfileButton>
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontSize: 14.sp,
                   ),
                 ),
               ],
@@ -343,7 +344,7 @@ class TitleAnswerWidget extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 15.sp,
               fontWeight: FontWeight.bold,
               color: Colors.black.withOpacity(0.7),
             ),
@@ -358,7 +359,7 @@ class TitleAnswerWidget extends StatelessWidget {
             child: Text(
               answer,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 14.sp,
                 color: Colors.black.withOpacity(0.7),
               ),
             ),
@@ -457,7 +458,7 @@ class LikesAndViewsWidget extends StatelessWidget {
               Text(
                 likes.toString(),
                 style: TextStyle(
-                  fontSize: 20.0,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                   color: Colors.grey[800],
                 ),
@@ -480,7 +481,7 @@ class LikesAndViewsWidget extends StatelessWidget {
               Text(
                 views.toString(),
                 style: TextStyle(
-                  fontSize: 20.0,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                   color: Colors.grey[800],
                 ),

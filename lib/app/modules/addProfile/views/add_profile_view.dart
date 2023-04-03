@@ -3,6 +3,7 @@
 import 'package:custom_searchable_dropdown/custom_searchable_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 import '../controllers/add_profile_controller.dart';
 
@@ -31,7 +32,7 @@ class AddProfileView extends GetView<AddProfileController> {
                           'Full Name',
                           style: TextStyle(
                             fontFamily: 'malgunBold',
-                            fontSize: 14,
+                            fontSize: 11.sp,
                             color: const Color(0xff272727),
                             letterSpacing: -0.28,
                             height: 1.0714285714285714,
@@ -71,7 +72,7 @@ class AddProfileView extends GetView<AddProfileController> {
                           'Date of Birth',
                           style: TextStyle(
                             fontFamily: 'malgunBold',
-                            fontSize: 14,
+                            fontSize: 11.sp,
                             color: const Color(0xff272727),
                             letterSpacing: -0.28,
                             height: 1.0714285714285714,
@@ -99,7 +100,7 @@ class AddProfileView extends GetView<AddProfileController> {
                           'Gender',
                           style: TextStyle(
                             fontFamily: 'malgunBold',
-                            fontSize: 14,
+                            fontSize: 11.sp,
                             color: const Color(0xff272727),
                             letterSpacing: -0.28,
                             height: 1.0714285714285714,
@@ -168,7 +169,7 @@ class AddProfileView extends GetView<AddProfileController> {
                           'City',
                           style: TextStyle(
                             fontFamily: 'malgunBold',
-                            fontSize: 14,
+                            fontSize: 11.sp,
                             color: const Color(0xff272727),
                             letterSpacing: -0.28,
                             height: 1.0714285714285714,
@@ -211,7 +212,7 @@ class AddProfileView extends GetView<AddProfileController> {
                           'Email',
                           style: TextStyle(
                             fontFamily: 'malgunBold',
-                            fontSize: 14,
+                            fontSize: 11.sp,
                             color: const Color(0xff272727),
                             letterSpacing: -0.28,
                             height: 1.0714285714285714,
@@ -250,7 +251,7 @@ class AddProfileView extends GetView<AddProfileController> {
                           'Mobile',
                           style: TextStyle(
                             fontFamily: 'malgunBold',
-                            fontSize: 14,
+                            fontSize: 11.sp,
                             color: const Color(0xff272727),
                             letterSpacing: -0.28,
                             height: 1.0714285714285714,
@@ -298,7 +299,7 @@ class AddProfileView extends GetView<AddProfileController> {
                               'Submit'.toUpperCase(),
                               style: TextStyle(
                                 fontFamily: 'malgun',
-                                fontSize: 26,
+                                fontSize: 21.sp,
                                 color: const Color(0xffffffff),
                                 letterSpacing: -0.52,
                                 fontWeight: FontWeight.w700,

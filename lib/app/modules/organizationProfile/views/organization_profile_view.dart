@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 import '../controllers/organization_profile_controller.dart';
 
@@ -40,7 +41,7 @@ class OrganizationProfileView extends GetView<OrganizationProfileController> {
                               'Individuals',
                               style: TextStyle(
                                 fontFamily: 'Oswald',
-                                fontSize: 18,
+                                fontSize: 15.sp,
                                 color: const Color(0xfffffdfb),
                                 fontWeight: FontWeight.w500,
                               ),
@@ -60,7 +61,7 @@ class OrganizationProfileView extends GetView<OrganizationProfileController> {
                             'Organizations',
                             style: TextStyle(
                               fontFamily: 'Oswald',
-                              fontSize: 18,
+                              fontSize: 15.sp,
                               color: const Color(0xff3a3732),
                               fontWeight: FontWeight.w500,
                             ),
@@ -79,7 +80,7 @@ class OrganizationProfileView extends GetView<OrganizationProfileController> {
                 'Profile ',
                 style: TextStyle(
                   fontFamily: 'Oswald',
-                  fontSize: 20,
+                  fontSize: 16.sp,
                   color: const Color(0xff564d4d),
                 ),
                 softWrap: false,
@@ -91,7 +92,7 @@ class OrganizationProfileView extends GetView<OrganizationProfileController> {
                 'Organization name',
                 style: TextStyle(
                   fontFamily: 'Segoe UI',
-                  fontSize: 12,
+                  fontSize: 9.sp,
                   color: const Color(0xff707070),
                 ),
               ),
@@ -102,7 +103,7 @@ class OrganizationProfileView extends GetView<OrganizationProfileController> {
                 controller.data['name'],
                 style: TextStyle(
                   fontFamily: 'Segoe UI',
-                  fontSize: 30,
+                  fontSize: 25.sp,
                   color: const Color(0xff564d4d),
                   fontWeight: FontWeight.w600,
                 ),
@@ -115,7 +116,7 @@ class OrganizationProfileView extends GetView<OrganizationProfileController> {
                 controller.data['description'],
                 style: TextStyle(
                   fontFamily: 'Segoe UI',
-                  fontSize: 16,
+                  fontSize: 14.sp,
                   color: const Color(0xff7d7373),
                 ),
                 softWrap: false,
@@ -127,7 +128,7 @@ class OrganizationProfileView extends GetView<OrganizationProfileController> {
                 'Organization type',
                 style: TextStyle(
                   fontFamily: 'Segoe UI',
-                  fontSize: 17,
+                  fontSize: 14.sp,
                   color: const Color(0xff035dc4),
                   fontWeight: FontWeight.w600,
                 ),
@@ -140,7 +141,7 @@ class OrganizationProfileView extends GetView<OrganizationProfileController> {
                 '09:30 PM to 11:30 PM',
                 style: TextStyle(
                   fontFamily: 'Segoe UI',
-                  fontSize: 12,
+                  fontSize: 10.sp,
                   color: const Color(0xff929292),
                 ),
                 softWrap: false,
@@ -152,7 +153,7 @@ class OrganizationProfileView extends GetView<OrganizationProfileController> {
                 controller.data['type'].toString(),
                 style: TextStyle(
                   fontFamily: 'Segoe UI',
-                  fontSize: 14,
+                  fontSize: 12.sp,
                   color: const Color(0xff7d7373),
                 ),
                 softWrap: false,
@@ -162,7 +163,8 @@ class OrganizationProfileView extends GetView<OrganizationProfileController> {
               ),
               GestureDetector(
                 onTap: () {
-                  Get.toNamed('/add-organizations-event2', arguments:controller.data['name']);
+                  Get.toNamed('/add-organizations-event2',
+                      arguments: controller.data['name']);
                 },
                 child: Container(
                   height: 60,
@@ -188,7 +190,7 @@ class OrganizationProfileView extends GetView<OrganizationProfileController> {
                         'Host New Event  ',
                         style: TextStyle(
                           fontFamily: 'Oswald',
-                          fontSize: 25,
+                          fontSize: 21.sp,
                           color: const Color(0xffffffff),
                         ),
                         softWrap: false,

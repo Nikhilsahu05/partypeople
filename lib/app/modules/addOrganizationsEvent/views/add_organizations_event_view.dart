@@ -480,7 +480,7 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                   child: Text('Select Amenities *',
                       style: TextStyle(
                         fontFamily: 'malgun',
-                        fontSize: 18,
+                        fontSize: 15.sp,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.0,
                         color: Colors.white,
@@ -550,11 +550,11 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                               controller.isEditable.value == false
                                   ? Text(
                                       'Create Organization Profile',
-                                      style: TextStyle(fontSize: 16),
+                                      style: TextStyle(fontSize: 14.sp),
                                     )
                                   : Text(
                                       'Update Organization Profile',
-                                      style: TextStyle(fontSize: 16),
+                                      style: TextStyle(fontSize: 14.sp),
                                     )
                             ],
                           ),
@@ -810,12 +810,12 @@ class _LocationButtonState extends State<LocationButton> {
                         style: _location == ''
                             ? TextStyle(
                                 color: Colors.grey[400],
-                                fontSize: 18.0,
+                                fontSize: 15.sp,
                                 overflow: TextOverflow.fade,
                               )
                             : TextStyle(
                                 color: Colors.black,
-                                fontSize: 18.0,
+                                fontSize: 15.sp,
                                 overflow: TextOverflow.fade,
                               ),
                         overflow: TextOverflow.ellipsis,

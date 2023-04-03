@@ -16,7 +16,7 @@ Future<void> main() async {
 
   //Assign publishable key to flutter_stripe
   Stripe.publishableKey =
-  "pk_live_51M4TemSDWijp4rP3mtTpPwsdZTwZdfDlqd4qFUtyOQRbHKNdPfy1UdNksgTjkpBazL1dOkIM5d4m09CaHPrmoXSY00i87UkW20";
+      "pk_live_51M4TemSDWijp4rP3mtTpPwsdZTwZdfDlqd4qFUtyOQRbHKNdPfy1UdNksgTjkpBazL1dOkIM5d4m09CaHPrmoXSY00i87UkW20";
   Stripe.merchantIdentifier = 'any string works';
   await Stripe.instance.applySettings();
   //Load our .env file that contains our Stripe Secret key
@@ -40,38 +40,36 @@ class App extends StatelessWidget {
     return Sizer(builder: (context, orientation, deviceType) {
       return ShowCaseWidget(
           builder: Builder(
-            builder: (context) =>
-                GetMaterialApp(
-                  builder: (context, child) =>
-                      MediaQuery(
-                          data: MediaQuery.of(context).copyWith(
-                            alwaysUse24HourFormat: true,
-                          ),
-                          child: child!),
-                  title: "Application",
-                  routes: {
-                    'MapScreen': (p0) => MapScreen(),
-                    'MapScreen2': (p0) => MapScreen2(),
-                  },
-                  // initialRoute: Routes.,
-                  // home: SplashScreenMain(),
-                  initialRoute:
-                  // GetStorage().read('token') == null
-                  //     ?
-                  // AppPages.INITIAL
-                  //     :
-                  Routes.ADD_ORGANIZATIONS_EVENT,
-                  // home: (),
-                  // home: AddAmenities(),
-                  // initialRoute: Routes.LOGIN,
-                  getPages: AppPages.routes,
-                  debugShowCheckedModeBanner: false,
-                  theme: ThemeData(
-                    primarySwatch: Colors.red,
-                    visualDensity: VisualDensity.adaptivePlatformDensity,
-                  ),
-                ),
-          ));
+        builder: (context) => GetMaterialApp(
+          builder: (context, child) => MediaQuery(
+              data: MediaQuery.of(context).copyWith(
+                alwaysUse24HourFormat: true,
+              ),
+              child: child!),
+          title: "Application",
+          routes: {
+            'MapScreen': (p0) => MapScreen(),
+            'MapScreen2': (p0) => MapScreen2(),
+          },
+          initialRoute: Routes.HOME,
+          //home: SplashScreenMain(),
+          //initialRoute:
+          // GetStorage().read('token') == null
+          //     ?
+          // AppPages.INITIAL
+          //     :
+          // Routes.ADD_ORGANIZATIONS_EVENT,
+          // home: (),
+          // home: AddAmenities(),
+          // initialRoute: Routes.LOGIN,
+          getPages: AppPages.routes,
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.red,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+        ),
+      ));
     });
   }
 }

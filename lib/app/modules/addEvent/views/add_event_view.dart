@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:sizer/sizer.dart';
 
 import '../controllers/add_event_controller.dart';
 
 class AddEventView extends GetView<AddEventController> {
-
   Future<void> _showMyDialog(context) async {
     return showDialog<void>(
       context: context,
@@ -14,8 +14,8 @@ class AddEventView extends GetView<AddEventController> {
         return AlertDialog(
           title: const Text('Individuals'),
           content: SingleChildScrollView(
-            child: Text("Thank you for your interest in this feature. Our team is currently working on developing it, and we apologize for any inconvenience caused by its absence. We aim to provide the best possible user experience, and we are confident that this feature will enhance your experience with our product.")
-          ),
+              child: Text(
+                  "Thank you for your interest in this feature. Our team is currently working on developing it, and we apologize for any inconvenience caused by its absence. We aim to provide the best possible user experience, and we are confident that this feature will enhance your experience with our product.")),
           actions: <Widget>[
             TextButton(
               child: const Text('OK'),
@@ -54,7 +54,7 @@ class AddEventView extends GetView<AddEventController> {
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               GestureDetector(
-                onTap: ()  {
+                onTap: () {
                   _showMyDialog(context);
                   // await Get.toNamed('/add-individual-event');
                   // if (AddIndividualEventController.picture != null) {
@@ -62,7 +62,6 @@ class AddEventView extends GetView<AddEventController> {
                   //   AddIndividualEventController.picture?.delete();
                   //   AddIndividualEventController.picture = null;
                   // }
-
                 },
                 child: Container(
                   height: 232,
@@ -83,7 +82,7 @@ class AddEventView extends GetView<AddEventController> {
                 'Individuals',
                 style: TextStyle(
                   fontFamily: 'Oswald',
-                  fontSize: 25,
+                  fontSize: 21.sp,
                   color: const Color(0xffffffff),
                   fontWeight: FontWeight.w600,
                 ),
@@ -115,7 +114,7 @@ class AddEventView extends GetView<AddEventController> {
                 'Organizations',
                 style: TextStyle(
                   fontFamily: 'Oswald',
-                  fontSize: 25,
+                  fontSize: 21.sp,
                   color: const Color(0xffffffff),
                   fontWeight: FontWeight.w600,
                 ),

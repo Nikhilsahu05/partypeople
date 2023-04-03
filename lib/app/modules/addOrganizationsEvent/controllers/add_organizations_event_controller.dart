@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -10,7 +9,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:pertypeople/app/modules/global_header_id_controller.dart';
-
 import '../../../routes/app_pages.dart';
 import 'GetCitys.dart';
 

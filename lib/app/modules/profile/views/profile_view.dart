@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/profile_controller.dart';
@@ -52,7 +53,7 @@ class ProfileView extends GetView<ProfileController> {
                   GetStorage().read('full_name') ?? "",
                   style: TextStyle(
                     fontFamily: 'malgun',
-                    fontSize: 27,
+                    fontSize: 24.sp,
                     color: const Color(0xffffffff),
                     letterSpacing: -0.54,
                     height: 1.2222222222222223,
@@ -232,7 +233,7 @@ class ProfileView extends GetView<ProfileController> {
                         title,
                         style: TextStyle(
                           fontFamily: 'Segoe UI',
-                          fontSize: 19,
+                          fontSize: 16.sp,
                           color: const Color(0xff525252),
                           letterSpacing: -0.38,
                           fontWeight: FontWeight.w600,
