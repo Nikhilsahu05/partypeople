@@ -48,31 +48,21 @@ class _SubscriptionViewState extends State<SubscriptionView> {
               stops: [0.0, 0.564, 1.0],
             ),
           ),
-          child: SingleChildScrollView(
-            child: Column(
+          child: ListView(children: [
+            Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: 50,
+                  height: 20,
                 ),
                 Text(
                   'Get Subscriptions',
                   style: TextStyle(
                     fontFamily: 'Oswald',
-                    fontSize: 26.sp,
+                    fontSize: 18.sp,
                     color: const Color(0xffffffff),
                     fontWeight: FontWeight.w600,
                   ),
-                  softWrap: false,
-                ),
-                Text(
-                  'For people who want to [see and search parties of other \ncities], [start chat - free for females],\n',
-                  style: TextStyle(
-                    fontFamily: 'Oswald',
-                    fontSize: 11.sp,
-                    color: const Color(0xffffffff),
-                  ),
-                  textAlign: TextAlign.center,
                   softWrap: false,
                 ),
                 Padding(
@@ -93,7 +83,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                           '1',
                           style: TextStyle(
                             fontFamily: 'malgun',
-                            fontSize: 26.sp,
+                            fontSize: 18.sp,
                             color: Colors.red.shade900,
                             letterSpacing: -0.88,
                             fontWeight: FontWeight.w700,
@@ -111,7 +101,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                           'DAYS',
                           style: TextStyle(
                             fontFamily: 'malgun',
-                            fontSize: 17.sp,
+                            fontSize: 16.sp,
                             color: Colors.red.shade900,
                             letterSpacing: -0.44,
                             height: 0.6363636363636364,
@@ -128,7 +118,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                           '₹499',
                           style: TextStyle(
                             fontFamily: 'malgun',
-                            fontSize: 26.sp,
+                            fontSize: 18.sp,
                             color: Colors.red.shade900,
                             letterSpacing: -0.6,
                             fontWeight: FontWeight.w700,
@@ -162,7 +152,7 @@ class _SubscriptionViewState extends State<SubscriptionView> {
                 ),
               ],
             ),
-          ),
+          ]),
         ),
       ),
     );
@@ -193,62 +183,59 @@ class _SubCardState extends State<SubCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 1,
-      child: widget.controller.count == null
-          ? Container()
-          : GestureDetector(
-              onTap: () {
-                widget.controller.count = int.parse(widget.month);
-              },
-              child: Container(
-                  // customize the appearance of your box here
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(30, 236, 221, 213),
-                    border: Border.all(
-                      color: widget.controller.count.toString() == widget.month
-                          ? Colors.amber
-                          : Colors.grey[400]!,
-                      width: 3,
-                    ),
+    return widget.controller.count == null
+        ? Container()
+        : GestureDetector(
+            onTap: () {
+              widget.controller.count = int.parse(widget.month);
+            },
+            child: Container(
+                // customize the appearance of your box here
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(30, 236, 221, 213),
+                  border: Border.all(
+                    color: widget.controller.count.toString() == widget.month
+                        ? Colors.amber
+                        : Colors.grey[400]!,
+                    width: 3,
                   ),
-                  height: 150,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        widget.month,
-                        style: TextStyle(
-                          fontSize: 26.sp,
-                          color: Colors.white,
-                          fontFamily: 'malgun',
-                          fontWeight: FontWeight.bold,
-                        ),
+                ),
+                height: 150,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.month,
+                      style: TextStyle(
+                        fontSize: 26.sp,
+                        color: Colors.white,
+                        fontFamily: 'malgun',
+                        fontWeight: FontWeight.bold,
                       ),
-                      Text(
-                        "month",
-                        style: TextStyle(
-                          fontFamily: 'malgun',
-                          fontSize: 15.sp,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    ),
+                    Text(
+                      "month",
+                      style: TextStyle(
+                        fontFamily: 'malgun',
+                        fontSize: 15.sp,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
                       ),
-                      SizedBox(
-                        height: 10,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      //rupee symbol
+                      "\u20B9${widget.price}/mo",
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
                       ),
-                      Text(
-                        //rupee symbol
-                        "\u20B9${widget.price}/mo",
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  )),
-            ),
-    );
+                    ),
+                  ],
+                )),
+          );
   }
 }
 
@@ -288,23 +275,20 @@ class LogoutOverlayState extends State<LogoutOverlay> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-          height: Get.height,
-          margin: EdgeInsets.all(12.0),
-          padding: EdgeInsets.all(12.0),
+          padding: EdgeInsets.only(top: 20, bottom: 50),
           decoration: BoxDecoration(
-            color: Colors.white,
             borderRadius: BorderRadius.circular(15.0),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Text(
-                "Your Party will be boosted as Popular Party till \n End Date - ${widget.data['end_date']} \n End Time - ${widget.data['end_time']}",
+                "Your Party will be boosted as Popular Party \nEnd Date - ${widget.data['end_date']} \nEnd Time - ${widget.data['end_time']}",
                 style: TextStyle(
                   color: Colors.black,
                   fontFamily: 'malgun',
                   fontWeight: FontWeight.bold,
-                  fontSize: 15.sp,
+                  fontSize: 12.sp,
                 ),
               ),
               SizedBox(height: 20),
@@ -314,7 +298,7 @@ class LogoutOverlayState extends State<LogoutOverlay> {
                       color: Colors.black,
                       fontFamily: 'malgun',
                       fontWeight: FontWeight.bold,
-                      fontSize: 15.sp,
+                      fontSize: 13.sp,
                     ),
                   )),
               SizedBox(height: 10),
@@ -324,7 +308,7 @@ class LogoutOverlayState extends State<LogoutOverlay> {
                       color: Colors.black,
                       fontFamily: 'malgun',
                       fontWeight: FontWeight.bold,
-                      fontSize: 15.sp,
+                      fontSize: 13.sp,
                     ),
                   )),
               InputQty(
@@ -374,7 +358,7 @@ class LogoutOverlayState extends State<LogoutOverlay> {
                       fontFamily: 'malgun',
                     ),
                   )),
-              SizedBox(height: 30),
+              SizedBox(height: 15),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -388,6 +372,7 @@ class LogoutOverlayState extends State<LogoutOverlay> {
                   child: Text(
                     "Edit Date & Time",
                     style: TextStyle(
+                      fontSize: 10.sp,
                       color: Colors.white,
                       fontFamily: 'malgun',
                     ),
@@ -424,14 +409,14 @@ class LogoutOverlayState extends State<LogoutOverlay> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Container(
-                            width: 35,
+                            width: 25,
                             child: Image.asset('assets/shuttle.png'),
                           ),
                           Text(
                             "Boost Post".toUpperCase(),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 13.sp,
+                                fontSize: 12.sp,
                                 fontFamily: 'malgun',
                                 color: Colors.white),
                           ),

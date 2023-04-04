@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:pertypeople/app/modules/subscription/views/subscription_view.dart';
 import 'package:pertypeople/cached_image_placeholder.dart';
 import 'package:sizer/sizer.dart';
@@ -123,7 +124,7 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
                   color: Colors.red,
                 ),
                 title: Text(
-                  "${widget.data['start_date']} to ${widget.data['end_date']}",
+                  "${DateFormat('EEEE, d MMMM y').format(DateTime.parse(widget.data['start_date']))} to ${DateFormat('EEEE, d MMMM y').format(DateTime.parse(widget.data['end_date']))}",
                   style: TextStyle(fontFamily: 'malgun', fontSize: 17),
                 ),
                 subtitle: Text(

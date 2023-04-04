@@ -213,17 +213,22 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
     final organizationData = await jsonDecode(organizationResponse.body)['data']
         [0]['organization_amenities'];
 
-    // Add all amenities to the selected list and create MultiSelectCard for each amenity
+    // Add amenities from organizationData to selectedAmenitiesListID and ameList
     for (final amenityData in organizationData) {
-      controller.selectedAmenitiesListID.add(amenityData['id']);
-      ameList.add(
-        MultiSelectCard(
-          value: amenityData['id'],
-          enabled: true,
-          selected: true,
-          label: amenityData['name'],
-        ),
-      );
+      final amenityId = amenityData['id'];
+      if (!controller.selectedAmenitiesListID.contains(amenityId)) {
+        controller.selectedAmenitiesListID.add(amenityId);
+      }
+      if (!ameList.any((ameItem) => ameItem.value == amenityId)) {
+        ameList.add(
+          MultiSelectCard(
+            value: amenityId,
+            enabled: true,
+            selected: true,
+            label: amenityData['name'],
+          ),
+        );
+      }
     }
 
     setState(() {
@@ -237,6 +242,7 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
       print("Function for matching amenities is now working");
       await newAmenities();
     }
+
     // Get all amenities
     final amenitiesResponse = await http.get(
       Uri.parse(
@@ -247,23 +253,19 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
     );
     final amenitiesData = await jsonDecode(amenitiesResponse.body)['data'];
 
+    // Add amenities from amenitiesData to ameList
     for (final amenityData in amenitiesData) {
-      bool alreadyExists = false;
-      for (final ameItem in ameList) {
-        if (ameItem.value == amenityData['id']) {
-          alreadyExists = true;
-          break;
-        }
-      }
-      if (!alreadyExists) {
+      final amenityId = amenityData['id'];
+      if (!ameList.any((ameItem) => ameItem.value == amenityId)) {
         ameList.add(
           MultiSelectCard(
-            value: amenityData['id'],
+            value: amenityId,
             label: amenityData['name'],
           ),
         );
       }
     }
+
     setState(() {
       controller.isLoading.value = false;
     });
@@ -489,39 +491,37 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Center(
-                    child: MultiSelectContainer(
-                        itemsPadding: EdgeInsets.all(8),
-                        prefix: MultiSelectPrefix(
-                            selectedPrefix: Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 14,
-                            ),
-                            disabledPrefix: Icon(
-                              Icons.do_disturb_alt_sharp,
-                              size: 14,
-                            )),
-                        items: ameList,
-                        onChange: (allSelectedItems, selectedItem) {
-                          setState(() {
-                            if (controller.selectedAmenitiesListID
-                                .contains(selectedItem)) {
-                              // If the item is already selected, remove it only if it is being deselected
-                              if (!allSelectedItems.contains(selectedItem)) {
-                                controller.selectedAmenitiesListID
-                                    .remove(selectedItem);
-                              }
-                            } else {
-                              // If the item is not selected, add it only if it is being selected
-                              if (allSelectedItems.contains(selectedItem)) {
-                                controller.selectedAmenitiesListID
-                                    .add(selectedItem);
-                              }
-                            }
-                            print(selectedItem);
-                            print(controller.selectedAmenitiesListID.value);
-                          });
-                        }),
+                    child: Wrap(
+                      spacing: 8.0,
+                      runSpacing: 8.0,
+                      children: ameList
+                          .map((item) => GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    item.selected = !item.selected;
+                                    print(
+                                        'Selected Organisation => ${item.value}');
+
+                                    if (!controller.selectedAmenitiesListID
+                                        .contains(item.value.toString())) {
+                                      controller.selectedAmenitiesListID
+                                          .add(item.value.toString());
+                                    } else {
+                                      controller.selectedAmenitiesListID
+                                          .remove(item.value.toString());
+                                    }
+                                  });
+                                  print(controller.selectedAmenitiesListID);
+                                },
+                                child: Chip(
+                                  label: Text(item.label.toString()),
+                                  backgroundColor: item.selected
+                                      ? Colors.red
+                                      : Colors.grey.shade200,
+                                ),
+                              ))
+                          .toList(),
+                    ),
                   ),
                 ),
                 SizedBox(

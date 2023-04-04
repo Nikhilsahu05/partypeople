@@ -879,6 +879,7 @@ class _OrganizationProfileNewViewState
                                             Duration(milliseconds: 800),
                                         autoPlayCurve: Curves.fastOutSlowIn,
                                         enlargeCenterPage: true,
+
                                         enlargeFactor: 0.3,
                                         // onPageChanged: callbackFunction,
                                         scrollDirection: Axis.horizontal,
@@ -1067,7 +1068,7 @@ class _OrganizationProfileNewViewState
                                                                                 style: TextStyle(
                                                                                   fontFamily: 'malgun',
                                                                                   fontSize: 12.sp,
-                                                                                  color: const Color(0xffc40d0d),
+                                                                                  color: Colors.black,
                                                                                 ),
                                                                               ),
                                                                             ],
@@ -1337,7 +1338,7 @@ class _OrganizationProfileNewViewState
                                                                                 TextStyle(
                                                                               fontFamily: 'malgun',
                                                                               fontSize: 12.sp,
-                                                                              color: const Color(0xffc40d0d),
+                                                                              color: Colors.black,
                                                                             ),
                                                                           ),
                                                                         ],
@@ -1625,7 +1626,7 @@ class _OrganizationProfileNewViewState
                                                                                 '${controller.jsonPartyOgranisationDataUpcomming[index]['start_time']}',
                                                                                 style: TextStyle(
                                                                                   fontSize: 12.sp,
-                                                                                  color: const Color(0xffc40d0d),
+                                                                                  color: Colors.black,
                                                                                 ),
                                                                               ),
                                                                             ],

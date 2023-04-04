@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -9,6 +10,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:pertypeople/app/modules/global_header_id_controller.dart';
+
 import '../../../routes/app_pages.dart';
 import 'GetCitys.dart';
 
@@ -46,7 +48,8 @@ class AddOrganizationsEventController extends GetxController {
     print("response of Organization ${response.body}");
     organisationID.value = jsonDecode(response.body)['data'][0]['id'];
     print(
-        'Getting ID Of Organisation ::: ${jsonDecode(response.body)['data'][0]['id']}');
+        'Getting ID Of Organisation ::: ${jsonDecode(
+            response.body)['data'][0]['id']}');
     print(organisationID.value);
     print("Print for test");
     fullOrganisationJsonData = jsonDecode(response.body);
@@ -56,7 +59,7 @@ class AddOrganizationsEventController extends GetxController {
       location.text = jsonDecode(response.body)['data'][0]['city_id'];
       description.text = jsonDecode(response.body)['data'][0]['description'];
       timeline.value =
-          "${jsonDecode(response.body)['data'][0]['timeline_pic']}";
+      "${jsonDecode(response.body)['data'][0]['timeline_pic']}";
       profile.value = "${jsonDecode(response.body)['data'][0]['profile_pic']}";
       update();
       refresh();
@@ -116,7 +119,8 @@ class AddOrganizationsEventController extends GetxController {
       Placemark place = placemarks[0];
 
       currentAddress =
-          "${place.street}, ${place.name}, ${place.locality}, ${place.administrativeArea}, ${place.country}, ${place.postalCode}";
+      "${place.street}, ${place.name}, ${place.locality}, ${place
+          .administrativeArea}, ${place.country}, ${place.postalCode}";
       print(currentAddress);
       // getcurrentaddressforUI = currentAddress;
       update();
@@ -150,6 +154,7 @@ class AddOrganizationsEventController extends GetxController {
     var headers = {
       'x-access-token': GetStorage().read("token").toString(),
     };
+
 
     var request = http.MultipartRequest(
         'POST',
@@ -195,7 +200,7 @@ class AddOrganizationsEventController extends GetxController {
   }
 
   GlobalHeaderIDController globalHeaderIDController =
-      Get.put(GlobalHeaderIDController());
+  Get.put(GlobalHeaderIDController());
 
   Future<void> addOrgnition() async {
     print("Printing profile picture and timeline picture");
