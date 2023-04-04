@@ -48,18 +48,17 @@ class AddOrganizationsEventController extends GetxController {
     print("response of Organization ${response.body}");
     organisationID.value = jsonDecode(response.body)['data'][0]['id'];
     print(
-        'Getting ID Of Organisation ::: ${jsonDecode(
-            response.body)['data'][0]['id']}');
+        'Getting ID Of Organisation ::: ${jsonDecode(response.body)['data'][0]['id']}');
     print(organisationID.value);
     print("Print for test");
     fullOrganisationJsonData = jsonDecode(response.body);
     if (jsonDecode(response.body)['data'] != null) {
       name.text = jsonDecode(response.body)['data'][0]['name'];
-      branches.text = jsonDecode(response.body)['data'][0]['branch'];
+      branches.text = jsonDecode(response.body)['data'][0]['branch'] ?? '';
       location.text = jsonDecode(response.body)['data'][0]['city_id'];
       description.text = jsonDecode(response.body)['data'][0]['description'];
       timeline.value =
-      "${jsonDecode(response.body)['data'][0]['timeline_pic']}";
+          "${jsonDecode(response.body)['data'][0]['timeline_pic']}";
       profile.value = "${jsonDecode(response.body)['data'][0]['profile_pic']}";
       update();
       refresh();
@@ -119,8 +118,7 @@ class AddOrganizationsEventController extends GetxController {
       Placemark place = placemarks[0];
 
       currentAddress =
-      "${place.street}, ${place.name}, ${place.locality}, ${place
-          .administrativeArea}, ${place.country}, ${place.postalCode}";
+          "${place.street}, ${place.name}, ${place.locality}, ${place.administrativeArea}, ${place.country}, ${place.postalCode}";
       print(currentAddress);
       // getcurrentaddressforUI = currentAddress;
       update();
@@ -154,7 +152,6 @@ class AddOrganizationsEventController extends GetxController {
     var headers = {
       'x-access-token': GetStorage().read("token").toString(),
     };
-
 
     var request = http.MultipartRequest(
         'POST',
@@ -200,7 +197,7 @@ class AddOrganizationsEventController extends GetxController {
   }
 
   GlobalHeaderIDController globalHeaderIDController =
-  Get.put(GlobalHeaderIDController());
+      Get.put(GlobalHeaderIDController());
 
   Future<void> addOrgnition() async {
     print("Printing profile picture and timeline picture");

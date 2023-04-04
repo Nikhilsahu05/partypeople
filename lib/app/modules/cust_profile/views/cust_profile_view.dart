@@ -151,9 +151,7 @@ class _CustProfileViewState extends State<CustProfileView> {
                     height: 10,
                   ),
                   Text(
-                    widget.organizationData['branch'] == ''
-                        ? 'No Branches'
-                        : widget.organizationData['branch'],
+                    widget.organizationData['branch'] ?? 'No Branches',
                     style: TextStyle(
                         color: Colors.grey[600],
                         fontSize: 14.sp,

@@ -1,4 +1,6 @@
 // ignore_for_file: must_be_immutable
+import 'dart:ui' as ui;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
@@ -60,32 +62,59 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
           child: Column(
             children: [
               SizedBox(
-                height: 50,
+                height: 65,
               ),
-              Container(
-                padding: EdgeInsets.zero,
-                height: 160,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: CachedNetworkImageWidget(
-                    imageUrl: '${widget.data['cover_photo']}',
-                    width: Get.width,
-                    height: 160,
-                    fit: BoxFit.fill,
-                    errorWidget: (context, url, error) => Center(
-                          child: CupertinoActivityIndicator(
-                            radius: 15,
-                            color: Colors.black,
-                          ),
-                        ),
-                    placeholder: (context, url) => Center(
-                        child: CupertinoActivityIndicator(
-                            color: Colors.black, radius: 15))),
-                width: Get.width,
-              ),
+              widget.data['image_status'] == '1'
+                  ? Container(
+                      padding: EdgeInsets.zero,
+                      height: 160,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: CachedNetworkImageWidget(
+                          imageUrl: '${widget.data['cover_photo']}',
+                          width: Get.width,
+                          height: 160,
+                          fit: BoxFit.fill,
+                          errorWidget: (context, url, error) => Center(
+                                child: CupertinoActivityIndicator(
+                                  radius: 15,
+                                  color: Colors.black,
+                                ),
+                              ),
+                          placeholder: (context, url) => Center(
+                              child: CupertinoActivityIndicator(
+                                  color: Colors.black, radius: 15))),
+                      width: Get.width,
+                    )
+                  : Container(
+                      padding: EdgeInsets.zero,
+                      height: 160,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: ImageFiltered(
+                        imageFilter:
+                            ui.ImageFilter.blur(sigmaX: 6.0, sigmaY: 6.0),
+                        child: CachedNetworkImageWidget(
+                            imageUrl: '${widget.data['cover_photo']}',
+                            width: Get.width,
+                            height: 160,
+                            fit: BoxFit.fill,
+                            errorWidget: (context, url, error) => Center(
+                                  child: CupertinoActivityIndicator(
+                                    radius: 15,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                            placeholder: (context, url) => Center(
+                                child: CupertinoActivityIndicator(
+                                    color: Colors.black, radius: 15))),
+                      ),
+                      width: Get.width,
+                    ),
               SizedBox(
-                height: 15,
+                height: 30,
               ),
               Text(
                 "${widget.data['title']}",

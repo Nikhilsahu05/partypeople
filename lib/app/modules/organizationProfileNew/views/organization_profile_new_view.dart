@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui' as ui;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -645,58 +646,75 @@ class _OrganizationProfileNewViewState
                                                                   const EdgeInsets
                                                                       .all(8.0),
                                                               child: ClipRRect(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          12),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          12),
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          12),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          12),
-                                                                ),
-                                                                child:
-                                                                    Container(
-                                                                  height:
-                                                                      Get.height *
-                                                                          0.5,
-                                                                  width:
-                                                                      Get.width *
-                                                                          0.48,
-                                                                  child:
-                                                                      CachedNetworkImage(
-                                                                    fit: BoxFit
-                                                                        .cover,
-                                                                    imageUrl:
-                                                                        '${controller.jsonPartyPopularData[index]['cover_photo']}',
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .only(
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            12),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            12),
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            12),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            12),
                                                                   ),
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              12),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              12),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              12),
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              12),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
+                                                                  child: controller.jsonPartyPopularData[index]
+                                                                              [
+                                                                              'image_status'] ==
+                                                                          '1'
+                                                                      ? Container(
+                                                                          height:
+                                                                              Get.height * 0.5,
+                                                                          width:
+                                                                              Get.width * 0.48,
+                                                                          child:
+                                                                              CachedNetworkImage(
+                                                                            fit:
+                                                                                BoxFit.cover,
+                                                                            imageUrl:
+                                                                                '${controller.jsonPartyPopularData[index]['cover_photo']}',
+                                                                          ),
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.only(
+                                                                              bottomLeft: Radius.circular(12),
+                                                                              bottomRight: Radius.circular(12),
+                                                                              topLeft: Radius.circular(12),
+                                                                              topRight: Radius.circular(12),
+                                                                            ),
+                                                                          ),
+                                                                        )
+                                                                      : Container(
+                                                                          height:
+                                                                              Get.height * 0.5,
+                                                                          width:
+                                                                              Get.width * 0.48,
+                                                                          child:
+                                                                              ImageFiltered(
+                                                                            imageFilter:
+                                                                                ui.ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                                                                            child:
+                                                                                CachedNetworkImage(
+                                                                              fit: BoxFit.cover,
+                                                                              imageUrl: '${controller.jsonPartyPopularData[index]['cover_photo']}',
+                                                                            ),
+                                                                          ),
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.only(
+                                                                              bottomLeft: Radius.circular(12),
+                                                                              bottomRight: Radius.circular(12),
+                                                                              topLeft: Radius.circular(12),
+                                                                              topRight: Radius.circular(12),
+                                                                            ),
+                                                                          ),
+                                                                        )),
                                                             ),
                                                           ],
                                                         ),
@@ -981,30 +999,39 @@ class _OrganizationProfileNewViewState
                                                             child: Stack(
                                                               children: [
                                                                 Container(
-                                                                  height: 160,
-                                                                  width: 171,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    color: const Color(
-                                                                        0xffffffff),
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            17.0),
-                                                                  ),
-                                                                  child:
-                                                                      ClipRRect(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            13.0),
-                                                                    child:
-                                                                        CachedNetworkImage(
-                                                                      imageUrl:
-                                                                          '${controller.jsonPartyOgranisationDataToday[index]['cover_photo']}',
-                                                                      fit: BoxFit
-                                                                          .cover,
+                                                                    height: 160,
+                                                                    width: 171,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color: const Color(
+                                                                          0xffffffff),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              17.0),
                                                                     ),
-                                                                  ),
-                                                                ),
+                                                                    child: controller.jsonPartyOgranisationDataToday[index]['image_status'] ==
+                                                                            '1'
+                                                                        ? ClipRRect(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(13.0),
+                                                                            child:
+                                                                                CachedNetworkImage(
+                                                                              imageUrl: '${controller.jsonPartyOgranisationDataToday[index]['cover_photo']}',
+                                                                              fit: BoxFit.cover,
+                                                                            ),
+                                                                          )
+                                                                        : ClipRRect(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(13.0),
+                                                                            child:
+                                                                                ImageFiltered(
+                                                                              imageFilter: ui.ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+                                                                              child: CachedNetworkImage(
+                                                                                imageUrl: '${controller.jsonPartyOgranisationDataToday[index]['cover_photo']}',
+                                                                                fit: BoxFit.cover,
+                                                                              ),
+                                                                            ),
+                                                                          )),
                                                                 Positioned(
                                                                   bottom: 0,
                                                                   child: Stack(
@@ -1246,19 +1273,43 @@ class _OrganizationProfileNewViewState
                                                                         .circular(
                                                                             17.0),
                                                               ),
-                                                              child: ClipRRect(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            13.0),
-                                                                child:
-                                                                    CachedNetworkImage(
-                                                                  imageUrl:
-                                                                      '${controller.jsonPartyOgranisationDataTomm[index]['cover_photo']}',
-                                                                  fit: BoxFit
-                                                                      .fill,
-                                                                ),
-                                                              ),
+                                                              child: controller.jsonPartyOgranisationDataTomm[
+                                                                              index]
+                                                                          [
+                                                                          'image_status'] ==
+                                                                      '1'
+                                                                  ? ClipRRect(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              13.0),
+                                                                      child:
+                                                                          CachedNetworkImage(
+                                                                        imageUrl:
+                                                                            '${controller.jsonPartyOgranisationDataTomm[index]['cover_photo']}',
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                      ),
+                                                                    )
+                                                                  : ClipRRect(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              13.0),
+                                                                      child:
+                                                                          ImageFiltered(
+                                                                        imageFilter: ui.ImageFilter.blur(
+                                                                            sigmaX:
+                                                                                8.0,
+                                                                            sigmaY:
+                                                                                8.0),
+                                                                        child:
+                                                                            CachedNetworkImage(
+                                                                          imageUrl:
+                                                                              '${controller.jsonPartyOgranisationDataTomm[index]['cover_photo']}',
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                        ),
+                                                                      ),
+                                                                    ),
                                                             ),
                                                             Positioned(
                                                               bottom: 0,
@@ -1527,19 +1578,43 @@ class _OrganizationProfileNewViewState
                                                                         .circular(
                                                                             17.0),
                                                               ),
-                                                              child: ClipRRect(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            13.0),
-                                                                child:
-                                                                    CachedNetworkImage(
-                                                                  imageUrl:
-                                                                      '${controller.jsonPartyOgranisationDataUpcomming[index]['cover_photo']}',
-                                                                  fit: BoxFit
-                                                                      .fill,
-                                                                ),
-                                                              ),
+                                                              child: controller.jsonPartyOgranisationDataUpcomming[
+                                                                              index]
+                                                                          [
+                                                                          'image_status'] ==
+                                                                      '1'
+                                                                  ? ClipRRect(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              13.0),
+                                                                      child:
+                                                                          CachedNetworkImage(
+                                                                        imageUrl:
+                                                                            '${controller.jsonPartyOgranisationDataUpcomming[index]['cover_photo']}',
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                      ),
+                                                                    )
+                                                                  : ClipRRect(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              13.0),
+                                                                      child:
+                                                                          ImageFiltered(
+                                                                        imageFilter: ui.ImageFilter.blur(
+                                                                            sigmaX:
+                                                                                8.0,
+                                                                            sigmaY:
+                                                                                8.0),
+                                                                        child:
+                                                                            CachedNetworkImage(
+                                                                          imageUrl:
+                                                                              '${controller.jsonPartyOgranisationDataUpcomming[index]['cover_photo']}',
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                        ),
+                                                                      ),
+                                                                    ),
                                                             ),
                                                             Positioned(
                                                               bottom: 0,
