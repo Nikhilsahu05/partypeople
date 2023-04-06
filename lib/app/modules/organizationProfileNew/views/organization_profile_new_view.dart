@@ -83,6 +83,7 @@ class _OrganizationProfileNewViewState
 
   Future<void> myAsyncRefreshFunction() async {
     await controller.getAPIOverview();
+    await controller.getOrganisationDetailsPopular();
     await controller.getOrganisationDetailsToday();
     await controller.getOrganisationDetailsTom();
     await controller.getOrganisationDetailsUpcomming();
