@@ -183,7 +183,7 @@ class _OrganizationProfileNewViewState
                           controller.organisationName.value,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 14.sp,
+                            fontSize: 13.sp,
                             fontFamily: 'SegeoUI',
                           ),
                         ),
@@ -810,7 +810,7 @@ class _OrganizationProfileNewViewState
                                                                             .value = true;
                                                                         addOrganizationsEvent2Controller
                                                                             .getPrefiledData = controller
-                                                                                .jsonPartyOgranisationDataToday[
+                                                                                .jsonPartyPopularData[
                                                                             index];
                                                                         addOrganizationsEvent2Controller
                                                                             .isPopular
@@ -945,258 +945,298 @@ class _OrganizationProfileNewViewState
                                         fontWeight: FontWeight.w400),
                                   ),
                                 )
-                              : controller.popularPartyLength.value != 0
-                                  ? Container(
-                                      padding: EdgeInsets.all(8),
-                                      child: Text(
-                                        "Sorry, there are no parties available at this time. Please try again later or check back for updates.",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.grey.shade300,
-                                            fontSize: 10.sp,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      child: Stack(
-                                        children: [
-                                          Container(
-                                            height: 190,
-                                            width: Get.width,
-                                            child: ListView.builder(
-                                                controller: ScrollController(
-                                                    initialScrollOffset: 0),
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                shrinkWrap: true,
+                              : Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0),
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                        height: 190,
+                                        width: Get.width,
+                                        child: ListView.builder(
+                                            controller: ScrollController(
+                                                initialScrollOffset: 0),
+                                            scrollDirection: Axis.horizontal,
+                                            shrinkWrap: true,
 
-                                                // physics: NeverScrollableScrollPhysics(),
-                                                itemCount: controller
-                                                    .lengthOfTodayParties.value,
-                                                itemBuilder: (context, index) {
-                                                  return controller.jsonPartyOgranisationDataToday[
-                                                                  index][
-                                                              'papular_status'] !=
-                                                          '1'
-                                                      ? Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child:
-                                                              GestureDetector(
-                                                            onTap: () {
-                                                              Get.to(
-                                                                  PopularPartyPreview(
-                                                                isPopularParty:
-                                                                    false,
-                                                                data: controller
-                                                                        .jsonPartyOgranisationDataToday[
-                                                                    index],
-                                                              ));
-                                                            },
-                                                            child: Stack(
-                                                              children: [
-                                                                Container(
-                                                                    height: 160,
-                                                                    width: 171,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: const Color(
-                                                                          0xffffffff),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              17.0),
-                                                                    ),
-                                                                    child: controller.jsonPartyOgranisationDataToday[index]['image_status'] ==
-                                                                            '1'
-                                                                        ? ClipRRect(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(13.0),
-                                                                            child:
-                                                                                CachedNetworkImage(
-                                                                              imageUrl: '${controller.jsonPartyOgranisationDataToday[index]['cover_photo']}',
-                                                                              fit: BoxFit.cover,
-                                                                            ),
-                                                                          )
-                                                                        : ClipRRect(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(13.0),
-                                                                            child:
-                                                                                ImageFiltered(
-                                                                              imageFilter: ui.ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
-                                                                              child: CachedNetworkImage(
-                                                                                imageUrl: '${controller.jsonPartyOgranisationDataToday[index]['cover_photo']}',
-                                                                                fit: BoxFit.cover,
-                                                                              ),
-                                                                            ),
-                                                                          )),
-                                                                Positioned(
-                                                                  bottom: 0,
-                                                                  child: Stack(
-                                                                    children: [
-                                                                      Container(
-                                                                        height:
-                                                                            80,
-                                                                        width:
-                                                                            171,
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          color:
-                                                                              const Color(0xffffffff),
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(20.0),
-                                                                          boxShadow: [
-                                                                            BoxShadow(
-                                                                              color: Colors.grey.withOpacity(0.5),
-                                                                              spreadRadius: 3,
-                                                                              blurRadius: 7,
-                                                                              offset: Offset(0, 3), // changes position of shadow
-                                                                            ),
-                                                                          ],
-                                                                          border:
-                                                                              Border.all(
-                                                                            color:
-                                                                                Colors.black,
-                                                                            width:
-                                                                                1,
-                                                                          ),
-                                                                        ),
-                                                                        child:
-                                                                            Padding(
-                                                                          padding: const EdgeInsets.only(
-                                                                              top: 10.0,
-                                                                              left: 20.0,
-                                                                              right: 10.0),
-                                                                          child:
-                                                                              Column(
-                                                                            crossAxisAlignment:
-                                                                                CrossAxisAlignment.start,
-                                                                            children: [
-                                                                              Text(
-                                                                                "${controller.jsonPartyOgranisationDataToday[index]['title']}",
-                                                                                style: TextStyle(
-                                                                                  overflow: TextOverflow.ellipsis,
-                                                                                  fontWeight: FontWeight.bold,
-                                                                                  fontFamily: 'malgun',
-                                                                                  fontSize: 12.sp,
-                                                                                  color: const Color(0xff564d4d),
-                                                                                  height: 1.25,
-                                                                                ),
-                                                                                textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false),
-                                                                                softWrap: false,
-                                                                              ),
-                                                                              SizedBox(
-                                                                                height: 10,
-                                                                              ),
-                                                                              Text(
-                                                                                '${controller.jsonPartyOgranisationDataToday[index]['start_time']}',
-                                                                                style: TextStyle(
-                                                                                  fontFamily: 'malgun',
-                                                                                  fontSize: 12.sp,
-                                                                                  color: Colors.black,
-                                                                                ),
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                controller.lengthOfTodayParties
-                                                                            .value !=
-                                                                        0
-                                                                    ? Positioned(
-                                                                        left: 0,
-                                                                        top: 0,
-                                                                        child: Container(
-                                                                            height: 50,
-                                                                            width: 55,
-                                                                            child: GestureDetector(
-                                                                              onTap: () {
-                                                                                Get.to(PopularPartyPreview(isPopularParty: false, data: controller.jsonPartyOgranisationDataToday[index]));
-                                                                              },
-                                                                              child: Card(
-                                                                                elevation: 5,
-                                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                                                                                child: Container(decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(40)), child: SizedBox(height: 15, width: 15, child: Lottie.asset('assets/21159-tm-boost-button.json'))),
-                                                                              ),
-                                                                            )),
-                                                                      )
-                                                                    : Container(),
-                                                                Positioned(
-                                                                  bottom: 15,
-                                                                  right: 0,
-                                                                  child:
-                                                                      SizedBox(
-                                                                    height: 30,
-                                                                    child:
-                                                                        ElevatedButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        addOrganizationsEvent2Controller
-                                                                            .isEditable
-                                                                            .value = true;
-                                                                        addOrganizationsEvent2Controller
-                                                                            .isPopular
-                                                                            .value = false;
-                                                                        addOrganizationsEvent2Controller
-                                                                            .getPrefiledData = controller
-                                                                                .jsonPartyOgranisationDataToday[
-                                                                            index];
-                                                                        Get.toNamed(
-                                                                            Routes.ADD_ORGANIZATIONS_EVENT2);
-                                                                      },
-                                                                      child:
-                                                                          Container(
-                                                                        child:
-                                                                            Center(
-                                                                          child:
-                                                                              Row(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.center,
-                                                                            crossAxisAlignment:
-                                                                                CrossAxisAlignment.center,
-                                                                            children: [
-                                                                              Icon(
-                                                                                Icons.edit,
-                                                                                color: Colors.white,
-                                                                                size: 14,
-                                                                              ),
-                                                                              Text(
-                                                                                "Edit",
-                                                                                style: TextStyle(color: Colors.white),
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                        width:
-                                                                            50,
-                                                                        decoration: BoxDecoration(
-                                                                            color:
-                                                                                Colors.orange,
-                                                                            borderRadius: BorderRadius.circular(30)),
-                                                                      ),
-                                                                      style: ElevatedButton.styleFrom(
-                                                                          elevation:
-                                                                              0,
-                                                                          backgroundColor:
-                                                                              Colors.transparent),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
+                                            // physics: NeverScrollableScrollPhysics(),
+                                            itemCount: controller
+                                                .lengthOfTodayParties.value,
+                                            itemBuilder: (context, index) {
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    Get.to(PopularPartyPreview(
+                                                      isPopularParty: false,
+                                                      data: controller
+                                                              .jsonPartyOgranisationDataToday[
+                                                          index],
+                                                    ));
+                                                  },
+                                                  child: Stack(
+                                                    children: [
+                                                      Container(
+                                                          height: 160,
+                                                          width: 171,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: const Color(
+                                                                0xffffffff),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        17.0),
                                                           ),
-                                                        )
-                                                      : Container();
-                                                }),
-                                          ),
-                                        ],
+                                                          child: controller.jsonPartyOgranisationDataToday[
+                                                                          index]
+                                                                      [
+                                                                      'image_status'] ==
+                                                                  '1'
+                                                              ? ClipRRect(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              13.0),
+                                                                  child:
+                                                                      CachedNetworkImage(
+                                                                    imageUrl:
+                                                                        '${controller.jsonPartyOgranisationDataToday[index]['cover_photo']}',
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  ),
+                                                                )
+                                                              : ClipRRect(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              13.0),
+                                                                  child:
+                                                                      ImageFiltered(
+                                                                    imageFilter: ui.ImageFilter.blur(
+                                                                        sigmaX:
+                                                                            8.0,
+                                                                        sigmaY:
+                                                                            8.0),
+                                                                    child:
+                                                                        CachedNetworkImage(
+                                                                      imageUrl:
+                                                                          '${controller.jsonPartyOgranisationDataToday[index]['cover_photo']}',
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    ),
+                                                                  ),
+                                                                )),
+                                                      Positioned(
+                                                        bottom: 0,
+                                                        child: Stack(
+                                                          children: [
+                                                            Container(
+                                                              height: 80,
+                                                              width: 171,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: const Color(
+                                                                    0xffffffff),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            20.0),
+                                                                boxShadow: [
+                                                                  BoxShadow(
+                                                                    color: Colors
+                                                                        .grey
+                                                                        .withOpacity(
+                                                                            0.5),
+                                                                    spreadRadius:
+                                                                        3,
+                                                                    blurRadius:
+                                                                        7,
+                                                                    offset: Offset(
+                                                                        0,
+                                                                        3), // changes position of shadow
+                                                                  ),
+                                                                ],
+                                                                border:
+                                                                    Border.all(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  width: 1,
+                                                                ),
+                                                              ),
+                                                              child: Padding(
+                                                                padding: const EdgeInsets
+                                                                        .only(
+                                                                    top: 10.0,
+                                                                    left: 20.0,
+                                                                    right:
+                                                                        10.0),
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Text(
+                                                                      "${controller.jsonPartyOgranisationDataToday[index]['title']}",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            'malgun',
+                                                                        fontSize:
+                                                                            12.sp,
+                                                                        color: const Color(
+                                                                            0xff564d4d),
+                                                                        height:
+                                                                            1.25,
+                                                                      ),
+                                                                      textHeightBehavior:
+                                                                          TextHeightBehavior(
+                                                                              applyHeightToFirstAscent: false),
+                                                                      softWrap:
+                                                                          false,
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          10,
+                                                                    ),
+                                                                    Text(
+                                                                      '${controller.jsonPartyOgranisationDataToday[index]['start_time']}',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontFamily:
+                                                                            'malgun',
+                                                                        fontSize:
+                                                                            12.sp,
+                                                                        color: Colors
+                                                                            .black,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      controller.lengthOfTodayParties
+                                                                  .value !=
+                                                              0
+                                                          ? Positioned(
+                                                              left: 0,
+                                                              top: 0,
+                                                              child: Container(
+                                                                  height: 50,
+                                                                  width: 55,
+                                                                  child:
+                                                                      GestureDetector(
+                                                                    onTap: () {
+                                                                      Get.to(PopularPartyPreview(
+                                                                          isPopularParty:
+                                                                              false,
+                                                                          data:
+                                                                              controller.jsonPartyOgranisationDataToday[index]));
+                                                                    },
+                                                                    child: Card(
+                                                                      elevation:
+                                                                          5,
+                                                                      shape: RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(40)),
+                                                                      child: Container(
+                                                                          decoration: BoxDecoration(
+                                                                              color: Colors
+                                                                                  .black,
+                                                                              borderRadius: BorderRadius.circular(
+                                                                                  40)),
+                                                                          child: SizedBox(
+                                                                              height: 15,
+                                                                              width: 15,
+                                                                              child: Lottie.asset('assets/21159-tm-boost-button.json'))),
+                                                                    ),
+                                                                  )),
+                                                            )
+                                                          : Container(),
+                                                      Positioned(
+                                                        bottom: 15,
+                                                        right: 0,
+                                                        child: SizedBox(
+                                                          height: 30,
+                                                          child: ElevatedButton(
+                                                            onPressed: () {
+                                                              addOrganizationsEvent2Controller
+                                                                  .isEditable
+                                                                  .value = true;
+                                                              addOrganizationsEvent2Controller
+                                                                      .isPopular
+                                                                      .value =
+                                                                  false;
+                                                              addOrganizationsEvent2Controller
+                                                                      .getPrefiledData =
+                                                                  controller
+                                                                          .jsonPartyOgranisationDataToday[
+                                                                      index];
+                                                              Get.toNamed(Routes
+                                                                  .ADD_ORGANIZATIONS_EVENT2);
+                                                            },
+                                                            child: Container(
+                                                              child: Center(
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Icon(
+                                                                      Icons
+                                                                          .edit,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      size: 14,
+                                                                    ),
+                                                                    Text(
+                                                                      "Edit",
+                                                                      style: TextStyle(
+                                                                          color:
+                                                                              Colors.white),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              width: 50,
+                                                              decoration: BoxDecoration(
+                                                                  color: Colors
+                                                                      .orange,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              30)),
+                                                            ),
+                                                            style: ElevatedButton
+                                                                .styleFrom(
+                                                                    elevation:
+                                                                        0,
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .transparent),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            }),
                                       ),
-                                    ),
+                                    ],
+                                  ),
+                                ),
                           SizedBox(
                             height: 20,
                           ),
@@ -1240,29 +1280,79 @@ class _OrganizationProfileNewViewState
                                             itemCount: controller
                                                 .lengthOfTommParties.value,
                                             itemBuilder: (context, index) {
-                                              return controller.jsonPartyOgranisationDataTomm[
-                                                              index]
-                                                          ['papular_status'] !=
-                                                      '1'
-                                                  ? Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: GestureDetector(
-                                                        onTap: () {
-                                                          Get.to(
-                                                              PopularPartyPreview(
-                                                            isPopularParty:
-                                                                false,
-                                                            data: controller
-                                                                    .jsonPartyOgranisationDataTomm[
-                                                                index],
-                                                          ));
-                                                        },
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    Get.to(PopularPartyPreview(
+                                                      isPopularParty: false,
+                                                      data: controller
+                                                              .jsonPartyOgranisationDataTomm[
+                                                          index],
+                                                    ));
+                                                  },
+                                                  child: Stack(
+                                                    children: [
+                                                      Container(
+                                                        height: 160,
+                                                        width: 171,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: const Color(
+                                                              0xffffffff),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      17.0),
+                                                        ),
+                                                        child: controller.jsonPartyOgranisationDataTomm[
+                                                                        index][
+                                                                    'image_status'] ==
+                                                                '1'
+                                                            ? ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            13.0),
+                                                                child:
+                                                                    CachedNetworkImage(
+                                                                  imageUrl:
+                                                                      '${controller.jsonPartyOgranisationDataTomm[index]['cover_photo']}',
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                              )
+                                                            : ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            13.0),
+                                                                child:
+                                                                    ImageFiltered(
+                                                                  imageFilter: ui
+                                                                          .ImageFilter
+                                                                      .blur(
+                                                                          sigmaX:
+                                                                              8.0,
+                                                                          sigmaY:
+                                                                              8.0),
+                                                                  child:
+                                                                      CachedNetworkImage(
+                                                                    imageUrl:
+                                                                        '${controller.jsonPartyOgranisationDataTomm[index]['cover_photo']}',
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                      ),
+                                                      Positioned(
+                                                        bottom: 0,
                                                         child: Stack(
                                                           children: [
                                                             Container(
-                                                              height: 160,
+                                                              height: 80,
                                                               width: 171,
                                                               decoration:
                                                                   BoxDecoration(
@@ -1271,232 +1361,196 @@ class _OrganizationProfileNewViewState
                                                                 borderRadius:
                                                                     BorderRadius
                                                                         .circular(
-                                                                            17.0),
-                                                              ),
-                                                              child: controller.jsonPartyOgranisationDataTomm[
-                                                                              index]
-                                                                          [
-                                                                          'image_status'] ==
-                                                                      '1'
-                                                                  ? ClipRRect(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              13.0),
-                                                                      child:
-                                                                          CachedNetworkImage(
-                                                                        imageUrl:
-                                                                            '${controller.jsonPartyOgranisationDataTomm[index]['cover_photo']}',
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                      ),
-                                                                    )
-                                                                  : ClipRRect(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              13.0),
-                                                                      child:
-                                                                          ImageFiltered(
-                                                                        imageFilter: ui.ImageFilter.blur(
-                                                                            sigmaX:
-                                                                                8.0,
-                                                                            sigmaY:
-                                                                                8.0),
-                                                                        child:
-                                                                            CachedNetworkImage(
-                                                                          imageUrl:
-                                                                              '${controller.jsonPartyOgranisationDataTomm[index]['cover_photo']}',
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                            ),
-                                                            Positioned(
-                                                              bottom: 0,
-                                                              child: Stack(
-                                                                children: [
-                                                                  Container(
-                                                                    height: 80,
-                                                                    width: 171,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: const Color(
-                                                                          0xffffffff),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              20.0),
-                                                                      boxShadow: [
-                                                                        BoxShadow(
-                                                                          color: Colors
-                                                                              .grey
-                                                                              .withOpacity(0.5),
-                                                                          spreadRadius:
-                                                                              3,
-                                                                          blurRadius:
-                                                                              7,
-                                                                          offset: Offset(
-                                                                              0,
-                                                                              3), // changes position of shadow
-                                                                        ),
-                                                                      ],
-                                                                      border:
-                                                                          Border
-                                                                              .all(
-                                                                        color: Colors
-                                                                            .black,
-                                                                        width:
-                                                                            1,
-                                                                      ),
-                                                                    ),
-                                                                    child:
-                                                                        Padding(
-                                                                      padding: const EdgeInsets
-                                                                              .only(
-                                                                          top:
-                                                                              10.0,
-                                                                          left:
-                                                                              20.0,
-                                                                          right:
-                                                                              10.0),
-                                                                      child:
-                                                                          Column(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.start,
-                                                                        children: [
-                                                                          Text(
-                                                                            "${controller.jsonPartyOgranisationDataTomm[index]['title']}",
-                                                                            style:
-                                                                                TextStyle(
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: 'malgun',
-                                                                              fontSize: 12.sp,
-                                                                              color: const Color(0xff564d4d),
-                                                                              height: 1.25,
-                                                                            ),
-                                                                            textHeightBehavior:
-                                                                                TextHeightBehavior(applyHeightToFirstAscent: false),
-                                                                            softWrap:
-                                                                                false,
-                                                                          ),
-                                                                          SizedBox(
-                                                                            height:
-                                                                                10,
-                                                                          ),
-                                                                          Text(
-                                                                            '${controller.jsonPartyOgranisationDataTomm[index]['start_time']}',
-                                                                            style:
-                                                                                TextStyle(
-                                                                              fontFamily: 'malgun',
-                                                                              fontSize: 12.sp,
-                                                                              color: Colors.black,
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            controller.lengthOfTommParties
-                                                                        .value !=
-                                                                    0
-                                                                ? Positioned(
-                                                                    left: 0,
-                                                                    top: 0,
-                                                                    child: Container(
-                                                                        height: 50,
-                                                                        width: 55,
-                                                                        child: GestureDetector(
-                                                                          onTap:
-                                                                              () {
-                                                                            Get.to(PopularPartyPreview(
-                                                                                isPopularParty: false,
-                                                                                data: controller.jsonPartyOgranisationDataTomm[index]));
-                                                                          },
-                                                                          child:
-                                                                              Card(
-                                                                            elevation:
-                                                                                5,
-                                                                            shape:
-                                                                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                                                                            child:
-                                                                                Container(decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(40)), child: SizedBox(height: 15, width: 15, child: Lottie.asset('assets/21159-tm-boost-button.json'))),
-                                                                          ),
-                                                                        )),
-                                                                  )
-                                                                : Container(),
-                                                            Positioned(
-                                                              bottom: 15,
-                                                              right: 0,
-                                                              child: SizedBox(
-                                                                height: 30,
-                                                                child:
-                                                                    ElevatedButton(
-                                                                  onPressed:
-                                                                      () {
-                                                                    addOrganizationsEvent2Controller
-                                                                        .isEditable
-                                                                        .value = true;
-                                                                    addOrganizationsEvent2Controller
-                                                                        .isPopular
-                                                                        .value = false;
-                                                                    addOrganizationsEvent2Controller
-                                                                        .getPrefiledData = controller
-                                                                            .jsonPartyOgranisationDataTomm[
-                                                                        index];
-                                                                    Get.toNamed(
-                                                                        Routes
-                                                                            .ADD_ORGANIZATIONS_EVENT2);
-                                                                  },
-                                                                  child:
-                                                                      Container(
-                                                                    child:
-                                                                        Center(
-                                                                      child:
-                                                                          Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.center,
-                                                                        children: [
-                                                                          Icon(
-                                                                            Icons.edit,
-                                                                            color:
-                                                                                Colors.white,
-                                                                            size:
-                                                                                14,
-                                                                          ),
-                                                                          Text(
-                                                                            "Edit",
-                                                                            style:
-                                                                                TextStyle(color: Colors.white),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    width: 50,
-                                                                    decoration: BoxDecoration(
-                                                                        color: Colors
-                                                                            .orange,
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(30)),
+                                                                            20.0),
+                                                                boxShadow: [
+                                                                  BoxShadow(
+                                                                    color: Colors
+                                                                        .grey
+                                                                        .withOpacity(
+                                                                            0.5),
+                                                                    spreadRadius:
+                                                                        3,
+                                                                    blurRadius:
+                                                                        7,
+                                                                    offset: Offset(
+                                                                        0,
+                                                                        3), // changes position of shadow
                                                                   ),
-                                                                  style: ElevatedButton.styleFrom(
-                                                                      elevation:
-                                                                          0,
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .transparent),
+                                                                ],
+                                                                border:
+                                                                    Border.all(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  width: 1,
                                                                 ),
                                                               ),
-                                                            ),
+                                                              child: Padding(
+                                                                padding: const EdgeInsets
+                                                                        .only(
+                                                                    top: 10.0,
+                                                                    left: 20.0,
+                                                                    right:
+                                                                        10.0),
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Text(
+                                                                      "${controller.jsonPartyOgranisationDataTomm[index]['title']}",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            'malgun',
+                                                                        fontSize:
+                                                                            12.sp,
+                                                                        color: const Color(
+                                                                            0xff564d4d),
+                                                                        height:
+                                                                            1.25,
+                                                                      ),
+                                                                      textHeightBehavior:
+                                                                          TextHeightBehavior(
+                                                                              applyHeightToFirstAscent: false),
+                                                                      softWrap:
+                                                                          false,
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          10,
+                                                                    ),
+                                                                    Text(
+                                                                      '${controller.jsonPartyOgranisationDataTomm[index]['start_time']}',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontFamily:
+                                                                            'malgun',
+                                                                        fontSize:
+                                                                            12.sp,
+                                                                        color: Colors
+                                                                            .black,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            )
                                                           ],
                                                         ),
                                                       ),
-                                                    )
-                                                  : Container();
+                                                      controller.lengthOfTommParties
+                                                                  .value !=
+                                                              0
+                                                          ? Positioned(
+                                                              left: 0,
+                                                              top: 0,
+                                                              child: Container(
+                                                                  height: 50,
+                                                                  width: 55,
+                                                                  child:
+                                                                      GestureDetector(
+                                                                    onTap: () {
+                                                                      Get.to(PopularPartyPreview(
+                                                                          isPopularParty:
+                                                                              false,
+                                                                          data:
+                                                                              controller.jsonPartyOgranisationDataTomm[index]));
+                                                                    },
+                                                                    child: Card(
+                                                                      elevation:
+                                                                          5,
+                                                                      shape: RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(40)),
+                                                                      child: Container(
+                                                                          decoration: BoxDecoration(
+                                                                              color: Colors
+                                                                                  .black,
+                                                                              borderRadius: BorderRadius.circular(
+                                                                                  40)),
+                                                                          child: SizedBox(
+                                                                              height: 15,
+                                                                              width: 15,
+                                                                              child: Lottie.asset('assets/21159-tm-boost-button.json'))),
+                                                                    ),
+                                                                  )),
+                                                            )
+                                                          : Container(),
+                                                      Positioned(
+                                                        bottom: 15,
+                                                        right: 0,
+                                                        child: SizedBox(
+                                                          height: 30,
+                                                          child: ElevatedButton(
+                                                            onPressed: () {
+                                                              addOrganizationsEvent2Controller
+                                                                  .isEditable
+                                                                  .value = true;
+                                                              addOrganizationsEvent2Controller
+                                                                      .isPopular
+                                                                      .value =
+                                                                  false;
+                                                              addOrganizationsEvent2Controller
+                                                                      .getPrefiledData =
+                                                                  controller
+                                                                          .jsonPartyOgranisationDataTomm[
+                                                                      index];
+                                                              Get.toNamed(Routes
+                                                                  .ADD_ORGANIZATIONS_EVENT2);
+                                                            },
+                                                            child: Container(
+                                                              child: Center(
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Icon(
+                                                                      Icons
+                                                                          .edit,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      size: 14,
+                                                                    ),
+                                                                    Text(
+                                                                      "Edit",
+                                                                      style: TextStyle(
+                                                                          color:
+                                                                              Colors.white),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              width: 50,
+                                                              decoration: BoxDecoration(
+                                                                  color: Colors
+                                                                      .orange,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              30)),
+                                                            ),
+                                                            style: ElevatedButton
+                                                                .styleFrom(
+                                                                    elevation:
+                                                                        0,
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .transparent),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
                                             }),
                                       ),
                                     ],
@@ -1545,29 +1599,79 @@ class _OrganizationProfileNewViewState
                                             itemCount: controller
                                                 .lengthOfUpcomingParties.value,
                                             itemBuilder: (context, index) {
-                                              return controller.jsonPartyOgranisationDataUpcomming[
-                                                              index]
-                                                          ['papular_status'] !=
-                                                      '1'
-                                                  ? Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: GestureDetector(
-                                                        onTap: () {
-                                                          Get.to(
-                                                              PopularPartyPreview(
-                                                            isPopularParty:
-                                                                false,
-                                                            data: controller
-                                                                    .jsonPartyOgranisationDataUpcomming[
-                                                                index],
-                                                          ));
-                                                        },
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    Get.to(PopularPartyPreview(
+                                                      isPopularParty: false,
+                                                      data: controller
+                                                              .jsonPartyOgranisationDataUpcomming[
+                                                          index],
+                                                    ));
+                                                  },
+                                                  child: Stack(
+                                                    children: [
+                                                      Container(
+                                                        height: 160,
+                                                        width: 171,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: const Color(
+                                                              0xffffffff),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      17.0),
+                                                        ),
+                                                        child: controller.jsonPartyOgranisationDataUpcomming[
+                                                                        index][
+                                                                    'image_status'] ==
+                                                                '1'
+                                                            ? ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            13.0),
+                                                                child:
+                                                                    CachedNetworkImage(
+                                                                  imageUrl:
+                                                                      '${controller.jsonPartyOgranisationDataUpcomming[index]['cover_photo']}',
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                              )
+                                                            : ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            13.0),
+                                                                child:
+                                                                    ImageFiltered(
+                                                                  imageFilter: ui
+                                                                          .ImageFilter
+                                                                      .blur(
+                                                                          sigmaX:
+                                                                              8.0,
+                                                                          sigmaY:
+                                                                              8.0),
+                                                                  child:
+                                                                      CachedNetworkImage(
+                                                                    imageUrl:
+                                                                        '${controller.jsonPartyOgranisationDataUpcomming[index]['cover_photo']}',
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                      ),
+                                                      Positioned(
+                                                        bottom: 0,
                                                         child: Stack(
                                                           children: [
                                                             Container(
-                                                              height: 160,
+                                                              height: 80,
                                                               width: 171,
                                                               decoration:
                                                                   BoxDecoration(
@@ -1576,241 +1680,212 @@ class _OrganizationProfileNewViewState
                                                                 borderRadius:
                                                                     BorderRadius
                                                                         .circular(
-                                                                            17.0),
-                                                              ),
-                                                              child: controller.jsonPartyOgranisationDataUpcomming[
-                                                                              index]
-                                                                          [
-                                                                          'image_status'] ==
-                                                                      '1'
-                                                                  ? ClipRRect(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              13.0),
-                                                                      child:
-                                                                          CachedNetworkImage(
-                                                                        imageUrl:
-                                                                            '${controller.jsonPartyOgranisationDataUpcomming[index]['cover_photo']}',
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                      ),
-                                                                    )
-                                                                  : ClipRRect(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              13.0),
-                                                                      child:
-                                                                          ImageFiltered(
-                                                                        imageFilter: ui.ImageFilter.blur(
-                                                                            sigmaX:
-                                                                                8.0,
-                                                                            sigmaY:
-                                                                                8.0),
-                                                                        child:
-                                                                            CachedNetworkImage(
-                                                                          imageUrl:
-                                                                              '${controller.jsonPartyOgranisationDataUpcomming[index]['cover_photo']}',
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                            ),
-                                                            Positioned(
-                                                              bottom: 0,
-                                                              child: Stack(
-                                                                children: [
-                                                                  Container(
-                                                                    height: 80,
-                                                                    width: 171,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: const Color(
-                                                                          0xffffffff),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              20.0),
-                                                                      boxShadow: [
-                                                                        BoxShadow(
-                                                                          color: Colors
-                                                                              .grey
-                                                                              .withOpacity(0.5),
-                                                                          spreadRadius:
-                                                                              3,
-                                                                          blurRadius:
-                                                                              7,
-                                                                          offset: Offset(
-                                                                              0,
-                                                                              3), // changes position of shadow
-                                                                        ),
-                                                                      ],
-                                                                      border:
-                                                                          Border
-                                                                              .all(
-                                                                        color: Colors
-                                                                            .black,
-                                                                        width:
-                                                                            1,
-                                                                      ),
-                                                                    ),
-                                                                    child:
-                                                                        Padding(
-                                                                      padding: const EdgeInsets
-                                                                              .only(
-                                                                          top:
-                                                                              10.0,
-                                                                          left:
-                                                                              20.0,
-                                                                          right:
-                                                                              10.0),
-                                                                      child:
-                                                                          Column(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.start,
-                                                                        children: [
-                                                                          Text(
-                                                                            "${controller.jsonPartyOgranisationDataUpcomming[index]['title']}",
-                                                                            style:
-                                                                                TextStyle(
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: 'malgun',
-                                                                              fontSize: 12.sp,
-                                                                              color: const Color(0xff564d4d),
-                                                                              height: 1.25,
-                                                                            ),
-                                                                            textHeightBehavior:
-                                                                                TextHeightBehavior(applyHeightToFirstAscent: false),
-                                                                            softWrap:
-                                                                                false,
-                                                                          ),
-                                                                          Column(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.start,
-                                                                            crossAxisAlignment:
-                                                                                CrossAxisAlignment.start,
-                                                                            children: [
-                                                                              Text(
-                                                                                DateFormat.yMEd().format(DateTime.parse(controller.jsonPartyOgranisationDataUpcomming[index]['start_date'])),
-                                                                                style: TextStyle(
-                                                                                  fontSize: 12.sp,
-                                                                                  color: const Color(0xffc40d0d),
-                                                                                ),
-                                                                              ),
-                                                                              Text(
-                                                                                '${controller.jsonPartyOgranisationDataUpcomming[index]['start_time']}',
-                                                                                style: TextStyle(
-                                                                                  fontSize: 12.sp,
-                                                                                  color: Colors.black,
-                                                                                ),
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            controller.lengthOfUpcomingParties
-                                                                        .value !=
-                                                                    0
-                                                                ? Positioned(
-                                                                    left: 0,
-                                                                    top: 0,
-                                                                    child: Container(
-                                                                        height: 40,
-                                                                        width: 40,
-                                                                        child: GestureDetector(
-                                                                          onTap:
-                                                                              () {
-                                                                            Get.to(PopularPartyPreview(
-                                                                                isPopularParty: false,
-                                                                                data: controller.jsonPartyOgranisationDataUpcomming[index]));
-                                                                          },
-                                                                          child:
-                                                                              Card(
-                                                                            elevation:
-                                                                                5,
-                                                                            shape:
-                                                                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                                                                            child:
-                                                                                Container(decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(40)), child: SizedBox(height: 15, width: 15, child: Lottie.asset('assets/21159-tm-boost-button.json'))),
-                                                                          ),
-                                                                        )),
-                                                                  )
-                                                                : Container(),
-                                                            Positioned(
-                                                              bottom: 5,
-                                                              right: 0,
-                                                              child: SizedBox(
-                                                                height: 30,
-                                                                child:
-                                                                    ElevatedButton(
-                                                                  onPressed:
-                                                                      () {
-                                                                    addOrganizationsEvent2Controller
-                                                                        .isEditable
-                                                                        .value = true;
-                                                                    addOrganizationsEvent2Controller
-                                                                        .isPopular
-                                                                        .value = false;
-                                                                    addOrganizationsEvent2Controller
-                                                                        .getPrefiledData = controller
-                                                                            .jsonPartyOgranisationDataUpcomming[
-                                                                        index];
-                                                                    Get.toNamed(
-                                                                        Routes
-                                                                            .ADD_ORGANIZATIONS_EVENT2);
-                                                                  },
-                                                                  child:
-                                                                      Container(
-                                                                    child:
-                                                                        Center(
-                                                                      child:
-                                                                          Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.center,
-                                                                        children: [
-                                                                          Icon(
-                                                                            Icons.edit,
-                                                                            color:
-                                                                                Colors.white,
-                                                                            size:
-                                                                                14,
-                                                                          ),
-                                                                          Text(
-                                                                            "Edit",
-                                                                            style:
-                                                                                TextStyle(color: Colors.white),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    width: 50,
-                                                                    decoration: BoxDecoration(
-                                                                        color: Colors
-                                                                            .orange,
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(30)),
+                                                                            20.0),
+                                                                boxShadow: [
+                                                                  BoxShadow(
+                                                                    color: Colors
+                                                                        .grey
+                                                                        .withOpacity(
+                                                                            0.5),
+                                                                    spreadRadius:
+                                                                        3,
+                                                                    blurRadius:
+                                                                        7,
+                                                                    offset: Offset(
+                                                                        0,
+                                                                        3), // changes position of shadow
                                                                   ),
-                                                                  style: ElevatedButton.styleFrom(
-                                                                      elevation:
-                                                                          0,
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .transparent),
+                                                                ],
+                                                                border:
+                                                                    Border.all(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  width: 1,
                                                                 ),
                                                               ),
-                                                            ),
+                                                              child: Padding(
+                                                                padding: const EdgeInsets
+                                                                        .only(
+                                                                    top: 10.0,
+                                                                    left: 20.0,
+                                                                    right:
+                                                                        10.0),
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Text(
+                                                                      "${controller.jsonPartyOgranisationDataUpcomming[index]['title']}",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            'malgun',
+                                                                        fontSize:
+                                                                            12.sp,
+                                                                        color: const Color(
+                                                                            0xff564d4d),
+                                                                        height:
+                                                                            1.25,
+                                                                      ),
+                                                                      textHeightBehavior:
+                                                                          TextHeightBehavior(
+                                                                              applyHeightToFirstAscent: false),
+                                                                      softWrap:
+                                                                          false,
+                                                                    ),
+                                                                    Column(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .start,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        Text(
+                                                                          DateFormat.yMEd().format(DateTime.parse(controller.jsonPartyOgranisationDataUpcomming[index]
+                                                                              [
+                                                                              'start_date'])),
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontSize:
+                                                                                12.sp,
+                                                                            color:
+                                                                                const Color(0xffc40d0d),
+                                                                          ),
+                                                                        ),
+                                                                        Text(
+                                                                          '${controller.jsonPartyOgranisationDataUpcomming[index]['start_time']}',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontSize:
+                                                                                12.sp,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            )
                                                           ],
                                                         ),
                                                       ),
-                                                    )
-                                                  : Container();
+                                                      controller.lengthOfUpcomingParties
+                                                                  .value !=
+                                                              0
+                                                          ? Positioned(
+                                                              left: 0,
+                                                              top: 0,
+                                                              child: Container(
+                                                                  height: 40,
+                                                                  width: 40,
+                                                                  child:
+                                                                      GestureDetector(
+                                                                    onTap: () {
+                                                                      Get.to(PopularPartyPreview(
+                                                                          isPopularParty:
+                                                                              false,
+                                                                          data:
+                                                                              controller.jsonPartyOgranisationDataUpcomming[index]));
+                                                                    },
+                                                                    child: Card(
+                                                                      elevation:
+                                                                          5,
+                                                                      shape: RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(40)),
+                                                                      child: Container(
+                                                                          decoration: BoxDecoration(
+                                                                              color: Colors
+                                                                                  .black,
+                                                                              borderRadius: BorderRadius.circular(
+                                                                                  40)),
+                                                                          child: SizedBox(
+                                                                              height: 15,
+                                                                              width: 15,
+                                                                              child: Lottie.asset('assets/21159-tm-boost-button.json'))),
+                                                                    ),
+                                                                  )),
+                                                            )
+                                                          : Container(),
+                                                      Positioned(
+                                                        bottom: 5,
+                                                        right: 0,
+                                                        child: SizedBox(
+                                                          height: 30,
+                                                          child: ElevatedButton(
+                                                            onPressed: () {
+                                                              addOrganizationsEvent2Controller
+                                                                  .isEditable
+                                                                  .value = true;
+                                                              addOrganizationsEvent2Controller
+                                                                      .isPopular
+                                                                      .value =
+                                                                  false;
+                                                              addOrganizationsEvent2Controller
+                                                                      .getPrefiledData =
+                                                                  controller
+                                                                          .jsonPartyOgranisationDataUpcomming[
+                                                                      index];
+                                                              Get.toNamed(Routes
+                                                                  .ADD_ORGANIZATIONS_EVENT2);
+                                                            },
+                                                            child: Container(
+                                                              child: Center(
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Icon(
+                                                                      Icons
+                                                                          .edit,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      size: 14,
+                                                                    ),
+                                                                    Text(
+                                                                      "Edit",
+                                                                      style: TextStyle(
+                                                                          color:
+                                                                              Colors.white),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              width: 50,
+                                                              decoration: BoxDecoration(
+                                                                  color: Colors
+                                                                      .orange,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              30)),
+                                                            ),
+                                                            style: ElevatedButton
+                                                                .styleFrom(
+                                                                    elevation:
+                                                                        0,
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .transparent),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
                                             }),
                                       ),
                                     ],

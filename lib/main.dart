@@ -51,6 +51,7 @@ class App extends StatelessWidget {
             'MapScreen': (p0) => MapScreen(),
             'MapScreen2': (p0) => MapScreen2(),
           },
+          // home: ProfileType(),
           initialRoute: GetStorage().read('token') == null
               ? AppPages.INITIAL
               : Routes.ORGANIZATION_PROFILE_NEW,
