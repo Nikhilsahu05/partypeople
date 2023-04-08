@@ -7,7 +7,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
 
-import '../../addIndividualEvent/controllers/add_individual_event_controller.dart';
 import '../models/place.dart';
 import '../models/place_search.dart';
 import '../services/geolocator_service.dart';
@@ -70,7 +69,6 @@ class ApplicationBloc with ChangeNotifier {
     // var sLocation = await placesService.getPlace(placeId);
 
     selectedLocation?.add(placeId);
-    AddIndividualEventController.address = placeId.formattedAddress!;
     selectedResult = placeId;
     // selectedLocationStatic = sLocation;
     result = null;

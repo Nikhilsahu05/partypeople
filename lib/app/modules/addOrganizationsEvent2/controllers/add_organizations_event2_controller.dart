@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -97,10 +96,14 @@ class AddOrganizationsEvent2Controller extends GetxController {
       print(result.period); // DayPeriod.pm or DayPeriod.am
       print(result.hour);
       print(result.minute);
-      var hour = result.hour.toString().length == 1
+      var hour = result.hour
+          .toString()
+          .length == 1
           ? '0${result.hour.toString()}'
           : result.hour.toString();
-      var min = result.minute.toString().length == 1
+      var min = result.minute
+          .toString()
+          .length == 1
           ? '0${result.minute.toString()}'
           : result.minute.toString();
       startTime.text = "$hour:$min";
@@ -114,10 +117,14 @@ class AddOrganizationsEvent2Controller extends GetxController {
       print(result.period); // DayPeriod.pm or DayPeriod.am
       print(result.hour);
       print(result.minute);
-      var hour = result.hour.toString().length == 1
+      var hour = result.hour
+          .toString()
+          .length == 1
           ? '0${result.hour.toString()}'
           : result.hour.toString();
-      var min = result.minute.toString().length == 1
+      var min = result.minute
+          .toString()
+          .length == 1
           ? '0${result.minute.toString()}'
           : result.minute.toString();
       endTime.text = "$hour:$min";
@@ -163,10 +170,18 @@ class AddOrganizationsEvent2Controller extends GetxController {
 
   var fullEditableData;
   GlobalHeaderIDController globalHeaderIDController =
-      Get.put(GlobalHeaderIDController());
+  Get.put(GlobalHeaderIDController());
+
+  @override
+  onInit() {
+    super.onInit();
+    genderList.clear();
+  }
 
   sendEditParty() async {
     isLoading.value = true;
+    print("SENDING PARTY PHOTO TO SAVE =>${timeline.value}");
+
     var headers = {
       'x-access-token': GetStorage().read("token").toString(),
       // 'Cookie': 'ci_session=f72b54d682c45ebf19fcc0fd54cef39508588d0c'
@@ -184,14 +199,19 @@ class AddOrganizationsEvent2Controller extends GetxController {
       'latitude': latLng.latitude.toString(),
       'longitude': latLng.longitude.toString(),
       'type': getPertyType(partyType.value),
-      'gender': genderList.toString().replaceAll('[', ' ').replaceAll(']', ''),
+      'gender': genderList
+          .toString()
+          .replaceAll('[', ' ')
+          .replaceAll(']', '')
+          .toLowerCase()
+          .removeAllWhitespace,
       'start_age': startPeopleAge.text,
       'end_age': endPeopleAge.text,
       'person_limit': peopleLimit.text,
       'status': '1',
       'organization_id': '1',
       'party_amenitie_id':
-          selectedAmenities.toString().replaceAll('[', ' ').replaceAll(']', ''),
+      selectedAmenities.toString().replaceAll('[', ' ').replaceAll(']', ''),
       "phone_number": mobileNumber.text,
       'offers': offersText.text,
       'ladies': ladiesPrice.text,
@@ -244,6 +264,7 @@ class AddOrganizationsEvent2Controller extends GetxController {
 
   sendRequst() async {
     isLoading.value = true;
+    print("SENDING PARTY PHOTO TO SAVE =>${timeline.value}");
     var headers = {
       'x-access-token': GetStorage().read("token").toString(),
       // 'Cookie': 'ci_session=f72b54d682c45ebf19fcc0fd54cef39508588d0c'
@@ -261,7 +282,12 @@ class AddOrganizationsEvent2Controller extends GetxController {
       'latitude': latLng.latitude.toString(),
       'longitude': latLng.longitude.toString(),
       'type': getPertyType(partyType.value),
-      'gender': genderList.toString(),
+      'gender': genderList
+          .toString()
+          .replaceAll('[', '')
+          .replaceAll(']', '')
+          .toLowerCase()
+          .removeAllWhitespace,
       'start_age': startPeopleAge.text,
       'end_age': endPeopleAge.text, "phone_number": mobileNumber.text,
 
@@ -269,7 +295,7 @@ class AddOrganizationsEvent2Controller extends GetxController {
       'status': character.name,
       'organization_id': '1',
       'party_amenitie_id':
-          selectedAmenities.toString().replaceAll('[', ' ').replaceAll(']', ''),
+      selectedAmenities.toString().replaceAll('[', ' ').replaceAll(']', ''),
       'offers': offersText.text,
       'ladies': ladiesPrice.text,
       'stag': stagPrice.text,

@@ -66,53 +66,57 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
               ),
               widget.data['image_status'] == '1'
                   ? Container(
-                      padding: EdgeInsets.zero,
+                padding: EdgeInsets.zero,
+                height: 160,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: CachedNetworkImageWidget(
+                    imageUrl: '${widget.data['cover_photo']}',
+                    width: Get.width,
+                    height: 160,
+                    fit: BoxFit.fill,
+                    errorWidget: (context, url, error) =>
+                        Center(
+                          child: CupertinoActivityIndicator(
+                            radius: 15,
+                            color: Colors.black,
+                          ),
+                        ),
+                    placeholder: (context, url) =>
+                        Center(
+                            child: CupertinoActivityIndicator(
+                                color: Colors.black, radius: 15))),
+                width: Get.width,
+              )
+                  : Container(
+                padding: EdgeInsets.zero,
+                height: 160,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: ImageFiltered(
+                  imageFilter:
+                  ui.ImageFilter.blur(sigmaX: 6.0, sigmaY: 6.0),
+                  child: CachedNetworkImageWidget(
+                      imageUrl: '${widget.data['cover_photo']}',
+                      width: Get.width,
                       height: 160,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: CachedNetworkImageWidget(
-                          imageUrl: '${widget.data['cover_photo']}',
-                          width: Get.width,
-                          height: 160,
-                          fit: BoxFit.fill,
-                          errorWidget: (context, url, error) => Center(
-                                child: CupertinoActivityIndicator(
-                                  radius: 15,
-                                  color: Colors.black,
-                                ),
-                              ),
-                          placeholder: (context, url) => Center(
+                      fit: BoxFit.fill,
+                      errorWidget: (context, url, error) =>
+                          Center(
+                            child: CupertinoActivityIndicator(
+                              radius: 15,
+                              color: Colors.black,
+                            ),
+                          ),
+                      placeholder: (context, url) =>
+                          Center(
                               child: CupertinoActivityIndicator(
                                   color: Colors.black, radius: 15))),
-                      width: Get.width,
-                    )
-                  : Container(
-                      padding: EdgeInsets.zero,
-                      height: 160,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: ImageFiltered(
-                        imageFilter:
-                            ui.ImageFilter.blur(sigmaX: 6.0, sigmaY: 6.0),
-                        child: CachedNetworkImageWidget(
-                            imageUrl: '${widget.data['cover_photo']}',
-                            width: Get.width,
-                            height: 160,
-                            fit: BoxFit.fill,
-                            errorWidget: (context, url, error) => Center(
-                                  child: CupertinoActivityIndicator(
-                                    radius: 15,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                            placeholder: (context, url) => Center(
-                                child: CupertinoActivityIndicator(
-                                    color: Colors.black, radius: 15))),
-                      ),
-                      width: Get.width,
-                    ),
+                ),
+                width: Get.width,
+              ),
               SizedBox(
                 height: 30,
               ),
@@ -141,10 +145,17 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
                 height: 15,
               ),
               BoostButton(
+                  color: widget.data['approval_status'] != '1'
+                      ? Colors.grey.shade300
+                      : Colors.red.shade900,
                   label: 'Boost Post',
                   onPressed: () {
-                    Get.to(SubscriptionView(
-                        id: widget.data['id'], data: widget.data));
+                    if (widget.data['approval_status'] != '1') {
+
+                    } else {
+                      Get.to(SubscriptionView(
+                          id: widget.data['id'], data: widget.data));
+                    }
                   }),
               Divider(),
               ListTile(
@@ -153,11 +164,15 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
                   color: Colors.red,
                 ),
                 title: Text(
-                  "${DateFormat('EEEE, d MMMM y').format(DateTime.parse(widget.data['start_date']))} to ${DateFormat('EEEE, d MMMM y').format(DateTime.parse(widget.data['end_date']))}",
+                  "${DateFormat('EEEE, d MMMM y').format(DateTime.parse(
+                      widget.data['start_date']))} to ${DateFormat(
+                      'EEEE, d MMMM y').format(
+                      DateTime.parse(widget.data['end_date']))}",
                   style: TextStyle(fontFamily: 'malgun', fontSize: 17),
                 ),
                 subtitle: Text(
-                    "${widget.data['start_time']} to ${widget.data['end_time']}"),
+                    "${widget.data['start_time']} to ${widget
+                        .data['end_time']}"),
               ),
               ListTile(
                 leading: Icon(
@@ -246,7 +261,7 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 28.0, vertical: 0),
+                const EdgeInsets.symmetric(horizontal: 28.0, vertical: 0),
                 child: Container(
                   alignment: Alignment.topLeft,
                   child: Text(
@@ -275,9 +290,9 @@ class _PopularPartyPreviewState extends State<PopularPartyPreview> {
                     maxSelectableCount: 0,
                     prefix: MultiSelectPrefix(
                         disabledPrefix: Icon(
-                      Icons.do_disturb_alt_sharp,
-                      size: 14,
-                    )),
+                          Icons.do_disturb_alt_sharp,
+                          size: 14,
+                        )),
                     items: listOfAmenities,
                     onChange: (List<dynamic> selectedItems, selectedItem) {},
                   ),
@@ -315,10 +330,10 @@ class _OrganizationProfileButtonState extends State<OrganizationProfileButton>
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 500));
     _animation =
-        Tween<double>(begin: 1.0, end: 0.95).animate(_animationController)
-          ..addListener(() {
-            setState(() {});
-          });
+    Tween<double>(begin: 1.0, end: 0.95).animate(_animationController)
+      ..addListener(() {
+        setState(() {});
+      });
   }
 
   @override
@@ -436,8 +451,12 @@ class TitleAnswerWidget extends StatelessWidget {
 class BoostButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
+  final color;
 
-  const BoostButton({Key? key, required this.label, required this.onPressed})
+  const BoostButton({Key? key,
+    required this.color,
+    required this.label,
+    required this.onPressed})
       : super(key: key);
 
   @override
@@ -445,7 +464,7 @@ class BoostButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        primary: Colors.red.shade900,
+        primary: color,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),

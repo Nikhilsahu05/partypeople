@@ -10,6 +10,7 @@ class OrganizationProfileNewController extends GetxController {
   RxString likes = '0'.obs;
   RxString views = '0'.obs;
   RxString bluetick = '0'.obs;
+  RxString approvalStatus = '0'.obs;
   RxString going = '0'.obs;
   var count = 0.obs;
   RxString token = ''.obs;
@@ -45,7 +46,6 @@ class OrganizationProfileNewController extends GetxController {
   RxBool isLoading = false.obs;
   var fullOrganizationData;
 
-
   getAPIOverview() async {
     isLoading.value = true;
     http.Response response = await http.post(
@@ -64,14 +64,16 @@ class OrganizationProfileNewController extends GetxController {
     views.value = jsonDecode(response.body)['data'][0]['view'];
     going.value = jsonDecode(response.body)['data'][0]['ongoing'];
     organisationName.value = jsonDecode(response.body)['data'][0]['name'];
+    approvalStatus.value =
+        jsonDecode(response.body)['data'][0]['approval_status'];
     bluetick.value = jsonDecode(response.body)['data'][0]['bluetick_status'];
     popularPartyVerification.value =
-    jsonDecode(response.body)['data'][0]['profile_pic_approval_status'];
+        jsonDecode(response.body)['data'][0]['profile_pic_approval_status'];
     organisationVerification.value =
-    jsonDecode(response.body)['data'][0]['approval_status'];
+        jsonDecode(response.body)['data'][0]['approval_status'];
     organisationRating.value = jsonDecode(response.body)['data'][0]['rating'];
     organizationDesc.value =
-    jsonDecode(response.body)['data'][0]['description'];
+        jsonDecode(response.body)['data'][0]['description'];
 
     print('printing ratings of organisation :: ${jsonDecode(response.body)}');
 

@@ -60,7 +60,11 @@ class _AddOrganizationsEvent2ViewState
 
       // Get the download URL for the photo
       String downloadURL = await photoRef.getDownloadURL();
-
+      print("Party Download URL : ${downloadURL}");
+      setState(() {
+        controller.timeline.value = downloadURL;
+        controller.isLoading.value = false;
+      });
       return downloadURL;
     } catch (e) {
       print('Error saving photo to Firebase Storage: $e');
@@ -76,8 +80,7 @@ class _AddOrganizationsEvent2ViewState
       File? img = File(image.path);
       img = await _cropImage(imageFile: img);
       setState(() {
-        savePhotoToFirebase(
-                GetStorage().read('token'), img!, 'HostedEventPhoto')
+        savePhotoToFirebase(GetStorage().read('token'), img!, 'Party New Event')
             .then((value) {
           controller.timeline.value = value!;
           controller.isLoading.value = false;
@@ -136,7 +139,6 @@ class _AddOrganizationsEvent2ViewState
     controller.startTime.text = controller.getPrefiledData['start_time'];
     controller.endTime.text = controller.getPrefiledData['end_time'];
     controller.peopleLimit.text = controller.getPrefiledData['person_limit'];
-    controller.genderList = [controller.getPrefiledData['gender']];
     controller.startPeopleAge.text = controller.getPrefiledData['start_age'];
     controller.endPeopleAge.text = controller.getPrefiledData['end_age'];
     controller.offersText.text = controller.getPrefiledData['offers'];

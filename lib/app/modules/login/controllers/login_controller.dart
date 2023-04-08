@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
@@ -27,6 +28,17 @@ class LoginController extends GetxController {
 
   @override
   void onClose() {}
+
+  RxString deviceToken = ''.obs;
+
+  @override
+  void onInit() {
+    FirebaseMessaging.instance.getToken().then((token) {
+      print("token is $token");
+      deviceToken.value = token!;
+    });
+    super.onInit();
+  }
 
   void increment() => count.value++;
 
@@ -143,6 +155,7 @@ class LoginController extends GetxController {
       var url = Uri.parse('https://manage.partypeople.in/v1/account/login');
       var response = await http.post(url, body: {
         'phone': mobileNumber.text,
+        'device_token': deviceToken.value
       });
       var json = jsonDecode(response.body);
       GetStorage().write('token', '${json['data']['token']}');

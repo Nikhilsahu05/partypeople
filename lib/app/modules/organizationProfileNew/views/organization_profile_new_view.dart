@@ -1131,35 +1131,41 @@ class _OrganizationProfileNewViewState
                                                               left: 0,
                                                               top: 0,
                                                               child: Container(
-                                                                  height: 50,
-                                                                  width: 55,
-                                                                  child:
-                                                                      GestureDetector(
-                                                                    onTap: () {
-                                                                      Get.to(PopularPartyPreview(
-                                                                          isPopularParty:
-                                                                              false,
-                                                                          data:
-                                                                              controller.jsonPartyOgranisationDataToday[index]));
-                                                                    },
-                                                                    child: Card(
-                                                                      elevation:
-                                                                          5,
-                                                                      shape: RoundedRectangleBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(40)),
-                                                                      child: Container(
-                                                                          decoration: BoxDecoration(
-                                                                              color: Colors
-                                                                                  .black,
-                                                                              borderRadius: BorderRadius.circular(
-                                                                                  40)),
-                                                                          child: SizedBox(
-                                                                              height: 15,
-                                                                              width: 15,
-                                                                              child: Lottie.asset('assets/21159-tm-boost-button.json'))),
-                                                                    ),
-                                                                  )),
+                                                                height: 50,
+                                                                width: 55,
+                                                                child:
+                                                                    GestureDetector(
+                                                                  onTap: () {
+                                                                    Get.to(PopularPartyPreview(
+                                                                        isPopularParty:
+                                                                            false,
+                                                                        data: controller
+                                                                            .jsonPartyOgranisationDataToday[index]));
+                                                                  },
+                                                                  child: controller.jsonPartyOgranisationDataToday[index]
+                                                                              [
+                                                                              'approval_status'] !=
+                                                                          "1"
+                                                                      ? Card(
+                                                                          elevation:
+                                                                              5,
+                                                                          shape:
+                                                                              RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                                                                          child: Container(
+                                                                              decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(40)),
+                                                                              child: SizedBox(height: 15, width: 15, child: Lottie.asset('assets/127247-disapproved.json'))),
+                                                                        )
+                                                                      : Card(
+                                                                          elevation:
+                                                                              5,
+                                                                          shape:
+                                                                              RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                                                                          child: Container(
+                                                                              decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(40)),
+                                                                              child: SizedBox(height: 15, width: 15, child: Lottie.asset('assets/21159-tm-boost-button.json'))),
+                                                                        ),
+                                                                ),
+                                                              ),
                                                             )
                                                           : Container(),
                                                       Positioned(
@@ -1265,7 +1271,7 @@ class _OrganizationProfileNewViewState
                                 )
                               : Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                                      horizontal: 16.0),
                                   child: Stack(
                                     children: [
                                       Container(
@@ -1461,23 +1467,24 @@ class _OrganizationProfileNewViewState
                                                                           data:
                                                                               controller.jsonPartyOgranisationDataTomm[index]));
                                                                     },
-                                                                    child: Card(
-                                                                      elevation:
-                                                                          5,
-                                                                      shape: RoundedRectangleBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(40)),
-                                                                      child: Container(
-                                                                          decoration: BoxDecoration(
-                                                                              color: Colors
-                                                                                  .black,
-                                                                              borderRadius: BorderRadius.circular(
-                                                                                  40)),
-                                                                          child: SizedBox(
-                                                                              height: 15,
-                                                                              width: 15,
-                                                                              child: Lottie.asset('assets/21159-tm-boost-button.json'))),
-                                                                    ),
+                                                                    child: controller.jsonPartyOgranisationDataTomm[index]['approval_status'] !=
+                                                                            "1"
+                                                                        ? Card(
+                                                                            elevation:
+                                                                                5,
+                                                                            shape:
+                                                                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                                                                            child:
+                                                                                Container(decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(40)), child: SizedBox(height: 15, width: 15, child: Lottie.asset('assets/127247-disapproved.json'))),
+                                                                          )
+                                                                        : Card(
+                                                                            elevation:
+                                                                                5,
+                                                                            shape:
+                                                                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                                                                            child:
+                                                                                Container(decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(40)), child: SizedBox(height: 15, width: 15, child: Lottie.asset('assets/21159-tm-boost-button.json'))),
+                                                                          ),
                                                                   )),
                                                             )
                                                           : Container(),
@@ -1584,7 +1591,7 @@ class _OrganizationProfileNewViewState
                                 )
                               : Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                                      horizontal: 16.0),
                                   child: Stack(
                                     children: [
                                       Container(
@@ -1796,23 +1803,24 @@ class _OrganizationProfileNewViewState
                                                                           data:
                                                                               controller.jsonPartyOgranisationDataUpcomming[index]));
                                                                     },
-                                                                    child: Card(
-                                                                      elevation:
-                                                                          5,
-                                                                      shape: RoundedRectangleBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(40)),
-                                                                      child: Container(
-                                                                          decoration: BoxDecoration(
-                                                                              color: Colors
-                                                                                  .black,
-                                                                              borderRadius: BorderRadius.circular(
-                                                                                  40)),
-                                                                          child: SizedBox(
-                                                                              height: 15,
-                                                                              width: 15,
-                                                                              child: Lottie.asset('assets/21159-tm-boost-button.json'))),
-                                                                    ),
+                                                                    child: controller.jsonPartyOgranisationDataUpcomming[index]['approval_status'] !=
+                                                                            "1"
+                                                                        ? Card(
+                                                                            elevation:
+                                                                                5,
+                                                                            shape:
+                                                                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                                                                            child:
+                                                                                Container(decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(40)), child: SizedBox(height: 15, width: 15, child: Lottie.asset('assets/127247-disapproved.json'))),
+                                                                          )
+                                                                        : Card(
+                                                                            elevation:
+                                                                                5,
+                                                                            shape:
+                                                                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                                                                            child:
+                                                                                Container(decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(40)), child: SizedBox(height: 15, width: 15, child: Lottie.asset('assets/21159-tm-boost-button.json'))),
+                                                                          ),
                                                                   )),
                                                             )
                                                           : Container(),

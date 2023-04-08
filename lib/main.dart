@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -10,6 +11,10 @@ import 'package:showcaseview/showcaseview.dart';
 import 'package:sizer/sizer.dart';
 
 import 'app/routes/app_pages.dart';
+
+Future<void> _messageHandler(RemoteMessage message) async {
+  print('background message ${message.notification!.body}');
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +28,23 @@ Future<void> main() async {
   await dotenv.load(fileName: "assets/.env");
 
   await Firebase.initializeApp();
+
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance; // Cha
+  _firebaseMessaging.requestPermission(); // nge here
+  _firebaseMessaging.getToken().then((token) {
+    print("token is $token");
+  });
+  FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+    print("message recieved");
+    print(event.notification!.body);
+  });
+  FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    print('Message clicked!');
+  });
+  FirebaseMessaging.onBackgroundMessage(_messageHandler);
+  FirebaseMessaging.instance.getInitialMessage();
+  _firebaseMessaging.requestPermission();
+
   await GetStorage.init();
   print(GetStorage().read('token'));
   runApp(
