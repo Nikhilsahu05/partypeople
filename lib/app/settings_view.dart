@@ -180,15 +180,7 @@ class _SettingsViewState extends State<SettingsView> {
                           Text("Account", style: headingStyle),
                         ],
                       ),
-                      ListTile(
-                        onTap: () {
-                          Get.snackbar(
-                              'Transaction History is currently in review', '');
-                        },
-                        leading: Icon(Icons.money),
-                        title: Text("Transaction History"),
-                      ),
-                      const Divider(),
+
                       ListTile(
                         onTap: () {
                           showAlertDialog(context);

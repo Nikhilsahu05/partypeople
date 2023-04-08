@@ -11,6 +11,7 @@ import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../routes/app_pages.dart';
+import '../../all_parties_history.dart';
 
 // class DrawerView extends GetView<DrawerController2> {
 //
@@ -105,6 +106,14 @@ class _DrawerViewState extends State<DrawerView> {
                   onTap: () {
                     print("verification screen navigation");
                     Get.to(VerificationScreen());
+                  },
+                ),
+                CustomOptionWidget(
+                  title: 'All Parties History',
+                  icon: Icons.history,
+                  onTap: () {
+                    print("Parties screen navigation");
+                    Get.to(AllPartiesHistory());
                   },
                 ),
                 CustomOptionWidget(
