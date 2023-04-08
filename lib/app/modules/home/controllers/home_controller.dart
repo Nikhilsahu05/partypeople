@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 class HomeController extends GetxController {
   //TODO: Implement HomeController
 
-  final count = 0.obs;
+  final pageCount = 0.obs;
 
   @override
   void onInit() {
@@ -19,5 +19,17 @@ class HomeController extends GetxController {
   @override
   void onClose() {}
 
-  void increment() => count.value++;
+  void increment() {
+    if (pageCount < 2) {
+      pageCount.value++;
+    } else {
+      Get.toNamed("/login");
+    }
+  }
+
+  void decrement() {
+    if (pageCount > 0) {
+      pageCount.value--;
+    }
+  }
 }

@@ -7,13 +7,24 @@ import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
+  static var kHeadingStyle = GoogleFonts.oswald(
+    fontSize: 29.sp,
+    color: Colors.white,
+    letterSpacing: -0.7000000000000001,
+    fontWeight: FontWeight.w600,
+    height: 1.9964688982282366,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-        onHorizontalDragUpdate: (details) {
-          if (details.delta.dx < -10) {
-            Get.toNamed('/splashscreen-two');
+        onHorizontalDragEnd: (details) {
+          if (details.primaryVelocity == null) return;
+          if (details.primaryVelocity! > 10) {
+            Get.find<HomeController>().decrement();
+          } else if (details.primaryVelocity! < -10) {
+            Get.find<HomeController>().increment();
           }
         },
         child: Stack(
@@ -40,7 +51,11 @@ class HomeView extends GetView<HomeController> {
                 ),
               ),
               child: Center(
-                child: Image.asset('assets/dancecouple.png'),
+                child: Obx(() => Get.find<HomeController>().pageCount == 0
+                    ? Image.asset('assets/dancecouple.png')
+                    : Get.find<HomeController>().pageCount == 1
+                        ? Image.asset('assets/img2.png')
+                        : Image.asset('assets/img3.png')),
               ),
             ),
             Positioned(
@@ -50,25 +65,40 @@ class HomeView extends GetView<HomeController> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Find Your Partner',
-                      style: GoogleFonts.oswald(
-                        fontSize: 29.sp,
-                        color: Colors.white,
-                        letterSpacing: -0.7000000000000001,
-                        fontWeight: FontWeight.w600,
-                        height: 1.9964688982282366,
-                      )),
+                  Obx(
+                    () => Get.find<HomeController>().pageCount == 0
+                        ? Text('Find Your Partner', style: kHeadingStyle)
+                        : Get.find<HomeController>().pageCount == 1
+                            ? Text('Find Chillout Place', style: kHeadingStyle)
+                            : Text('Find Best Club', style: kHeadingStyle),
+                  ),
                   SizedBox(
                     height: 10,
                   ),
                   Container(
                     width: 200,
-                    child: Text(
-                        'Discover the ultimate partying experience with PartyMate. Connect with strangers and have an unforgettable time!',
-                        style: GoogleFonts.oswald(
-                          fontSize: 11.sp,
-                          color: Colors.white,
-                        )),
+                    child: Obx(
+                      () => Get.find<HomeController>().pageCount == 0
+                          ? Text(
+                              'Discover the ultimate partying experience with PartyMate. Connect with strangers and have an unforgettable time!',
+                              style: GoogleFonts.oswald(
+                                fontSize: 11.sp,
+                                color: Colors.white,
+                              ))
+                          : Get.find<HomeController>().pageCount == 1
+                              ? Text(
+                                  'Join the party with PartyNow! Meet new people and find the hottest parties in town with just a few taps.',
+                                  style: GoogleFonts.oswald(
+                                    fontSize: 11.sp,
+                                    color: Colors.white,
+                                  ))
+                              : Text(
+                                  'Make new friends and party like never before with PartyConnect. Find exciting events and connect with strangers who share your love for partying.',
+                                  style: GoogleFonts.oswald(
+                                    fontSize: 11.sp,
+                                    color: Colors.white,
+                                  )),
+                    ),
                   ),
                 ],
               ),
@@ -92,46 +122,73 @@ class HomeView extends GetView<HomeController> {
                 ),
               ),
             ),
-            Positioned(
-              bottom: 45,
-              left: 20,
-              child: Row(
-                children: [
-                  Container(
-                    height: 9,
-                    width: 33,
-                    decoration: BoxDecoration(
-                      color: const Color(0xffdbb314),
-                      borderRadius: BorderRadius.circular(11.0),
+            Obx(
+              () => Positioned(
+                bottom: 45,
+                left: 20,
+                child: Row(
+                  children: [
+                    Get.find<HomeController>().pageCount == 0
+                        ? bottomScrollView(
+                            color: Color(0xffdbb314),
+                            width: 33,
+                          )
+                        : bottomScrollView(
+                            color: Colors.white,
+                            width: 15,
+                          ),
+                    SizedBox(
+                      width: 5,
                     ),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Container(
-                    height: 9,
-                    width: 15,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(11.0),
+                    Get.find<HomeController>().pageCount == 1
+                        ? bottomScrollView(
+                            color: Color(0xffdbb314),
+                            width: 33,
+                          )
+                        : bottomScrollView(
+                            color: Colors.white,
+                            width: 15,
+                          ),
+                    SizedBox(
+                      width: 5,
                     ),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Container(
-                    height: 9,
-                    width: 15,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(11.0),
-                    ),
-                  )
-                ],
+                    Get.find<HomeController>().pageCount == 2
+                        ? bottomScrollView(
+                            color: Color(0xffdbb314),
+                            width: 33,
+                          )
+                        : bottomScrollView(
+                            color: Colors.white,
+                            width: 15,
+                          ),
+                  ],
+                ),
               ),
-            )
+            ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class bottomScrollView extends StatelessWidget {
+  bottomScrollView({
+    required this.color,
+    required this.width,
+  });
+
+  final color;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 9,
+      width: width,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(11.0),
       ),
     );
   }

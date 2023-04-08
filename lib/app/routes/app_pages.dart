@@ -37,10 +37,6 @@ import '../modules/otp/bindings/otp_binding.dart';
 import '../modules/otp/views/otp_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
-import '../modules/splashscreenThree/bindings/splashscreen_three_binding.dart';
-import '../modules/splashscreenThree/views/splashscreen_three_view.dart';
-import '../modules/splashscreenTwo/bindings/splashscreen_two_binding.dart';
-import '../modules/splashscreenTwo/views/splashscreen_two_view.dart';
 import '../modules/subscription/bindings/subscription_binding.dart';
 import '../modules/subscription/views/subscription_view.dart';
 import '../modules/viewEvent/bindings/view_event_binding.dart';
@@ -63,16 +59,6 @@ class AppPages {
       name: _Paths.HOME,
       page: () => HomeView(),
       binding: HomeBinding(),
-    ),
-    GetPage(
-      name: _Paths.SPLASHSCREEN_TWO,
-      page: () => SplashscreenTwoView(),
-      binding: SplashscreenTwoBinding(),
-    ),
-    GetPage(
-      name: _Paths.SPLASHSCREEN_THREE,
-      page: () => SplashscreenThreeView(),
-      binding: SplashscreenThreeBinding(),
     ),
     GetPage(
       name: _Paths.LOGIN,

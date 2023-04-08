@@ -855,17 +855,41 @@ class _LocationButtonState extends State<LocationButton> {
                     setState(() {
                       isLoading = true;
                     });
-                    Position position = await Geolocator.getCurrentPosition(
-                        desiredAccuracy: LocationAccuracy.high);
-                    _getAddressFromLatLng(position);
+                    LocationPermission permission =
+                        await Geolocator.checkPermission();
+
+                    if (permission == LocationPermission.denied) {
+                      permission = await Geolocator.requestPermission();
+                      permission = await Geolocator.checkPermission();
+
+                      if (permission == LocationPermission.deniedForever ||
+                          permission == LocationPermission.denied) {
+                        Get.snackbar("Permission Denied",
+                            "Location Permission is Denied",
+                            backgroundColor: Colors.white);
+                      } else {
+                        Position position = await Geolocator.getCurrentPosition(
+                            desiredAccuracy: LocationAccuracy.high);
+                        _getAddressFromLatLng(position);
+                      }
+                    } else {
+                      if (permission == LocationPermission.deniedForever) {
+                        Get.snackbar("Permission Denied",
+                            "Location Permission is Denied",
+                            backgroundColor: Colors.white);
+                      } else {
+                        Position position = await Geolocator.getCurrentPosition(
+                            desiredAccuracy: LocationAccuracy.high);
+                        _getAddressFromLatLng(position);
+                      }
+                    }
                   },
                   child: Icon(
                     Icons.pin_drop,
                     color: Colors.red,
                   ),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                    onPrimary: Colors.red,
+                    backgroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0),
                     ),

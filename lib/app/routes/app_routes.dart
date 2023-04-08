@@ -8,8 +8,6 @@ abstract class Routes {
 
   static const HOME = _Paths.HOME;
   static const PARTYPEOPLE = _Paths.PARTYPEOPLE;
-  static const SPLASHSCREEN_TWO = _Paths.SPLASHSCREEN_TWO;
-  static const SPLASHSCREEN_THREE = _Paths.SPLASHSCREEN_THREE;
   static const LOGIN = _Paths.LOGIN;
   static const OTP = _Paths.OTP;
   static const DASHBORD = _Paths.DASHBORD;
@@ -36,8 +34,6 @@ abstract class _Paths {
 
   static const HOME = '/home';
   static const PARTYPEOPLE = '/party-people';
-  static const SPLASHSCREEN_TWO = '/splashscreen-two';
-  static const SPLASHSCREEN_THREE = '/splashscreen-three';
   static const LOGIN = '/login';
   static const OTP = '/otp';
   static const DASHBORD = '/dashbord';
