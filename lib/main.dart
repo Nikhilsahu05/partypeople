@@ -28,22 +28,19 @@ Future<void> main() async {
   await dotenv.load(fileName: "assets/.env");
 
   await Firebase.initializeApp();
-
-  FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance; // Cha
-  _firebaseMessaging.requestPermission(); // nge here
-  _firebaseMessaging.getToken().then((token) {
-    print("token is $token");
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  NotificationSettings settings = await messaging.requestPermission();
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    print('User granted permission');
+  } else {
+    print('User declined permission');
+  }
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Received message in foreground: ${message.notification?.title}');
   });
-  FirebaseMessaging.onMessage.listen((RemoteMessage event) {
-    print("message recieved");
-    print(event.notification!.body);
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    print('Opened app from background: ${message.notification?.title}');
   });
-  FirebaseMessaging.onMessageOpenedApp.listen((message) {
-    print('Message clicked!');
-  });
-  FirebaseMessaging.onBackgroundMessage(_messageHandler);
-  FirebaseMessaging.instance.getInitialMessage();
-  _firebaseMessaging.requestPermission();
 
   await GetStorage.init();
   print(GetStorage().read('token'));
@@ -52,10 +49,17 @@ Future<void> main() async {
   );
 }
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  ///Implementing notiifations
 
   @override
   Widget build(BuildContext context) {

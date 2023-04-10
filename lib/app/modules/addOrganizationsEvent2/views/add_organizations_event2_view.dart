@@ -19,7 +19,7 @@ import 'package:pertypeople/app/select_photo_options_screen.dart';
 import 'package:pertypeople/cached_image_placeholder.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../testing_screen.dart';
+import '../../../party_amenities.dart';
 import '../controllers/add_organizations_event2_controller.dart';
 
 //
