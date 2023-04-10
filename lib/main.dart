@@ -9,11 +9,11 @@ import 'package:pertypeople/app/modules/addOrganizationsEvent/views/mapscreen.da
 import 'package:pertypeople/app/modules/addOrganizationsEvent/views/mapscreen2.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'app/routes/app_pages.dart';
 
-Future<void> _messageHandler(RemoteMessage message) async {
-  print('background message ${message.notification!.body}');
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  return;
 }
 
 Future<void> main() async {
@@ -28,19 +28,38 @@ Future<void> main() async {
   await dotenv.load(fileName: "assets/.env");
 
   await Firebase.initializeApp();
+
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+  FlutterLocalNotificationsPlugin pluginInstance =
+      FlutterLocalNotificationsPlugin();
+  var init = InitializationSettings(
+      android: AndroidInitializationSettings('@mipmap/launcher_icon'));
+  pluginInstance.initialize(init);
+
   NotificationSettings settings = await messaging.requestPermission();
-  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-    print('User granted permission');
-  } else {
-    print('User declined permission');
-  }
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Received message in foreground: ${message.notification?.title}');
+
+  // if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+  //   print('User granted permission');
+  // } else {
+  //   print('User declined permission');
+  // }
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    AndroidNotificationDetails androidSpec = AndroidNotificationDetails(
+      'ch_id',
+      'ch_name',
+      importance: Importance.high,
+      priority: Priority.high,
+      playSound: true,
+    );
+
+    NotificationDetails platformSpec =
+        NotificationDetails(android: androidSpec);
+    await pluginInstance.show(0, message.notification?.title,
+        message.notification?.body, platformSpec);
   });
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print('Opened app from background: ${message.notification?.title}');
-  });
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   await GetStorage.init();
   print(GetStorage().read('token'));
