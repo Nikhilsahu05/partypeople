@@ -51,9 +51,9 @@ class HomeView extends GetView<HomeController> {
                 ),
               ),
               child: Center(
-                child: Obx(() => Get.find<HomeController>().pageCount == 0
+                child: Obx(() => controller.pageCount == 0
                     ? Image.asset('assets/dancecouple.png')
-                    : Get.find<HomeController>().pageCount == 1
+                    : controller.pageCount == 1
                         ? Image.asset('assets/img2.png')
                         : Image.asset('assets/img3.png')),
               ),
@@ -66,9 +66,9 @@ class HomeView extends GetView<HomeController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Obx(
-                    () => Get.find<HomeController>().pageCount == 0
+                    () => controller.pageCount == 0
                         ? Text('Find Your Partner', style: kHeadingStyle)
-                        : Get.find<HomeController>().pageCount == 1
+                        : controller.pageCount == 1
                             ? Text('Find Chillout Place', style: kHeadingStyle)
                             : Text('Find Best Club', style: kHeadingStyle),
                   ),
@@ -78,14 +78,14 @@ class HomeView extends GetView<HomeController> {
                   Container(
                     width: 200,
                     child: Obx(
-                      () => Get.find<HomeController>().pageCount == 0
+                      () => controller.pageCount == 0
                           ? Text(
                               'Discover the ultimate partying experience with PartyMate. Connect with strangers and have an unforgettable time!',
                               style: GoogleFonts.oswald(
                                 fontSize: 11.sp,
                                 color: Colors.white,
                               ))
-                          : Get.find<HomeController>().pageCount == 1
+                          : controller.pageCount == 1
                               ? Text(
                                   'Join the party with PartyNow! Meet new people and find the hottest parties in town with just a few taps.',
                                   style: GoogleFonts.oswald(
@@ -128,7 +128,7 @@ class HomeView extends GetView<HomeController> {
                 left: 20,
                 child: Row(
                   children: [
-                    Get.find<HomeController>().pageCount == 0
+                    controller.pageCount == 0
                         ? bottomScrollView(
                             color: Color(0xffdbb314),
                             width: 33,
@@ -140,7 +140,7 @@ class HomeView extends GetView<HomeController> {
                     SizedBox(
                       width: 5,
                     ),
-                    Get.find<HomeController>().pageCount == 1
+                    controller.pageCount == 1
                         ? bottomScrollView(
                             color: Color(0xffdbb314),
                             width: 33,
@@ -152,7 +152,7 @@ class HomeView extends GetView<HomeController> {
                     SizedBox(
                       width: 5,
                     ),
-                    Get.find<HomeController>().pageCount == 2
+                    controller.pageCount == 2
                         ? bottomScrollView(
                             color: Color(0xffdbb314),
                             width: 33,

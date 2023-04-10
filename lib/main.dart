@@ -79,6 +79,7 @@ class _AppState extends State<App> {
           },
           initialRoute: GetStorage().read('token') == null
               ? AppPages.INITIAL
+              //   : Routes.ORGANIZATION_PROFILE_NEW,
               : Routes.ORGANIZATION_PROFILE_NEW,
           getPages: AppPages.routes,
           debugShowCheckedModeBanner: false,
