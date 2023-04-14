@@ -27,6 +27,9 @@ abstract class Routes {
   static const ORGANIZATION_PROFILE_NEW = _Paths.ORGANIZATION_PROFILE_NEW;
   static const ORGANIZATION_MENU = _Paths.ORGANIZATION_MENU;
   static const AddAmenities = _Paths.AddAmenities;
+  static const INDIVIDUAL_DASHBOARD = _Paths.INDIVIDUAL_DASHBOARD;
+  static const CHAT_SCREEN = _Paths.CHAT_SCREEN;
+  static const VISIT_INFO = _Paths.VISIT_INFO;
 }
 
 abstract class _Paths {
@@ -53,4 +56,7 @@ abstract class _Paths {
   static const ORGANIZATION_PROFILE_NEW = '/organization-profile-new';
   static const ORGANIZATION_MENU = '/organization-menu';
   static const AddAmenities = '/AddAmenities';
+  static const INDIVIDUAL_DASHBOARD = '/individual-dashboard';
+  static const CHAT_SCREEN = '/chat-screen';
+  static const VISIT_INFO = '/visit-info';
 }

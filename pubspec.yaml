@@ -62,7 +62,7 @@ dependencies:
   lottie: ^2.3.0
   firebase_storage: any
   cached_network_image: ^3.2.3
-
+  google_nav_bar: ^5.0.6
   responsive_grid_list: ^1.3.1
   upi_india: ^3.0.1
   audioplayers: ^1.0.1

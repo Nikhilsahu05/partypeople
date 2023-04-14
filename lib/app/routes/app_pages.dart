@@ -3,6 +3,7 @@
 import 'package:get/get.dart';
 import 'package:pertypeople/app/modules/organizationProfile/bindings/organization_profile_binding.dart';
 import 'package:pertypeople/app/modules/organizationProfile/views/organization_profile_view.dart';
+import 'package:pertypeople/app/modules/visitInfo/views/visit_info_view.dart';
 import 'package:pertypeople/app/splash_main.dart';
 
 import '../modules/addIndividualEvent/bindings/add_individual_event_binding.dart';
@@ -31,6 +32,11 @@ import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/subscription/bindings/subscription_binding.dart';
 import '../modules/subscription/views/subscription_view.dart';
+import '../modules/individualDashboard/bindings/individual_dashboard_binding.dart';
+import '../modules/individualDashboard/views/individual_dashboard_view.dart';
+import '../modules/chatScreen/bindings/chat_screen_binding.dart';
+import '../modules/chatScreen/views/chat_screen_view.dart';
+import '../modules/visitInfo/bindings/visit_info_binding.dart';
 
 part 'app_routes.dart';
 
@@ -65,7 +71,6 @@ class AppPages {
       page: () => DashbordView(),
       binding: DashbordBinding(),
     ),
-
     GetPage(
       name: _Paths.ADD_INDIVIDUAL_EVENT,
       page: () => AddIndividualEventView(),
@@ -76,43 +81,36 @@ class AppPages {
       page: () => AddOrganizationsEventView(),
       binding: AddOrganizationsEventBinding(),
     ),
-
-
     GetPage(
       name: _Paths.ADD_ORGANIZATIONS_EVENT2,
       page: () => AddOrganizationsEvent2View(isPopular: false),
       binding: AddOrganizationsEvent2Binding(),
     ),
-
     GetPage(
       name: _Paths.ADD_PROFILE,
       page: () => const AddProfileView(),
       binding: AddProfileBinding(),
     ),
-
     GetPage(
       name: _Paths.SUBSCRIPTION,
-      page: () =>
-          SubscriptionView(
-            id: '',
-            data: {},
-          ),
+      page: () => SubscriptionView(
+        id: '',
+        data: {},
+      ),
       binding: SubscriptionBinding(),
     ),
     GetPage(
       name: _Paths.DRAWER,
-      page: () =>
-          DrawerView(
-              likes: '', views: '', profileImageView: '', timeLineImage: ''),
+      page: () => DrawerView(
+          likes: '', views: '', profileImageView: '', timeLineImage: ''),
       binding: DrawerBinding(),
     ),
     GetPage(
       name: _Paths.CUST_PROFILE,
-      page: () =>
-          CustProfileView(
-            phoneNumber: '',
-            organizationData: {},
-          ),
+      page: () => CustProfileView(
+        phoneNumber: '',
+        organizationData: {},
+      ),
       binding: CustProfileBinding(),
     ),
     GetPage(
@@ -130,6 +128,20 @@ class AppPages {
       page: () => OrganizationProfileView(),
       binding: OrganizationProfileBinding(),
     ),
-
+    GetPage(
+      name: _Paths.INDIVIDUAL_DASHBOARD,
+      page: () => IndividualDashboardView(),
+      binding: IndividualDashboardBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHAT_SCREEN,
+      page: () => ChatScreenView(),
+      binding: ChatScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.VISIT_INFO,
+      page: () => VisitInfoView(),
+      binding: VisitInfoBinding(),
+    ),
   ];
 }

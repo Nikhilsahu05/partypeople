@@ -96,10 +96,10 @@ class _AppState extends State<App> {
             'MapScreen': (p0) => MapScreen(),
             'MapScreen2': (p0) => MapScreen2(),
           },
-          initialRoute: GetStorage().read('token') == null
-              ? AppPages.INITIAL
-              //   : Routes.ORGANIZATION_PROFILE_NEW,
-              : Routes.ORGANIZATION_PROFILE_NEW,
+          // initialRoute: GetStorage().read('token') == null
+          //     ? AppPages.INITIAL
+          //     //   : Routes.ORGANIZATION_PROFILE_NEW,
+          initialRoute: Routes.INDIVIDUAL_DASHBOARD,
           getPages: AppPages.routes,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
