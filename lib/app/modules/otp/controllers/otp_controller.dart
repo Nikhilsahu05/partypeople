@@ -51,7 +51,7 @@ class OtpController extends GetxController {
       var response = await Dio().post(
           options:
               Options(headers: {"x-access-token": GetStorage().read("token")}),
-          'https://manage.partypeople.in/v1/account/otp_verify',
+          'http://app.partypeople.in/v1/account/otp_verify',
           data: frm.FormData.fromMap({'otp': smsCode}));
       print(response);
       Get.snackbar(
@@ -73,7 +73,7 @@ class OtpController extends GetxController {
       var response = await Dio().post(
           options:
               Options(headers: {"x-access-token": GetStorage().read("token")}),
-          'https://manage.partypeople.in/v1/account/send_otp',
+          'http://app.partypeople.in/v1/account/send_otp',
           data: frm.FormData.fromMap({'phone': phonNum}));
       print(response);
 

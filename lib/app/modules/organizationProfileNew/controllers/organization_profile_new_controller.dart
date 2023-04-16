@@ -49,7 +49,7 @@ class OrganizationProfileNewController extends GetxController {
   getAPIOverview() async {
     isLoading.value = true;
     http.Response response = await http.post(
-      Uri.parse('https://manage.partypeople.in/v1/party/organization_details'),
+      Uri.parse('http://app.partypeople.in/v1/party/organization_details'),
       headers: {'x-access-token': '${GetStorage().read("token")}'},
     );
 
@@ -83,7 +83,7 @@ class OrganizationProfileNewController extends GetxController {
   getOrganisationDetailsToday() async {
     http.Response response = await http.post(
         Uri.parse(
-            'https://manage.partypeople.in/v1/party/get_user_organization_party_by_id'),
+            'http://app.partypeople.in/v1/party/get_user_organization_party_by_id'),
         body: {
           'organization_id': '1',
           'status': '1'
@@ -105,7 +105,7 @@ class OrganizationProfileNewController extends GetxController {
   getOrganisationDetailsPopular() async {
     http.Response response = await http.post(
         Uri.parse(
-            'https://manage.partypeople.in/v1/party/get_user_organization_party_by_id'),
+            'http://app.partypeople.in/v1/party/get_user_organization_party_by_id'),
         body: {
           'organization_id': '1',
           'status': '5'
@@ -127,7 +127,7 @@ class OrganizationProfileNewController extends GetxController {
   getOrganisationDetailsTom() async {
     http.Response response = await http.post(
         Uri.parse(
-            'https://manage.partypeople.in/v1/party/get_user_organization_party_by_id'),
+            'http://app.partypeople.in/v1/party/get_user_organization_party_by_id'),
         body: {
           'organization_id': '1',
           'status': '2'
@@ -148,7 +148,7 @@ class OrganizationProfileNewController extends GetxController {
   getOrganisationDetailsUpcomming() async {
     http.Response response = await http.post(
         Uri.parse(
-            'https://manage.partypeople.in/v1/party/get_user_organization_party_by_id'),
+            'http://app.partypeople.in/v1/party/get_user_organization_party_by_id'),
         body: {
           'organization_id': '1',
           'status': '3'

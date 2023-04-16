@@ -52,7 +52,7 @@ class DashbordController extends GetxController {
     };
 
     var response = await Dio().get(
-        'https://manage.partypeople.in/v1/account/get_profile',
+        'http://app.partypeople.in/v1/account/get_profile',
         options: Options(headers: headers));
 
     if (response.statusCode == 200) {
@@ -100,7 +100,7 @@ class DashbordController extends GetxController {
     var request = http.MultipartRequest(
         'POST',
         Uri.parse(
-            'https://manage.partypeople.in/v1/party/get_user_organization_party_by_id'));
+            'http://app.partypeople.in/v1/party/get_user_organization_party_by_id'));
 
     request.headers.addAll(headers);
 
@@ -124,7 +124,7 @@ class DashbordController extends GetxController {
       'Cookie': 'ci_session=de6d713b333931d25740c249fd67250a24b581f2'
     };
     var request = http.MultipartRequest(
-        'GET', Uri.parse('https://manage.partypeople.in/v1/party/cities'));
+        'GET', Uri.parse('http://app.partypeople.in/v1/party/cities'));
 
     request.headers.addAll(headers);
 
@@ -143,8 +143,8 @@ class DashbordController extends GetxController {
       'x-access-token': GetStorage().read("token").toString(),
       'Cookie': 'ci_session=de6d713b333931d25740c249fd67250a24b581f2'
     };
-    var request = http.Request('POST',
-        Uri.parse('https://manage.partypeople.in/v1/home/near_by_users'));
+    var request = http.Request(
+        'POST', Uri.parse('http://app.partypeople.in/v1/home/near_by_users'));
     city.isEmpty
         ? request.bodyFields = {}
         : request.bodyFields = {'city_id': city};
@@ -169,8 +169,8 @@ class DashbordController extends GetxController {
       // 'Cookie': 'ci_session=471ced3dc462db89e201c3312b0bb0c0f9da11ec'
     };
 
-    var request = http.Request('POST',
-        Uri.parse('https://manage.partypeople.in/v1/home/get_today_party'));
+    var request = http.Request(
+        'POST', Uri.parse('http://app.partypeople.in/v1/home/get_today_party'));
     city.isEmpty
         ? request.bodyFields = {'offset': '0', 'organisation_id': '1'}
         : request.bodyFields = {
@@ -205,8 +205,8 @@ class DashbordController extends GetxController {
       'Content-Type': 'application/x-www-form-urlencoded',
       // 'Cookie': 'ci_session=471ced3dc462db89e201c3312b0bb0c0f9da11ec'
     };
-    var request = http.Request('POST',
-        Uri.parse('https://manage.partypeople.in/v1/home/get_today_party'));
+    var request = http.Request(
+        'POST', Uri.parse('http://app.partypeople.in/v1/home/get_today_party'));
     city.isEmpty
         ? request.bodyFields = {'offset': '0', 'organisation_id': '0'}
         : request.bodyFields = {
@@ -239,7 +239,7 @@ class DashbordController extends GetxController {
       'x-access-token': GetStorage().read("token").toString(),
     };
     var request = http.Request('POST',
-        Uri.parse('https://manage.partypeople.in/v1/home/get_tomorrow_party'));
+        Uri.parse('http://app.partypeople.in/v1/home/get_tomorrow_party'));
     city.isEmpty
         ? request.bodyFields = {'offset': '0', 'organisation': '1'}
         : request.bodyFields = {
@@ -270,7 +270,7 @@ class DashbordController extends GetxController {
       'x-access-token': GetStorage().read("token").toString(),
     };
     var request = http.Request('POST',
-        Uri.parse('https://manage.partypeople.in/v1/home/get_tomorrow_party'));
+        Uri.parse('http://app.partypeople.in/v1/home/get_tomorrow_party'));
     city.isEmpty
         ? request.bodyFields = {'offset': '0', 'organisation': '0'}
         : request.bodyFields = {

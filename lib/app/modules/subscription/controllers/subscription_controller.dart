@@ -102,7 +102,7 @@ class SubscriptionController extends GetxController {
   ///Call this function if payment was successfull
   oderIdPlaced(String partyID) async {
     http.Response response = await http.post(
-        Uri.parse('https://manage.partypeople.in/v1/order/create_order'),
+        Uri.parse('http://app.partypeople.in/v1/order/create_order'),
         body: {'party_id': partyID, 'amount': '499', 'papular_status': '1'},
         headers: {"x-access-token": GetStorage().read("token")});
     initPaymentSheet('');
@@ -150,7 +150,7 @@ class SubscriptionController extends GetxController {
     };
     isLoading = true.obs;
     var response = await Dio().get(
-        'https://manage.partypeople.in/v1/party/subscriptions',
+        'http://app.partypeople.in/v1/party/subscriptions',
         options: Options(headers: headers));
 
     debugPrint(response.data.toString());

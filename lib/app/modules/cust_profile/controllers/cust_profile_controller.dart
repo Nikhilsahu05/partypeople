@@ -138,8 +138,8 @@ class CustProfileController extends GetxController {
       'x-access-token': GetStorage().read('token').toString(),
       'Cookie': 'ci_session=972e9866aaf4ca60e49a9a9373d917755592078c'
     };
-    var response = await Dio()
-        .post('https://manage.partypeople.in/v1/account/edit_profile',
+    var response =
+        await Dio().post('http://app.partypeople.in/v1/account/edit_profile',
             data: frm.FormData.fromMap({
               'full_name': name.value.text,
               'dob': startDate.value.toString(),
@@ -203,7 +203,7 @@ class CustProfileController extends GetxController {
             filename: img.path.split('/').last),
       });
       var response = await Dio().post(
-          'https://manage.partypeople.in/v1/account/change_profile_picture',
+          'http://app.partypeople.in/v1/account/change_profile_picture',
           data: formData,
           options: Options(headers: headers));
 
@@ -300,7 +300,7 @@ class CustProfileController extends GetxController {
     };
 
     var response = await Dio().get(
-        'https://manage.partypeople.in/v1/account/get_profile',
+        'http://app.partypeople.in/v1/account/get_profile',
         options: Options(headers: headers));
 
     if (response.statusCode == 200) {

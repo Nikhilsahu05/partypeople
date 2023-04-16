@@ -173,7 +173,7 @@ class DashbordView extends GetView<DashbordController> {
                                                     backgroundImage:
                                                         NetworkImage(
                                                       // ignore: prefer_interpolation_to_compose_strings
-                                                      'https://manage.partypeople.in/' +
+                                                      'http://app.partypeople.in/' +
                                                           controller
                                                               .getCitys[
                                                                   index - 1]
@@ -250,7 +250,7 @@ class DashbordView extends GetView<DashbordController> {
                                               ? CircleAvatar(
                                                   radius: 30,
                                                   backgroundImage: NetworkImage(
-                                                      ('https://manage.partypeople.in/${controller.nearByUser[index]['profile_picture']}')))
+                                                      ('http://app.partypeople.in/${controller.nearByUser[index]['profile_picture']}')))
                                               : Image.asset('assets/Image.png'),
                                           // Image.asset('assets/Image.png'),
                                           SizedBox(
@@ -619,8 +619,8 @@ class UserData extends StatelessWidget {
                         borderRadius: BorderRadius.circular(13.0),
                         child: Image.network(
                           controller.isindividualSelected.value
-                              ? 'https://manage.partypeople.in/${controller.getindividualData!.data[index].coverPhoto}'
-                              : 'https://manage.partypeople.in/${controller.getGrupData!.data[index].coverPhoto}',
+                              ? 'http://app.partypeople.in/${controller.getindividualData!.data[index].coverPhoto}'
+                              : 'http://app.partypeople.in/${controller.getGrupData!.data[index].coverPhoto}',
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -788,8 +788,8 @@ class TodayData extends StatelessWidget {
                               borderRadius: BorderRadius.circular(13.0),
                               child: Image.network(
                                 controller.isindividualSelected.value
-                                    ? 'https://manage.partypeople.in/${controller.toDayPertyIndividual![index].coverPhoto}'
-                                    : 'https://manage.partypeople.in/${controller.toDayPertyOrgination![index].coverPhoto}',
+                                    ? 'http://app.partypeople.in/${controller.toDayPertyIndividual![index].coverPhoto}'
+                                    : 'http://app.partypeople.in/${controller.toDayPertyOrgination![index].coverPhoto}',
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -1049,8 +1049,8 @@ class TommarowData extends StatelessWidget {
                               borderRadius: BorderRadius.circular(13.0),
                               child: Image.network(
                                 controller.isindividualSelected.value
-                                    ? 'https://manage.partypeople.in/${controller.tommarowPertyIndividual![index].coverPhoto}'
-                                    : 'https://manage.partypeople.in/${controller.tommarowPertyOrgination![index].coverPhoto}',
+                                    ? 'http://app.partypeople.in/${controller.tommarowPertyIndividual![index].coverPhoto}'
+                                    : 'http://app.partypeople.in/${controller.tommarowPertyOrgination![index].coverPhoto}',
                                 fit: BoxFit.cover,
                               ),
                             ),

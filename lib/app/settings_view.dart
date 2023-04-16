@@ -25,7 +25,7 @@ class _SettingsViewState extends State<SettingsView> {
 
   deleteAccountAPICall() async {
     http.Response response = await http.post(
-        Uri.parse('https://manage.partypeople.in/v1/party/delete_organization'),
+        Uri.parse('http://app.partypeople.in/v1/party/delete_organization'),
         headers: {
           'x-access-token': '${GetStorage().read('token')}'
         },

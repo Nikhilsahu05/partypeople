@@ -44,7 +44,7 @@ class ProfileView extends GetView<ProfileController> {
                         child: CircleAvatar(
                           radius: 50,
                           backgroundImage: NetworkImage(
-                            'https://manage.partypeople.in/' +
+                            'http://app.partypeople.in/' +
                                 GetStorage().read('profile_picture'),
                           ),
                         ),

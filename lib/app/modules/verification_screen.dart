@@ -21,7 +21,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
 
   getDownloadablePDF() async {
     http.Response response = await http.post(
-        Uri.parse('http://manage.partypeople.in/v1/party/organization_pdf'),
+        Uri.parse('http://app.partypeople.in/v1/party/organization_pdf'),
         headers: {
           'x-access-token': GetStorage().read("token").toString(),
         });

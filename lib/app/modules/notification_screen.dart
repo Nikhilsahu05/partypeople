@@ -21,7 +21,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   getAllNotification() async {
     http.Response response = await http.post(
         Uri.parse(
-            'http://manage.partypeople.in/v1/notification/get_all_notification'),
+            'http://app.partypeople.in/v1/notification/get_all_notification'),
         headers: {"x-access-token": GetStorage().read('token')});
 
     print(response.body);

@@ -55,7 +55,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                       ? CircleAvatar(
                           radius: 100,
                           backgroundImage: NetworkImage(
-                            'https://manage.partypeople.in/${controller.profilePic.value}',
+                            'http://app.partypeople.in/${controller.profilePic.value}',
                           ),
                         )
                       : controller.img != null

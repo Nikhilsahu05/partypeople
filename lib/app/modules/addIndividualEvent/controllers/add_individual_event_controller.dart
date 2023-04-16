@@ -166,7 +166,7 @@ class AddIndividualEventController extends GetxController {
     };
     print("file size ${picture?.lengthSync()}");
     var request = http.MultipartRequest(
-        'POST', Uri.parse('https://manage.partypeople.in/v1/party/add'));
+        'POST', Uri.parse('http://app.partypeople.in/v1/party/add'));
     request.fields.addAll({
       'title': title.text,
       'description': description.text,

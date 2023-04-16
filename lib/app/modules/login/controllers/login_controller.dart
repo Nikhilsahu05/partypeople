@@ -57,7 +57,7 @@ class LoginController extends GetxController {
 
       if (data?.displayName != null) {
         var url =
-            Uri.parse('https://manage.partypeople.in/v1/account/social_signup');
+            Uri.parse('http://app.partypeople.in/v1/account/social_signup');
         // print(_googleSignIn.currentUser?.photoUrl.toString());
         var responce = await http.post(url, body: {
           'social_id': _googleSignIn.currentUser?.id.toString(),
@@ -98,7 +98,7 @@ class LoginController extends GetxController {
     isLoading.value = true;
     http.Response response = await http.post(
         Uri.parse(
-          'https://manage.partypeople.in/v1/account/otp_verify',
+          'http://app.partypeople.in/v1/account/otp_verify',
         ),
         body: {
           'otp': otpValue,
@@ -129,8 +129,7 @@ class LoginController extends GetxController {
   getAPIOverview(BuildContext context) async {
     isLoading.value = true;
     http.Response response = await http.post(
-        Uri.parse(
-            'https://manage.partypeople.in/v1/party/organization_details'),
+        Uri.parse('http://app.partypeople.in/v1/party/organization_details'),
         headers: {
           'x-access-token': '${GetStorage().read("token")}',
         });
@@ -152,7 +151,7 @@ class LoginController extends GetxController {
 
     if (mobileNumber.text.isPhoneNumber) {
       isLoading.value = true;
-      var url = Uri.parse('https://manage.partypeople.in/v1/account/login');
+      var url = Uri.parse('http://app.partypeople.in/v1/account/login');
       var response = await http.post(url, body: {
         'phone': mobileNumber.text,
         'device_token': deviceToken.value

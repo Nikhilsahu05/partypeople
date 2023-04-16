@@ -40,8 +40,7 @@ class AddOrganizationsEventController extends GetxController {
 
   getAPIOverview() async {
     http.Response response = await http.post(
-        Uri.parse(
-            'https://manage.partypeople.in/v1/party/organization_details'),
+        Uri.parse('http://app.partypeople.in/v1/party/organization_details'),
         headers: {
           'x-access-token': '${GetStorage().read("token")}',
         });
@@ -132,7 +131,7 @@ class AddOrganizationsEventController extends GetxController {
       'x-access-token': '${GetStorage().read("token")}',
     };
     var request = http.MultipartRequest(
-        'GET', Uri.parse('https://manage.partypeople.in/v1/party/cities'));
+        'GET', Uri.parse('http://app.partypeople.in/v1/party/cities'));
 
     request.headers.addAll(headers);
 
@@ -153,10 +152,8 @@ class AddOrganizationsEventController extends GetxController {
       'x-access-token': GetStorage().read("token").toString(),
     };
 
-    var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(
-            'https://manage.partypeople.in/v1/party/update_organization'));
+    var request = http.MultipartRequest('POST',
+        Uri.parse('http://app.partypeople.in/v1/party/update_organization'));
     request.fields.addAll({
       'organization_amenitie_id': selectedAmenitiesListID
           .toString()
@@ -209,7 +206,7 @@ class AddOrganizationsEventController extends GetxController {
     };
 
     var request = http.MultipartRequest('POST',
-        Uri.parse('https://manage.partypeople.in/v1/party/add_organization'));
+        Uri.parse('http://app.partypeople.in/v1/party/add_organization'));
     request.fields.addAll({
       'organization_amenitie_id': selectedAmenitiesListID
           .toString()

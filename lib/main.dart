@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -9,7 +10,7 @@ import 'package:pertypeople/app/modules/addOrganizationsEvent/views/mapscreen.da
 import 'package:pertypeople/app/modules/addOrganizationsEvent/views/mapscreen2.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:sizer/sizer.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 import 'app/routes/app_pages.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -96,10 +97,10 @@ class _AppState extends State<App> {
             'MapScreen': (p0) => MapScreen(),
             'MapScreen2': (p0) => MapScreen2(),
           },
-          // initialRoute: GetStorage().read('token') == null
-          //     ? AppPages.INITIAL
-          //     //   : Routes.ORGANIZATION_PROFILE_NEW,
-          initialRoute: Routes.INDIVIDUAL_DASHBOARD,
+          initialRoute: GetStorage().read('token') == null
+              ? AppPages.INITIAL
+              : Routes.ORGANIZATION_PROFILE_NEW,
+          // initialRoute: Routes.INDIVIDUAL_DASHBOARD,
           getPages: AppPages.routes,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(

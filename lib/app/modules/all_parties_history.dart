@@ -28,7 +28,7 @@ class _AllPartiesHistoryState extends State<AllPartiesHistory> {
       isLoading = true;
     });
     http.Response response = await http.post(
-        Uri.parse('https://manage.partypeople.in/v1/party/party_history'),
+        Uri.parse('http://app.partypeople.in/v1/party/party_history'),
         headers: {'x-access-token': GetStorage().read('token')},
         body: {'organization_id': '1'});
     var decodedData = jsonDecode(response.body);
@@ -65,62 +65,62 @@ class _AllPartiesHistoryState extends State<AllPartiesHistory> {
       ),
       body: isLoading == true
           ? Center(
-              child: CupertinoActivityIndicator(
-              radius: 15,
-              color: Colors.black,
-            ))
+          child: CupertinoActivityIndicator(
+            radius: 15,
+            color: Colors.black,
+          ))
           : status == '0'
-              ? Center(
-                  child: Text("No Data Found"),
-                )
-              : Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: RadialGradient(
-                          center: Alignment(1, -0.45),
-                          radius: 0.9,
-                          colors: [
-                            const Color(0xff7e160a),
-                            const Color(0xff2e0303),
-                          ],
-                          stops: [0.0, 1],
-                          transform: GradientXDTransform(
-                            0.0,
-                            -1.0,
-                            1.23,
-                            0.0,
-                            -0.115,
-                            1.0,
-                            Alignment(0.0, 0.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                    ListView.builder(
-                      itemCount: data.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Get.to(PopularPartyPreview(
-                                data: data[index], isPopularParty: false));
-                          },
-                          child: CustomListTile(
-                            endDate: '${data[index]['end_date']}',
-                            startDate: '${data[index]['start_date']}',
-                            title: '${data[index]['title']}',
-                            subtitle: '${data[index]['description']}',
-                            trailingText: "Trailing Text",
-                            leadingImage: '${data[index]['cover_photo']}',
-                            leadingIcon: Icon(Icons.history),
-                            trailingIcon: Icon(Icons.add),
-                            city: '${data[index]['city_id']}',
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+          ? Center(
+        child: Text("No Data Found"),
+      )
+          : Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                center: Alignment(1, -0.45),
+                radius: 0.9,
+                colors: [
+                  const Color(0xff7e160a),
+                  const Color(0xff2e0303),
+                ],
+                stops: [0.0, 1],
+                transform: GradientXDTransform(
+                  0.0,
+                  -1.0,
+                  1.23,
+                  0.0,
+                  -0.115,
+                  1.0,
+                  Alignment(0.0, 0.0),
                 ),
+              ),
+            ),
+          ),
+          ListView.builder(
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  Get.to(PopularPartyPreview(
+                      data: data[index], isPopularParty: false));
+                },
+                child: CustomListTile(
+                  endDate: '${data[index]['end_date']}',
+                  startDate: '${data[index]['start_date']}',
+                  title: '${data[index]['title']}',
+                  subtitle: '${data[index]['description']}',
+                  trailingText: "Trailing Text",
+                  leadingImage: '${data[index]['cover_photo']}',
+                  leadingIcon: Icon(Icons.history),
+                  trailingIcon: Icon(Icons.add),
+                  city: '${data[index]['city_id']}',
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }
@@ -135,6 +135,7 @@ class CustomListTile extends StatelessWidget {
   final String endDate;
   final Widget trailingIcon;
   final String city;
+
   CustomListTile({
     required this.title,
     required this.subtitle,
@@ -151,9 +152,18 @@ class CustomListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-          left: MediaQuery.of(context).size.width * 0.08,
-          right: MediaQuery.of(context).size.width * 0.08,
-          bottom: MediaQuery.of(context).size.width * 0.07),
+          left: MediaQuery
+              .of(context)
+              .size
+              .width * 0.08,
+          right: MediaQuery
+              .of(context)
+              .size
+              .width * 0.08,
+          bottom: MediaQuery
+              .of(context)
+              .size
+              .width * 0.07),
       child: Container(
         decoration: BoxDecoration(
           color: Color(0xFF3c0103),
@@ -173,8 +183,14 @@ class CustomListTile extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.07,
-                    vertical: MediaQuery.of(context).size.height * 0.015),
+                    horizontal: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.07,
+                    vertical: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0.015),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -190,15 +206,8 @@ class CustomListTile extends StatelessWidget {
                         fontSize: 15.0.sp,
                       ),
                     ),
-                    // SizedBox(height: 5.0),
-                    // Text(
-                    //   subtitle,
-                    //   style: TextStyle(
-                    //     fontSize: 14.0,
-                    //     color: Colors.grey[600],
-                    //   ),
-                    // ),
-                    SizedBox(height: 5.0),
+
+                    SizedBox(height: 10.0),
                     Row(
                       children: [
                         Icon(
@@ -207,10 +216,14 @@ class CustomListTile extends StatelessWidget {
                           size: 13.sp,
                         ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.015,
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 0.015,
                         ),
                         Text(
-                          "${DateFormat('MMM d, yyyy').format(DateTime.parse(startDate))}",
+                          "${DateFormat('MMM d, yyyy').format(DateTime.parse(
+                              startDate))}",
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 14.0,
@@ -220,34 +233,20 @@ class CustomListTile extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 5.0),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.pin_drop,
-                          color: Color(0xFFd3b2b1),
-                          size: 13.sp,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.015,
-                        ),
-                        Text(
-                          city.toString(),
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),
             ),
             SizedBox(width: 10.0),
             Container(
-              width: MediaQuery.of(context).size.width * 0.25,
-              height: MediaQuery.of(context).size.height * 0.12,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width * 0.25,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.12,
               child: ClipRRect(
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(10),

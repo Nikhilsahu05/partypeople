@@ -50,7 +50,7 @@ class _OrganizationProfileNewViewState
   readNotificationCount() async {
     http.Response response = await http.post(
         Uri.parse(
-            'https://manage.partypeople.in/v1/party/notification_read_status_update'),
+            'http://app.partypeople.in/v1/party/notification_read_status_update'),
         headers: {'x-access-token': GetStorage().read('token')});
 
     print('Notification count read ::${response.body}');

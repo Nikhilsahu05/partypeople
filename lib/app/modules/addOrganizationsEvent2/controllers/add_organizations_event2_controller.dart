@@ -188,7 +188,7 @@ class AddOrganizationsEvent2Controller extends GetxController {
     };
 
     var request = http.MultipartRequest(
-        'POST', Uri.parse('https://manage.partypeople.in/v1/party/update'));
+        'POST', Uri.parse('http://app.partypeople.in/v1/party/update'));
     request.fields.addAll({
       'title': title.text,
       'description': description.text,
@@ -271,7 +271,7 @@ class AddOrganizationsEvent2Controller extends GetxController {
     };
 
     var request = http.MultipartRequest(
-        'POST', Uri.parse('https://manage.partypeople.in/v1/party/add'));
+        'POST', Uri.parse('http://app.partypeople.in/v1/party/add'));
     request.fields.addAll({
       'title': title.text,
       'description': description.text,

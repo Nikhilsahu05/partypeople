@@ -121,8 +121,8 @@ class AddProfileController extends GetxController {
       'x-access-token': GetStorage().read('token').toString(),
       'Cookie': 'ci_session=972e9866aaf4ca60e49a9a9373d917755592078c'
     };
-    var request = http.MultipartRequest('POST',
-        Uri.parse('https://manage.partypeople.in/v1/account/edit_profile'));
+    var request = http.MultipartRequest(
+        'POST', Uri.parse('http://app.partypeople.in/v1/account/edit_profile'));
     request.fields.addAll({
       'full_name': name.value.text,
       'dob': startDate.value.toString(),

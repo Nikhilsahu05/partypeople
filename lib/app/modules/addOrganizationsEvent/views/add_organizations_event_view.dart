@@ -36,8 +36,8 @@ class AddOrganizationsEventView extends StatefulWidget {
 class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
   final cropKey = GlobalKey<CropState>();
 
-  Future<String?> savePhotoToFirebase(String tokenId, File photo,
-      String imageName) async {
+  Future<String?> savePhotoToFirebase(
+      String tokenId, File photo, String imageName) async {
     try {
       await FirebaseAuth.instance.signInAnonymously();
 
@@ -46,7 +46,7 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
 
       // Create a reference to the photo in Firebase Storage
       Reference photoRef =
-      storage.ref().child('$tokenId/organization/$imageName.jpg');
+          storage.ref().child('$tokenId/organization/$imageName.jpg');
 
       // Upload the photo to Firebase Storage
       await photoRef.putFile(photo);
@@ -108,7 +108,7 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
 
   Future<File?> _cropImage({required File imageFile}) async {
     CroppedFile? croppedImage =
-    await ImageCropper().cropImage(sourcePath: imageFile.path);
+        await ImageCropper().cropImage(sourcePath: imageFile.path);
     if (croppedImage == null) return null;
     return File(croppedImage.path);
   }
@@ -122,20 +122,19 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
           top: Radius.circular(25.0),
         ),
       ),
-      builder: (context) =>
-          DraggableScrollableSheet(
-              initialChildSize: 0.28,
-              maxChildSize: 0.4,
-              minChildSize: 0.28,
-              expand: false,
-              builder: (context, scrollController) {
-                return SingleChildScrollView(
-                  controller: scrollController,
-                  child: SelectPhotoOptionsScreen(
-                    onTap: _pickImageTimeLine,
-                  ),
-                );
-              }),
+      builder: (context) => DraggableScrollableSheet(
+          initialChildSize: 0.28,
+          maxChildSize: 0.4,
+          minChildSize: 0.28,
+          expand: false,
+          builder: (context, scrollController) {
+            return SingleChildScrollView(
+              controller: scrollController,
+              child: SelectPhotoOptionsScreen(
+                onTap: _pickImageTimeLine,
+              ),
+            );
+          }),
     );
   }
 
@@ -148,25 +147,24 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
           top: Radius.circular(25.0),
         ),
       ),
-      builder: (context) =>
-          DraggableScrollableSheet(
-              initialChildSize: 0.28,
-              maxChildSize: 0.4,
-              minChildSize: 0.28,
-              expand: false,
-              builder: (context, scrollController) {
-                return SingleChildScrollView(
-                  controller: scrollController,
-                  child: SelectPhotoOptionsScreen(
-                    onTap: _pickImageProfile,
-                  ),
-                );
-              }),
+      builder: (context) => DraggableScrollableSheet(
+          initialChildSize: 0.28,
+          maxChildSize: 0.4,
+          minChildSize: 0.28,
+          expand: false,
+          builder: (context, scrollController) {
+            return SingleChildScrollView(
+              controller: scrollController,
+              child: SelectPhotoOptionsScreen(
+                onTap: _pickImageProfile,
+              ),
+            );
+          }),
     );
   }
 
   AddOrganizationsEventController controller =
-  Get.put(AddOrganizationsEventController());
+      Get.put(AddOrganizationsEventController());
 
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
@@ -208,13 +206,13 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
 
     // Get organization details
     final organizationResponse = await http.post(
-      Uri.parse('https://manage.partypeople.in/v1/party/organization_details'),
+      Uri.parse('http://app.partypeople.in/v1/party/organization_details'),
       headers: {
         'x-access-token': '${GetStorage().read("token")}',
       },
     );
     final organizationData = await jsonDecode(organizationResponse.body)['data']
-    [0]['organization_amenities'];
+        [0]['organization_amenities'];
 
     // Add amenities from organizationData to selectedAmenitiesListID and ameList
     for (final amenityData in organizationData) {
@@ -248,8 +246,7 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
 
     // Get all amenities
     final amenitiesResponse = await http.get(
-      Uri.parse(
-          'https://manage.partypeople.in/v1/party/organization_amenities'),
+      Uri.parse('http://app.partypeople.in/v1/party/organization_amenities'),
       headers: {
         'x-access-token': '${GetStorage().read("token")}',
       },
@@ -287,320 +284,298 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
     return Scaffold(
         body: SingleChildScrollView(
             child: Obx(
-                  () =>
-                  Container(
-                    height: Get.height,
-                    width: Get.width,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage("assets/red_background.png"),
-                            fit: BoxFit.fill)),
-                    child: SingleChildScrollView(
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+      () => Container(
+        height: Get.height,
+        width: Get.width,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/red_background.png"),
+                fit: BoxFit.fill)),
+        child: SingleChildScrollView(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 40,
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                      controller.isEditable.value == true
+                          ? 'Edit Profile'
+                          : 'Profile',
+                      style: TextStyle(
+                        fontFamily: 'malgun',
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.0,
+                        color: Colors.white,
+                      )),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Stack(
+                  children: [
+                    GestureDetector(
+                      onTap: () => _showSelectPhotoOptionsTimeline(context),
+                      child: Obx(
+                        () => Stack(
                           children: [
-                            SizedBox(
-                              height: 40,
-                            ),
-                            Container(
-                              alignment: Alignment.center,
-                              child: Text(
-                                  controller.isEditable.value == true
-                                      ? 'Edit Profile'
-                                      : 'Profile',
-                                  style: TextStyle(
-                                    fontFamily: 'malgun',
-                                    fontSize: 13.sp,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 1.0,
-                                    color: Colors.white,
-                                  )),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Stack(
-                              children: [
-                                GestureDetector(
-                                  onTap: () =>
-                                      _showSelectPhotoOptionsTimeline(context),
-                                  child: Obx(
-                                        () =>
-                                        Stack(
-                                          children: [
-                                            controller.isLoading.value == false
-                                                ? Container(
-                                              height: 200,
-                                              width: double.maxFinite,
-                                              child: controller.timeline
-                                                  .value != ''
-                                                  ? Card(
-                                                  child: CachedNetworkImageWidget(
-                                                      imageUrl:
-                                                      controller.timeline.value,
-                                                      width: Get.width,
-                                                      height: 200,
-                                                      fit: BoxFit.fill,
-                                                      errorWidget: (context,
-                                                          url,
-                                                          error) =>
-                                                          Icon(Icons
-                                                              .error_outline),
-                                                      placeholder: (context,
-                                                          url) =>
-                                                          Center(
-                                                              child:
-                                                              CupertinoActivityIndicator(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  radius: 15))))
-                                                  : Card(
-                                                child: Lottie.asset(
-                                                  'assets/127619-photo-click.json',
-                                                ),
-                                              ),
-                                            )
-                                                : Container(
-                                              child: Center(
-                                                child: CupertinoActivityIndicator(
-                                                  radius: 15,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
+                            controller.isLoading.value == false
+                                ? Container(
+                                    height: 200,
+                                    width: double.maxFinite,
+                                    child: controller.timeline.value != ''
+                                        ? Card(
+                                            child: CachedNetworkImageWidget(
+                                                imageUrl:
+                                                    controller.timeline.value,
+                                                width: Get.width,
+                                                height: 200,
+                                                fit: BoxFit.fill,
+                                                errorWidget: (context, url,
+                                                        error) =>
+                                                    Icon(Icons.error_outline),
+                                                placeholder: (context, url) =>
+                                                    Center(
+                                                        child:
+                                                            CupertinoActivityIndicator(
+                                                                color: Colors
+                                                                    .black,
+                                                                radius: 15))))
+                                        : Card(
+                                            child: Lottie.asset(
+                                              'assets/127619-photo-click.json',
                                             ),
-                                            Positioned(
-                                              bottom: 0,
-                                              right: 0,
-                                              child: Container(
-                                                child: IconButton(
-                                                  onPressed: () {
-                                                    _showSelectPhotoOptionsTimeline(
-                                                        context);
-                                                  },
-                                                  icon: Icon(
-                                                    Icons.camera_alt,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              bottom: 10,
-                                              right: 10,
-                                              child: Container(
-                                                  height: 30,
-                                                  width: 30,
-                                                  child: Icon(
-                                                    size: 30,
-                                                    Icons.camera_alt,
-                                                    color: Colors.red,
-                                                  )),
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                  )
+                                : Container(
+                                    child: Center(
+                                      child: CupertinoActivityIndicator(
+                                        radius: 15,
+                                        color: Colors.black,
+                                      ),
+                                    ),
                                   ),
-                                ),
-
-                                ///TODO: ADD CACHED IMAGE PLACEHOLDER
-                                Positioned(
-                                  bottom: 0,
-                                  left: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width / 2.9,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      _showSelectPhotoOptionsProfile(context);
-                                    },
-                                    child: Container(
-                                        child: Card(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius
-                                                    .circular(99)),
-                                            elevation: 5,
-                                            child: Container(
-                                              height: 100,
-                                              width: 100,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                              ),
-                                              child: controller.profile.value !=
-                                                  ''
-                                                  ? CircleAvatar(
-                                                backgroundColor: Colors.red
-                                                    .shade900,
-                                                maxRadius: 40,
-                                                backgroundImage:
-                                                CachedNetworkImageProvider(
-                                                  controller.profile.value,
-                                                ),
-                                              )
-                                                  : Container(
-                                                width: 50,
-                                                height: 60,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                  BorderRadius.circular(99999),
-                                                ),
-                                                child: Lottie.asset(
-                                                    fit: BoxFit.cover,
-                                                    'assets/107137-add-profile-picture.json'),
-                                              ),
-                                            ))),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            TextFieldWithTitle(
-                              title: 'Organization Name *',
-                              controller: controller.name,
-                              maxLength: 30,
-                              inputType: TextInputType.name,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter an organization name';
-                                } else {
-                                  return null;
-                                }
-                              },
-                            ),
-                            TextFieldWithTitle(
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter an organization description';
-                                } else {
-                                  return null;
-                                }
-                              },
-                              title: 'Organization Description *',
-                              maxLength: 120,
-                              controller: controller.description,
-                              inputType: TextInputType.name,
-                            ),
-                            TextFieldWithTitle(
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter an organization branches';
-                                } else {
-                                  return null;
-                                }
-                              },
-                              title: 'Organization Branches',
-                              controller: controller.branches,
-                              inputType: TextInputType.name,
-                            ),
-                            LocationButton(),
-                            Container(
-                              alignment: Alignment.center,
-                              child: Text('Select Amenities *',
-                                  style: TextStyle(
-                                    fontFamily: 'malgun',
-                                    fontSize: 13.sp,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 1.0,
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                child: IconButton(
+                                  onPressed: () {
+                                    _showSelectPhotoOptionsTimeline(context);
+                                  },
+                                  icon: Icon(
+                                    Icons.camera_alt,
                                     color: Colors.white,
-                                  )),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0),
-                              child: Center(
-                                child: Wrap(
-                                  spacing: 8.0,
-                                  runSpacing: 8.0,
-                                  children: ameList
-                                      .map((item) =>
-                                      GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            item.selected = !item.selected;
-                                            print(
-                                                'Selected Organisation => ${item
-                                                    .value}');
-
-                                            if (!controller
-                                                .selectedAmenitiesListID
-                                                .contains(
-                                                item.value.toString())) {
-                                              controller.selectedAmenitiesListID
-                                                  .add(item.value.toString());
-                                            } else {
-                                              controller.selectedAmenitiesListID
-                                                  .remove(
-                                                  item.value.toString());
-                                            }
-                                          });
-                                          print(controller
-                                              .selectedAmenitiesListID);
-                                        },
-                                        child: Chip(
-                                          label: Text(item.label.toString()),
-                                          backgroundColor: item.selected
-                                              ? Colors.red
-                                              : Colors.grey.shade200,
-                                        ),
-                                      ))
-                                      .toList(),
+                                  ),
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 20,
+                            Positioned(
+                              bottom: 10,
+                              right: 10,
+                              child: Container(
+                                  height: 30,
+                                  width: 30,
+                                  child: Icon(
+                                    size: 30,
+                                    Icons.camera_alt,
+                                    color: Colors.red,
+                                  )),
                             ),
-                            Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 28.0, vertical: 14),
-                                  child: controller.isLoading.value == true
-                                      ? Center(
-                                    child: CupertinoActivityIndicator(
-                                        color: Colors.white, radius: 15),
-                                  )
-                                      : ElevatedButton(
-                                    onPressed: () {
-                                      controller.isEditable.value == true
-                                          ? controller.updateOrganisation()
-                                          : controller.addOrgnition();
-                                    },
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(Icons.business),
-                                        SizedBox(width: 8),
-                                        controller.isEditable.value == false
-                                            ? Text(
-                                          'Create Organization Profile',
-                                          style: TextStyle(fontSize: 12.sp),
-                                        )
-                                            : Text(
-                                          'Update Organization Profile',
-                                          style: TextStyle(fontSize: 12.sp),
-                                        )
-                                      ],
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Colors.red,
-                                      onPrimary: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            30.0),
-                                      ),
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 16.0, horizontal: 24.0),
-                                    ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    ///TODO: ADD CACHED IMAGE PLACEHOLDER
+                    Positioned(
+                      bottom: 0,
+                      left: MediaQuery.of(context).size.width / 2.9,
+                      child: GestureDetector(
+                        onTap: () {
+                          _showSelectPhotoOptionsProfile(context);
+                        },
+                        child: Container(
+                            child: Card(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(99)),
+                                elevation: 5,
+                                child: Container(
+                                  height: 100,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
                                   ),
-                                )),
-                            SizedBox(
-                              height: 20,
-                            ),
-                          ]),
+                                  child: controller.profile.value != ''
+                                      ? CircleAvatar(
+                                          backgroundColor: Colors.red.shade900,
+                                          maxRadius: 40,
+                                          backgroundImage:
+                                              CachedNetworkImageProvider(
+                                            controller.profile.value,
+                                          ),
+                                        )
+                                      : Container(
+                                          width: 50,
+                                          height: 60,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(99999),
+                                          ),
+                                          child: Lottie.asset(
+                                              fit: BoxFit.cover,
+                                              'assets/107137-add-profile-picture.json'),
+                                        ),
+                                ))),
+                      ),
+                    ),
+                  ],
+                ),
+                TextFieldWithTitle(
+                  title: 'Organization Name *',
+                  controller: controller.name,
+                  maxLength: 30,
+                  inputType: TextInputType.name,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter an organization name';
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+                TextFieldWithTitle(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter an organization description';
+                    } else {
+                      return null;
+                    }
+                  },
+                  title: 'Organization Description *',
+                  maxLength: 120,
+                  controller: controller.description,
+                  inputType: TextInputType.name,
+                ),
+                TextFieldWithTitle(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter an organization branches';
+                    } else {
+                      return null;
+                    }
+                  },
+                  title: 'Organization Branches',
+                  controller: controller.branches,
+                  inputType: TextInputType.name,
+                ),
+                LocationButton(),
+                Container(
+                  alignment: Alignment.center,
+                  child: Text('Select Amenities *',
+                      style: TextStyle(
+                        fontFamily: 'malgun',
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.0,
+                        color: Colors.white,
+                      )),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Center(
+                    child: Wrap(
+                      spacing: 8.0,
+                      runSpacing: 8.0,
+                      children: ameList
+                          .map((item) => GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    item.selected = !item.selected;
+                                    print(
+                                        'Selected Organisation => ${item.value}');
+
+                                    if (!controller.selectedAmenitiesListID
+                                        .contains(item.value.toString())) {
+                                      controller.selectedAmenitiesListID
+                                          .add(item.value.toString());
+                                    } else {
+                                      controller.selectedAmenitiesListID
+                                          .remove(item.value.toString());
+                                    }
+                                  });
+                                  print(controller.selectedAmenitiesListID);
+                                },
+                                child: Chip(
+                                  label: Text(item.label.toString()),
+                                  backgroundColor: item.selected
+                                      ? Colors.red
+                                      : Colors.grey.shade200,
+                                ),
+                              ))
+                          .toList(),
                     ),
                   ),
-            )));
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Center(
+                    child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 28.0, vertical: 14),
+                  child: controller.isLoading.value == true
+                      ? Center(
+                          child: CupertinoActivityIndicator(
+                              color: Colors.white, radius: 15),
+                        )
+                      : ElevatedButton(
+                          onPressed: () {
+                            controller.isEditable.value == true
+                                ? controller.updateOrganisation()
+                                : controller.addOrgnition();
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.business),
+                              SizedBox(width: 8),
+                              controller.isEditable.value == false
+                                  ? Text(
+                                      'Create Organization Profile',
+                                      style: TextStyle(fontSize: 12.sp),
+                                    )
+                                  : Text(
+                                      'Update Organization Profile',
+                                      style: TextStyle(fontSize: 12.sp),
+                                    )
+                            ],
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.red,
+                            onPrimary: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 16.0, horizontal: 24.0),
+                          ),
+                        ),
+                )),
+                SizedBox(
+                  height: 20,
+                ),
+              ]),
+        ),
+      ),
+    )));
   }
 }
 
@@ -746,7 +721,7 @@ class _LocationButtonState extends State<LocationButton> {
   String _location = '';
   bool isLoading = false;
   AddOrganizationsEventController controller =
-  Get.put(AddOrganizationsEventController());
+      Get.put(AddOrganizationsEventController());
 
   Future<void> _getAddressFromLatLng(Position position) async {
     await placemarkFromCoordinates(position.latitude, position.longitude)
@@ -754,8 +729,7 @@ class _LocationButtonState extends State<LocationButton> {
       Placemark place = placemarks[0];
       setState(() {
         _location =
-        '${place.street}, ${place.subLocality}, ${place
-            .subAdministrativeArea}, ${place.postalCode}';
+            '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
         controller.location.text = _location;
         isLoading = false;
       });
@@ -768,88 +742,88 @@ class _LocationButtonState extends State<LocationButton> {
   Widget build(BuildContext context) {
     return isLoading == true
         ? Center(
-        child: CupertinoActivityIndicator(
-          radius: 15,
-          color: Colors.white,
-        ))
+            child: CupertinoActivityIndicator(
+            radius: 15,
+            color: Colors.white,
+          ))
         : Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          ElevatedButton(
-            onPressed: () async {
-              // Fetch the current location
-              setState(() {
-                isLoading = true;
-              });
-              Position position = await Geolocator.getCurrentPosition(
-                  desiredAccuracy: LocationAccuracy.high);
-              _getAddressFromLatLng(position);
-              setState(() {
-                controller.latitude = position.latitude;
-                controller.longitude = position.longitude;
-              });
-            },
-            child: Icon(
-              Icons.pin_drop,
-              color: Colors.red,
-            ),
-            style: ElevatedButton.styleFrom(
-              primary: Colors.white,
-              onPrimary: Colors.red,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-              padding:
-              EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-            ),
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 4,
-                    offset: Offset(0, 2),
+            padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    // Fetch the current location
+                    setState(() {
+                      isLoading = true;
+                    });
+                    Position position = await Geolocator.getCurrentPosition(
+                        desiredAccuracy: LocationAccuracy.high);
+                    _getAddressFromLatLng(position);
+                    setState(() {
+                      controller.latitude = position.latitude;
+                      controller.longitude = position.longitude;
+                    });
+                  },
+                  child: Icon(
+                    Icons.pin_drop,
+                    color: Colors.red,
                   ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                child: Text(
-                  controller.location.text.isEmpty
-                      ? _location == ''
-                      ? 'Location'
-                      : _location
-                      : controller.location.text,
-                  style: _location == ''
-                      ? TextStyle(
-                    color: Colors.grey[400],
-                    fontSize: 12.sp,
-                    overflow: TextOverflow.fade,
-                  )
-                      : TextStyle(
-                    color: Colors.black,
-                    fontSize: 12.sp,
-                    overflow: TextOverflow.fade,
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white,
+                    onPrimary: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 4,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      child: Text(
+                        controller.location.text.isEmpty
+                            ? _location == ''
+                                ? 'Location'
+                                : _location
+                            : controller.location.text,
+                        style: _location == ''
+                            ? TextStyle(
+                                color: Colors.grey[400],
+                                fontSize: 12.sp,
+                                overflow: TextOverflow.fade,
+                              )
+                            : TextStyle(
+                                color: Colors.black,
+                                fontSize: 12.sp,
+                                overflow: TextOverflow.fade,
+                              ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 }
