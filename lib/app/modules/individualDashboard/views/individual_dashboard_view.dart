@@ -168,27 +168,34 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
                     ),
                     Container(
                       height: MediaQuery.of(context).size.height * 0.14,
-                      padding: EdgeInsets.only(
+                      margin: EdgeInsets.only(
                           top: MediaQuery.of(context).size.height * 0.01,
                           left: MediaQuery.of(context).size.width * 0.08),
                       child: ListView.builder(
+                        shrinkWrap: true,
                         itemCount: 10,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: ((context, index) => GestureDetector(
                               onTap: () {},
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(
+                                  MediaQuery.of(context).size.height * 0.01,
+                                ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     CircleAvatar(
-                                      radius: 20.sp,
+                                      radius:
+                                          MediaQuery.of(context).size.height *
+                                              0.035,
                                       backgroundImage: AssetImage(
                                         'assets/img.png',
                                       ),
                                     ),
                                     SizedBox(
-                                      height: 6.sp,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.01,
                                     ),
                                     Text(
                                       'City',
@@ -228,17 +235,22 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
                           top: MediaQuery.of(context).size.height * 0.01,
                           left: MediaQuery.of(context).size.width * 0.08),
                       child: ListView.builder(
+                        shrinkWrap: true,
                         itemCount: 10,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: ((context, index) => GestureDetector(
                               onTap: () {},
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(
+                                  MediaQuery.of(context).size.height * 0.01,
+                                ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     CircleAvatar(
-                                      radius: 20.sp,
+                                      radius:
+                                          MediaQuery.of(context).size.height *
+                                              0.035,
                                       backgroundImage:
                                           AssetImage("assets/img.png"),
                                       child: Stack(children: [
@@ -253,16 +265,24 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
                                       ]),
                                     ),
                                     SizedBox(
-                                      height: 6.sp,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.01,
                                     ),
                                     Row(
                                       children: [
                                         Icon(
                                           Icons.message_outlined,
-                                          size: 13.sp,
+                                          size: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.022,
                                         ),
                                         SizedBox(
-                                          width: 3.sp,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.005,
                                         ),
                                         Text(
                                           'Name',
@@ -335,153 +355,20 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * 0.06,
+                      margin: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.11,
+                        top: MediaQuery.of(context).size.height * 0.025,
+                        bottom: MediaQuery.of(context).size.height * 0.025,
                       ),
-                      height: MediaQuery.of(context).size.height * 0.25,
+                      height: MediaQuery.of(context).size.height * 0.2,
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 16.sp, vertical: 16.sp),
                         itemCount: 5,
-                        separatorBuilder: (context, index) =>
-                            SizedBox(width: 16.sp),
+                        separatorBuilder: (context, index) => SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.05,
+                        ),
                         itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.38,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: const Color(0xffFFFFFF),
-                                boxShadow: [
-                                  BoxShadow(
-                                    offset: const Offset(0, 4),
-                                    blurRadius: 10,
-                                    color: const Color(0xff000000)
-                                        .withOpacity(0.2),
-                                  ),
-                                ],
-                              ),
-                              child: Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.asset(
-                                      "assets/img.png",
-                                      width: 200,
-                                      height: 400,
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 10.sp, vertical: 5.sp),
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.1,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(10.sp)),
-                                      child: Column(children: [
-                                        SizedBox(
-                                          height: 4.sp,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'TODAY - ',
-                                              style: TextStyle(fontSize: 7.sp),
-                                            ),
-                                            Text(
-                                              '08:00 PM',
-                                              style: TextStyle(
-                                                  color: Colors.red,
-                                                  fontSize: 7.sp),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 4.sp,
-                                        ),
-                                        Text(
-                                          'Dance Party at My Home With Music',
-                                          style: TextStyle(
-                                              color: Color(0xFF564d4d),
-                                              fontSize: 8.sp),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Icon(
-                                              Icons.person_outlined,
-                                              size: 11.sp,
-                                            ),
-                                            SizedBox(
-                                              width: 3.sp,
-                                            ),
-                                            Text(
-                                              '15/30',
-                                              style: TextStyle(fontSize: 8.sp),
-                                            ),
-                                            SizedBox(
-                                              width: 4.sp,
-                                            ),
-                                          ],
-                                        )
-                                      ]),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: MediaQuery.of(context).size.height *
-                                        0.08,
-                                    right: MediaQuery.of(context).size.width *
-                                        0.02,
-                                    child: GestureDetector(
-                                      onTap: () {},
-                                      child: Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.03,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.14,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          color: const Color(0xFFffa914),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Icon(
-                                              Icons.add,
-                                              color: Colors.white,
-                                              size: 15.sp,
-                                            ),
-                                            Text(
-                                              'Join',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 10.sp),
-                                            ),
-                                            SizedBox(
-                                              width: 3,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          );
+                          return PartyCard(context);
                         },
                       ),
                     ),
@@ -499,153 +386,20 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * 0.06,
+                      margin: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.11,
+                        top: MediaQuery.of(context).size.height * 0.025,
+                        bottom: MediaQuery.of(context).size.height * 0.025,
                       ),
-                      height: MediaQuery.of(context).size.height * 0.25,
+                      height: MediaQuery.of(context).size.height * 0.2,
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 16.sp, vertical: 16.sp),
                         itemCount: 5,
-                        separatorBuilder: (context, index) =>
-                            SizedBox(width: 16.sp),
+                        separatorBuilder: (context, index) => SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.05,
+                        ),
                         itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.38,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: const Color(0xffFFFFFF),
-                                boxShadow: [
-                                  BoxShadow(
-                                    offset: const Offset(0, 4),
-                                    blurRadius: 10,
-                                    color: const Color(0xff000000)
-                                        .withOpacity(0.2),
-                                  ),
-                                ],
-                              ),
-                              child: Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.asset(
-                                      "assets/img.png",
-                                      width: 200,
-                                      height: 400,
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 10.sp, vertical: 5.sp),
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.1,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(10.sp)),
-                                      child: Column(children: [
-                                        SizedBox(
-                                          height: 4.sp,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'TODAY - ',
-                                              style: TextStyle(fontSize: 7.sp),
-                                            ),
-                                            Text(
-                                              '08:00 PM',
-                                              style: TextStyle(
-                                                  color: Colors.red,
-                                                  fontSize: 7.sp),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 4.sp,
-                                        ),
-                                        Text(
-                                          'Dance Party at My Home With Music',
-                                          style: TextStyle(
-                                              color: Color(0xFF564d4d),
-                                              fontSize: 8.sp),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Icon(
-                                              Icons.person_outlined,
-                                              size: 11.sp,
-                                            ),
-                                            SizedBox(
-                                              width: 3.sp,
-                                            ),
-                                            Text(
-                                              '15/30',
-                                              style: TextStyle(fontSize: 8.sp),
-                                            ),
-                                            SizedBox(
-                                              width: 4.sp,
-                                            ),
-                                          ],
-                                        )
-                                      ]),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: MediaQuery.of(context).size.height *
-                                        0.08,
-                                    right: MediaQuery.of(context).size.width *
-                                        0.02,
-                                    child: GestureDetector(
-                                      onTap: () {},
-                                      child: Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.03,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.14,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          color: const Color(0xFFffa914),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Icon(
-                                              Icons.add,
-                                              color: Colors.white,
-                                              size: 15.sp,
-                                            ),
-                                            Text(
-                                              'Join',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 10.sp),
-                                            ),
-                                            SizedBox(
-                                              width: 3,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          );
+                          return PartyCard(context);
                         },
                       ),
                     ),
@@ -656,6 +410,110 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  GestureDetector PartyCard(BuildContext context) {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.38,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/img.png'), fit: BoxFit.cover),
+          borderRadius: BorderRadius.circular(8.sp),
+        ),
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                padding:
+                    EdgeInsets.symmetric(horizontal: 10.sp, vertical: 5.sp),
+                height: MediaQuery.of(context).size.height * 0.1,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.sp)),
+                child: Column(children: [
+                  SizedBox(
+                    height: 4.sp,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'TODAY - ',
+                        style: TextStyle(fontSize: 7.sp),
+                      ),
+                      Text(
+                        '08:00 PM',
+                        style: TextStyle(color: Colors.red, fontSize: 7.sp),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 4.sp,
+                  ),
+                  Text(
+                    'Dance Party at My Home With Music',
+                    style: TextStyle(color: Color(0xFF564d4d), fontSize: 8.sp),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Icon(
+                        Icons.person_outlined,
+                        size: 11.sp,
+                      ),
+                      SizedBox(
+                        width: 3.sp,
+                      ),
+                      Text(
+                        '15/30',
+                        style: TextStyle(fontSize: 8.sp),
+                      ),
+                      SizedBox(
+                        width: 4.sp,
+                      ),
+                    ],
+                  )
+                ]),
+              ),
+            ),
+            Positioned(
+              top: MediaQuery.of(context).size.height * 0.083,
+              right: MediaQuery.of(context).size.width * 0.025,
+              child: GestureDetector(
+                onTap: () {},
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.03,
+                  width: MediaQuery.of(context).size.width * 0.14,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30.sp),
+                    color: const Color(0xFFffa914),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Icon(
+                        Icons.add,
+                        color: Colors.white,
+                        size: 15.sp,
+                      ),
+                      Text(
+                        'Join',
+                        style: TextStyle(color: Colors.white, fontSize: 10.sp),
+                      ),
+                      SizedBox(
+                        width: 3.sp,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
