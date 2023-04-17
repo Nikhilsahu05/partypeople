@@ -1,8 +1,14 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:get/get.dart';
+import 'package:pertypeople/app/modules/individualLogin/bindings/individual_login_binding.dart';
+import 'package:pertypeople/app/modules/individualLogin/views/individual_login_view.dart';
+import 'package:pertypeople/app/modules/individualOTP/bindings/individual_otp_binding.dart';
+import 'package:pertypeople/app/modules/individualOTP/views/individual_otp_view.dart';
 import 'package:pertypeople/app/modules/organizationProfile/bindings/organization_profile_binding.dart';
 import 'package:pertypeople/app/modules/organizationProfile/views/organization_profile_view.dart';
+import 'package:pertypeople/app/modules/userTypeSelection/bindings/user_type_selection_binding.dart';
+import 'package:pertypeople/app/modules/userTypeSelection/views/user_type_selection_view.dart';
 import 'package:pertypeople/app/modules/visitInfo/views/visit_info_view.dart';
 import 'package:pertypeople/app/splash_main.dart';
 
@@ -142,6 +148,21 @@ class AppPages {
       name: _Paths.VISIT_INFO,
       page: () => VisitInfoView(),
       binding: VisitInfoBinding(),
+    ),
+    GetPage(
+      name: _Paths.INDIVIDUAL_OTP,
+      page: () => IndividualOtpView(),
+      binding: IndividualOtpBinding(),
+    ),
+    GetPage(
+      name: _Paths.USER_TYPE_SELECTION,
+      page: () => UserTypeSelectionView(),
+      binding: UserTypeSelectionBinding(),
+    ),
+    GetPage(
+      name: _Paths.INDIVIDUAL_LOGIN,
+      page: () => IndividualLoginView(),
+      binding: IndividualLoginBinding(),
     ),
   ];
 }

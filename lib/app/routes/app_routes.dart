@@ -30,6 +30,9 @@ abstract class Routes {
   static const INDIVIDUAL_DASHBOARD = _Paths.INDIVIDUAL_DASHBOARD;
   static const CHAT_SCREEN = _Paths.CHAT_SCREEN;
   static const VISIT_INFO = _Paths.VISIT_INFO;
+  static const INDIVIDUAL_OTP = _Paths.INDIVIDUAL_OTP;
+  static const USER_TYPE_SELECTION = _Paths.USER_TYPE_SELECTION;
+  static const INDIVIDUAL_LOGIN = _Paths.INDIVIDUAL_LOGIN;
 }
 
 abstract class _Paths {
@@ -59,4 +62,7 @@ abstract class _Paths {
   static const INDIVIDUAL_DASHBOARD = '/individual-dashboard';
   static const CHAT_SCREEN = '/chat-screen';
   static const VISIT_INFO = '/visit-info';
+  static const INDIVIDUAL_OTP = '/individual-otp';
+  static const USER_TYPE_SELECTION = '/user-type-selection';
+  static const INDIVIDUAL_LOGIN = '/individual-login';
 }
