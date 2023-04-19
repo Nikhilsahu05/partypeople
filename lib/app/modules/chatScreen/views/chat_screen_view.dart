@@ -3,6 +3,8 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:get/get.dart';
+import 'package:pertypeople/app/modules/individualDashboard/views/individual_dashboard_view.dart';
 import 'package:sizer/sizer.dart';
 
 class ChatScreenView extends StatefulWidget {
@@ -17,16 +19,17 @@ class _ChatScreenViewState extends State<ChatScreenView> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        //backgroundColor: Colors.red,
         appBar: AppBar(
-          toolbarHeight: MediaQuery.of(context).size.height * 0.13,
+          toolbarHeight: MediaQuery.of(context).size.height * 0.1,
           backgroundColor: Color(0xFF3c03bc),
           leading: IconButton(
             padding: EdgeInsets.symmetric(horizontal: 18.sp),
             alignment: Alignment.centerLeft,
             enableFeedback: true,
             icon: Icon(Icons.arrow_back_ios),
-            onPressed: () {},
+            onPressed: () {
+              Get.back();
+            },
             iconSize: 16.sp,
           ),
           centerTitle: false,
@@ -36,7 +39,7 @@ class _ChatScreenViewState extends State<ChatScreenView> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(12.sp),
                 child: Image.asset(
-                  'assets/img.png',
+                  'assets/a.jpeg',
                   height: MediaQuery.of(context).size.height * 0.055,
                   width: MediaQuery.of(context).size.width * 0.11,
                   fit: BoxFit.fill,
@@ -75,7 +78,7 @@ class _ChatScreenViewState extends State<ChatScreenView> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(22.sp),
-              top: Radius.circular(22.sp),
+              //     top: Radius.circular(22.sp),
             ),
           ),
         ),

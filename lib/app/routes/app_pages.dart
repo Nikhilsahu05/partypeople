@@ -1,6 +1,8 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:get/get.dart';
+import 'package:pertypeople/app/modules/individualDrawer/bindings/individual_drawer_binding.dart';
+import 'package:pertypeople/app/modules/individualDrawer/views/individual_drawer_view.dart';
 import 'package:pertypeople/app/modules/individualLogin/bindings/individual_login_binding.dart';
 import 'package:pertypeople/app/modules/individualLogin/views/individual_login_view.dart';
 import 'package:pertypeople/app/modules/individualOTP/bindings/individual_otp_binding.dart';
@@ -163,6 +165,11 @@ class AppPages {
       name: _Paths.INDIVIDUAL_LOGIN,
       page: () => IndividualLoginView(),
       binding: IndividualLoginBinding(),
+    ),
+    GetPage(
+      name: _Paths.INDIVIDUAL_DRAWER,
+      page: () => IndividualDrawerView(),
+      binding: IndividualDrawerBinding(),
     ),
   ];
 }

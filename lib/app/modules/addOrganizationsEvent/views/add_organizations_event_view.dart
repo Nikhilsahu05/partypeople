@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:csc_picker/csc_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,7 +22,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pertypeople/cached_image_placeholder.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../select_photo_options_screen.dart';
 import '../controllers/add_organizations_event_controller.dart';
 
@@ -473,9 +473,94 @@ class _AddOrganizationsEventViewState extends State<AddOrganizationsEventView> {
                   controller: controller.branches,
                   inputType: TextInputType.name,
                 ),
-                LocationButton(),
+                //  LocationButton(),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Get.width * 0.07,
+                  ),
+                  child: CSCPicker(
+                    showStates: true,
+                    showCities: true,
+                    layout: Layout.vertical,
+                    flagState: CountryFlag.ENABLE,
+
+                    dropdownDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: Colors.white,
+                        border:
+                            Border.all(color: Colors.grey.shade300, width: 1)),
+
+                    //Disabled Dropdown box decoration to style your dropdown selector [OPTIONAL PARAMETER]  (USE with disabled dropdownDecoration)
+                    disabledDropdownDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: Colors.white,
+                        border:
+                            Border.all(color: Colors.grey.shade300, width: 1)),
+
+                    ///placeholders for dropdown search field
+                    countrySearchPlaceholder: "Country",
+                    stateSearchPlaceholder: "State",
+                    citySearchPlaceholder: "City",
+
+                    ///labels for dropdown
+                    countryDropdownLabel: "Country",
+                    stateDropdownLabel: "State",
+                    cityDropdownLabel: "City",
+
+                    //defaultCountry: CscCountry.India,
+
+                    ///Country Filter [OPTIONAL PARAMETER]
+                    // countryFilter: [
+                    //   CscCountry.India,
+                    //   CscCountry.United_States,
+                    //   CscCountry.Canada
+                    // ],
+
+                    headingStyle: TextStyle(
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+
+                    ///selected item style [OPTIONAL PARAMETER]
+                    selectedItemStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400),
+
+                    ///DropdownDialog Heading style [OPTIONAL PARAMETER]
+                    dropdownHeadingStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold),
+
+                    ///DropdownDialog Item style [OPTIONAL PARAMETER]
+                    dropdownItemStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12.sp,
+                    ),
+
+                    ///Dialog box radius [OPTIONAL PARAMETER]
+                    dropdownDialogRadius: 8.0,
+
+                    ///Search bar radius [OPTIONAL PARAMETER]
+                    searchBarRadius: 8.0,
+
+                    ///triggers once country selected in dropdown
+                    onCountryChanged: (value) {},
+
+                    ///triggers once state selected in dropdown
+                    onStateChanged: (value) {},
+
+                    ///triggers once city selected in dropdown
+                    onCityChanged: (value) {},
+                  ),
+                ),
+
                 Container(
                   alignment: Alignment.center,
+                  padding: EdgeInsets.only(top: Get.height * 0.025),
                   child: Text('Select Amenities *',
                       style: TextStyle(
                         fontFamily: 'malgun',

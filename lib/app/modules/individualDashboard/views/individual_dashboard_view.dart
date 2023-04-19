@@ -1,9 +1,13 @@
 import 'package:adobe_xd/gradient_xd_transform.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pertypeople/app/modules/chatScreen/views/chat_screen_view.dart';
 import 'package:pertypeople/app/modules/individualDashboard/controllers/individual_dashboard_controller.dart';
+import 'package:pertypeople/app/modules/individualDrawer/views/individual_drawer_view.dart';
+import 'package:pertypeople/app/modules/individualNotificationScreen.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:like_button/like_button.dart';
 
 class IndividualDashboardView extends StatefulWidget {
   const IndividualDashboardView({super.key});
@@ -20,10 +24,16 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: Colors.transparent,
           elevation: 0,
           toolbarHeight: MediaQuery.of(context).size.height * 0.07,
           title: GestureDetector(
+            onTap: () => Get.to(
+              IndividualDrawerView(),
+              duration: Duration(milliseconds: 500),
+              transition: Transition.leftToRight,
+            ),
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 15.sp, vertical: 5.sp),
               child: Image.asset('assets/side_drawer.png'),
@@ -33,6 +43,11 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 30.sp, vertical: 5.sp),
               child: GestureDetector(
+                onTap: () => Get.to(
+                  IndividualNotificationScreen(),
+                  duration: Duration(milliseconds: 500),
+                  transition: Transition.rightToLeft,
+                ),
                 child: Image.asset(
                   'assets/notification.png',
                 ),
@@ -58,7 +73,7 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
             color: Colors.white,
             activeColor: Colors.white,
             tabBackgroundColor: Color(0xFF802a2a),
-            tabs: const [
+            tabs: [
               GButton(
                 icon: Icons.home,
                 text: 'Home',
@@ -69,10 +84,16 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
                 margin: EdgeInsets.only(right: 35),
               ),
               GButton(
-                icon: Icons.message,
-                text: 'Message',
-                margin: EdgeInsets.only(left: 45),
-              ),
+                  icon: Icons.message,
+                  text: 'Chat',
+                  margin: EdgeInsets.only(left: 45),
+                  onPressed: () {
+                    Get.to(
+                      ChatScreenView(),
+                      duration: Duration(milliseconds: 500),
+                      transition: Transition.downToUp,
+                    );
+                  }),
               GButton(icon: Icons.person, text: 'Profile'),
             ],
           ),
@@ -102,74 +123,79 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
               ),
             ),
             Container(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.06),
+              margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.065),
               width: double.infinity,
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
+                    Container(
+                      margin: EdgeInsets.only(top: Get.height * 0.02),
                       padding: EdgeInsets.symmetric(
-                        horizontal: MediaQuery.of(context).size.width * 0.1,
-                        vertical: MediaQuery.of(context).size.height * 0.03,
+                        horizontal: Get.width * 0.1,
                       ),
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.05,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10.sp)),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        child: TextField(
-                                          decoration: InputDecoration(
-                                              icon: Icon(Icons.search),
-                                              labelText:
-                                                  'Search for Party, City or Location',
-                                              labelStyle: TextStyle(
-                                                  color: Color(0xFF7d7373),
-                                                  fontSize: 9.sp)),
-                                        ),
+                      height: MediaQuery.of(context).size.height * 0.05,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.sp)),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: Get.width * 0.02,
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      child: TextField(
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            contentPadding: EdgeInsets.fromLTRB(
+                                                0,
+                                                0,
+                                                Get.width * 0.03,
+                                                Get.height * 0.01),
+                                            icon: Icon(Icons.search),
+                                            hintText:
+                                                'Search for Party, City or Location',
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 10.sp)),
                                       ),
-                                    )
-                                  ],
-                                ),
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.03,
-                            ),
-                            GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                padding: EdgeInsets.all(8.sp),
-                                decoration: BoxDecoration(
-                                    color: Color(0xFFffa914),
-                                    borderRadius: BorderRadius.circular(10.sp)),
-                                width: MediaQuery.of(context).size.width * 0.12,
-                                child: Image.asset(
-                                  'assets/filter.png',
-                                ),
+                          ),
+                          SizedBox(
+                            width: Get.width * 0.03,
+                          ),
+                          GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * 0.05,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: Get.height * 0.005),
+                              decoration: BoxDecoration(
+                                  color: Color(0xFFffa914),
+                                  borderRadius: BorderRadius.circular(10.sp)),
+                              width: MediaQuery.of(context).size.width * 0.12,
+                              child: Image.asset(
+                                'assets/filter.png',
                               ),
-                            )
-                          ],
-                        ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                     Container(
-                      height: MediaQuery.of(context).size.height * 0.14,
+                      height: MediaQuery.of(context).size.width * 0.27,
                       margin: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.01,
+                          top: MediaQuery.of(context).size.height * 0.02,
                           left: MediaQuery.of(context).size.width * 0.08),
                       child: ListView.builder(
                         shrinkWrap: true,
@@ -177,42 +203,14 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
                         scrollDirection: Axis.horizontal,
                         itemBuilder: ((context, index) => GestureDetector(
                               onTap: () {},
-                              child: Padding(
-                                padding: EdgeInsets.all(
-                                  MediaQuery.of(context).size.height * 0.01,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    CircleAvatar(
-                                      radius:
-                                          MediaQuery.of(context).size.height *
-                                              0.035,
-                                      backgroundImage: AssetImage(
-                                        'assets/img.png',
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.01,
-                                    ),
-                                    Text(
-                                      'City',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 10.sp),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              child: CityCard(),
                             )),
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width * 0.12,
-                          top: MediaQuery.of(context).size.height * 0.02,
-                          bottom: MediaQuery.of(context).size.height * 0.02),
+                          left: MediaQuery.of(context).size.width * 0.11,
+                          bottom: MediaQuery.of(context).size.height * 0.01),
                       child: Text(
                         'People Nearby',
                         style: TextStyle(
@@ -230,71 +228,17 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
                           ],
                         ),
                       ),
-                      height: MediaQuery.of(context).size.height * 0.14,
+                      height: MediaQuery.of(context).size.width * 0.27,
                       padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.01,
-                          left: MediaQuery.of(context).size.width * 0.08),
+                        left: MediaQuery.of(context).size.width * 0.08,
+                      ),
                       child: ListView.builder(
                         shrinkWrap: true,
                         itemCount: 10,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: ((context, index) => GestureDetector(
                               onTap: () {},
-                              child: Padding(
-                                padding: EdgeInsets.all(
-                                  MediaQuery.of(context).size.height * 0.01,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    CircleAvatar(
-                                      radius:
-                                          MediaQuery.of(context).size.height *
-                                              0.035,
-                                      backgroundImage:
-                                          AssetImage("assets/img.png"),
-                                      child: Stack(children: [
-                                        Positioned(
-                                            top: 0.sp,
-                                            right: 0.sp,
-                                            child: Icon(
-                                              Icons.circle,
-                                              color: Colors.red,
-                                              size: 14.sp,
-                                            )),
-                                      ]),
-                                    ),
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.01,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.message_outlined,
-                                          size: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.022,
-                                        ),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.005,
-                                        ),
-                                        Text(
-                                          'Name',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 10.sp),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              child: NearbyPeopleProfile(),
                             )),
                       ),
                     ),
@@ -303,10 +247,10 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
                         horizontal: MediaQuery.of(context).size.width * 0.1,
                         vertical: MediaQuery.of(context).size.height * 0.03,
                       ),
-                      height: MediaQuery.of(context).size.height * 0.07,
+                      height: MediaQuery.of(context).size.height * 0.065,
                       decoration: BoxDecoration(
                           color: Color(0xFFa22d2d),
-                          borderRadius: BorderRadius.circular(100)),
+                          borderRadius: BorderRadius.circular(100.sp)),
                       child: Row(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -318,7 +262,7 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
                                       .switchButtonState();
                                 });
                               },
-                              child: choiceSelectionButton(
+                              child: ChoiceSelectionButton(
                                 buttonState:
                                     Get.find<IndividualDashboardController>()
                                         .buttonState,
@@ -332,7 +276,7 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
                                       .switchButtonState();
                                 });
                               },
-                              child: choiceSelectionButton(
+                              child: ChoiceSelectionButton(
                                 buttonState:
                                     !Get.find<IndividualDashboardController>()
                                         .buttonState,
@@ -343,9 +287,9 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width * 0.11,
-                          top: MediaQuery.of(context).size.height * 0.01,
-                          bottom: MediaQuery.of(context).size.height * 0.005),
+                        left: MediaQuery.of(context).size.width * 0.11,
+                        top: Get.height * 0.005,
+                      ),
                       child: Text(
                         'TODAY',
                         style: TextStyle(
@@ -356,27 +300,24 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
                     ),
                     Container(
                       margin: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * 0.11,
-                        top: MediaQuery.of(context).size.height * 0.025,
-                        bottom: MediaQuery.of(context).size.height * 0.025,
+                        top: Get.width * 0.05,
+                        left: MediaQuery.of(context).size.width * 0.09,
+                        bottom: Get.width * 0.05,
                       ),
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      child: ListView.separated(
+                      height: Get.width * 0.42,
+                      child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: 5,
-                        separatorBuilder: (context, index) => SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.05,
-                        ),
                         itemBuilder: (context, index) {
-                          return PartyCard(context);
+                          return partyCard(context);
                         },
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width * 0.11,
-                          top: MediaQuery.of(context).size.height * 0.01,
-                          bottom: MediaQuery.of(context).size.height * 0.005),
+                        left: MediaQuery.of(context).size.width * 0.11,
+                        top: Get.height * 0.005,
+                      ),
                       child: Text(
                         'TOMORROW',
                         style: TextStyle(
@@ -387,24 +328,21 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
                     ),
                     Container(
                       margin: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * 0.11,
-                        top: MediaQuery.of(context).size.height * 0.025,
-                        bottom: MediaQuery.of(context).size.height * 0.025,
+                        top: Get.width * 0.05,
+                        left: MediaQuery.of(context).size.width * 0.09,
+                        bottom: Get.width * 0.05,
                       ),
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      child: ListView.separated(
+                      height: Get.width * 0.42,
+                      child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: 5,
-                        separatorBuilder: (context, index) => SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.05,
-                        ),
                         itemBuilder: (context, index) {
-                          return PartyCard(context);
+                          return partyCard(context);
                         },
                       ),
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.15,
+                      height: MediaQuery.of(context).size.height * 0.1,
                     ),
                   ],
                 ),
@@ -416,15 +354,26 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
     );
   }
 
-  GestureDetector PartyCard(BuildContext context) {
+  GestureDetector partyCard(BuildContext context) {
     return GestureDetector(
       onTap: () {},
       child: Container(
+        margin: EdgeInsets.symmetric(
+          horizontal: Get.width * 0.03,
+          vertical: Get.width * 0.02,
+        ),
         width: MediaQuery.of(context).size.width * 0.38,
         decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFF802a2a),
+              spreadRadius: 5,
+              blurRadius: 5,
+            ),
+          ],
           image: DecorationImage(
               image: AssetImage('assets/img.png'), fit: BoxFit.cover),
-          borderRadius: BorderRadius.circular(8.sp),
+          borderRadius: BorderRadius.circular(12.sp),
         ),
         child: Stack(
           children: [
@@ -433,7 +382,7 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
               child: Container(
                 padding:
                     EdgeInsets.symmetric(horizontal: 10.sp, vertical: 5.sp),
-                height: MediaQuery.of(context).size.height * 0.1,
+                height: Get.width * 0.19,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10.sp)),
@@ -454,11 +403,11 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
                     ],
                   ),
                   SizedBox(
-                    height: 4.sp,
+                    height: Get.width * 0.008,
                   ),
                   Text(
                     'Dance Party at My Home With Music',
-                    style: TextStyle(color: Color(0xFF564d4d), fontSize: 8.sp),
+                    style: TextStyle(color: Color(0xFF564d4d), fontSize: 7.sp),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -468,28 +417,28 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
                         size: 11.sp,
                       ),
                       SizedBox(
-                        width: 3.sp,
+                        width: Get.width * 0.008,
                       ),
                       Text(
                         '15/30',
-                        style: TextStyle(fontSize: 8.sp),
+                        style: TextStyle(fontSize: 7.sp),
                       ),
                       SizedBox(
-                        width: 4.sp,
+                        width: Get.width * 0.01,
                       ),
                     ],
                   )
                 ]),
               ),
             ),
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.083,
-              right: MediaQuery.of(context).size.width * 0.025,
+            Align(
+              alignment: Alignment.centerRight,
               child: GestureDetector(
                 onTap: () {},
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 0.03,
-                  width: MediaQuery.of(context).size.width * 0.14,
+                  margin: EdgeInsets.only(right: Get.width * 0.028),
+                  height: MediaQuery.of(context).size.width * 0.052,
+                  width: MediaQuery.of(context).size.width * 0.135,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30.sp),
                     color: const Color(0xFFffa914),
@@ -521,8 +470,154 @@ class _IndividualDashboardViewState extends State<IndividualDashboardView> {
   }
 }
 
-class choiceSelectionButton extends StatelessWidget {
-  choiceSelectionButton(
+class CityCard extends StatelessWidget {
+  const CityCard({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(
+        MediaQuery.of(context).size.width * 0.015,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            padding: EdgeInsets.all(Get.width * 0.0045),
+            decoration: BoxDecoration(
+                border: Border.all(
+                  width: Get.width * 0.004,
+                  color: Color(0xFFf69416),
+                ),
+                borderRadius: BorderRadius.circular(100.sp),
+                color: Colors.white),
+            child: CircleAvatar(
+              radius: Get.width * 0.067,
+              backgroundImage: AssetImage(
+                'assets/a.jpeg',
+              ),
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.width * 0.02,
+          ),
+          Text(
+            'City',
+            style: TextStyle(color: Colors.white, fontSize: 10.sp),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class NearbyPeopleProfile extends StatelessWidget {
+  const NearbyPeopleProfile({
+    super.key,
+  });
+
+  Future<bool> onLikeButtonTapped(bool isLiked) async {
+    /// send your request here
+    return !isLiked;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(
+        MediaQuery.of(context).size.width * 0.015,
+      ),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.005,
+              ),
+              Container(
+                width: Get.width * 0.151,
+                height: Get.width * 0.151,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: Get.width * 0.005,
+                    color: Color(0xFFe3661d),
+                  ),
+
+                  borderRadius: BorderRadius.circular(100.sp), //<-- SEE HERE
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(Get.width * 0.006),
+                  child: CircleAvatar(
+                    backgroundImage: AssetImage('assets/img.png'),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              Row(
+                children: [
+                  Icon(
+                    Icons.message,
+                    size: MediaQuery.of(context).size.height * 0.02,
+                    color: Colors.white,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.height * 0.005,
+                  ),
+                  Text(
+                    'Name',
+                    style: TextStyle(color: Colors.white, fontSize: 10.sp),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Positioned(
+            top: Get.height * 0.001,
+            right: -Get.height * 0.006,
+            child: Container(
+              width: Get.height * 0.032,
+              height: Get.height * 0.032,
+              padding: EdgeInsets.only(
+                left: Get.height * 0.0045,
+                top: Get.height * 0.00045,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(100.sp),
+              ),
+              child: LikeButton(
+                onTap: onLikeButtonTapped,
+                circleColor:
+                    CircleColor(start: Colors.white, end: Color(0xFFe3661d)),
+                size: Get.height * 0.022,
+                likeBuilder: (bool isLiked) {
+                  return Icon(
+                    Icons.favorite,
+                    color: isLiked ? Color(0xFFf9090a) : Colors.white,
+                    size: Get.height * 0.022,
+                  );
+                },
+                bubblesColor: BubblesColor(
+                  dotPrimaryColor: Color(0xff0099cc),
+                  dotSecondaryColor: Color(0xff0099cc),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ChoiceSelectionButton extends StatelessWidget {
+  ChoiceSelectionButton(
       {super.key, required this.buttonState, required this.textVal});
   var buttonState;
   final textVal;

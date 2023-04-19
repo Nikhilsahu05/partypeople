@@ -43,6 +43,7 @@ class _DrawerViewState extends State<DrawerView> {
         appBar: AppBar(
           backgroundColor: Colors.red.shade900,
           elevation: 0,
+          leading: BackButton(color: Colors.white),
           title: Text(
             "My Profile",
             style: TextStyle(

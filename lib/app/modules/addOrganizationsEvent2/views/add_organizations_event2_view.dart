@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 import 'dart:io';
 
+import 'package:csc_picker/csc_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -496,7 +497,130 @@ class _AddOrganizationsEvent2ViewState
                           ],
                         )
                       : Container(),
-                  LocationButton(),
+                  //LocationButton(),
+                  TextFieldWithTitle(
+                    title: 'Address',
+                    controller: controller.description,
+                    inputType: TextInputType.name,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter House number';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Get.width * 0.07,
+                    ),
+                    child: CSCPicker(
+                      showStates: true,
+                      showCities: true,
+                      layout: Layout.vertical,
+                      flagState: CountryFlag.ENABLE,
+                      headingStyle: TextStyle(
+                        fontSize: 13.sp,
+                        fontFamily: 'malgun',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+
+                      dropdownDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 4,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+
+                      //Disabled Dropdown box decoration to style your dropdown selector [OPTIONAL PARAMETER]  (USE with disabled dropdownDecoration)
+                      disabledDropdownDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 4,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+
+                      ///placeholders for dropdown search field
+                      countrySearchPlaceholder: "Country",
+                      stateSearchPlaceholder: "State",
+                      citySearchPlaceholder: "City",
+
+                      ///labels for dropdown
+                      countryDropdownLabel: "Country",
+                      stateDropdownLabel: "State",
+                      cityDropdownLabel: "City",
+
+                      //defaultCountry: CscCountry.India,
+
+                      ///Country Filter [OPTIONAL PARAMETER]
+                      // countryFilter: [
+                      //   CscCountry.India,
+                      //   CscCountry.United_States,
+                      //   CscCountry.Canada
+                      // ],
+
+                      ///selected item style [OPTIONAL PARAMETER]
+                      selectedItemStyle: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w400),
+
+                      ///DropdownDialog Heading style [OPTIONAL PARAMETER]
+                      dropdownHeadingStyle: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold),
+
+                      ///DropdownDialog Item style [OPTIONAL PARAMETER]
+                      dropdownItemStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12.sp,
+                      ),
+
+                      ///Dialog box radius [OPTIONAL PARAMETER]
+                      dropdownDialogRadius: 8.0,
+
+                      ///Search bar radius [OPTIONAL PARAMETER]
+                      searchBarRadius: 8.0,
+
+                      ///triggers once country selected in dropdown
+                      onCountryChanged: (value) {},
+
+                      ///triggers once state selected in dropdown
+                      onStateChanged: (value) {},
+
+                      ///triggers once city selected in dropdown
+                      onCityChanged: (value) {},
+                    ),
+                  ),
+
+                  TextFieldWithTitle(
+                    title: 'Pin Code ',
+                    controller: controller.description,
+                    inputType: TextInputType.name,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter Pin Code : ';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: Get.height * 0.02,
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 28.0),
                     child: Text(

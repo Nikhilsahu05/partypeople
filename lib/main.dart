@@ -10,7 +10,6 @@ import 'package:pertypeople/app/modules/addOrganizationsEvent/views/mapscreen.da
 import 'package:pertypeople/app/modules/addOrganizationsEvent/views/mapscreen2.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'package:sizer/sizer.dart';
-
 import 'app/routes/app_pages.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -100,7 +99,7 @@ class _AppState extends State<App> {
           // initialRoute: GetStorage().read('token') == null
           //     ? AppPages.INITIAL
           //     : Routes.ORGANIZATION_PROFILE_NEW,
-          initialRoute: Routes.INDIVIDUAL_LOGIN,
+          initialRoute: Routes.INDIVIDUAL_DASHBOARD,
           getPages: AppPages.routes,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(

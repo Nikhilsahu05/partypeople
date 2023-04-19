@@ -69,6 +69,8 @@ dependencies:
   assets_audio_player: ^3.0.6
   sizer: ^2.0.15
   firebase_messaging: ^14.4.0
+  csc_picker: ^0.2.7
+  like_button: ^2.0.5
 
 
 

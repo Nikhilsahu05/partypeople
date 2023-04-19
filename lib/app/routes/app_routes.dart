@@ -33,6 +33,7 @@ abstract class Routes {
   static const INDIVIDUAL_OTP = _Paths.INDIVIDUAL_OTP;
   static const USER_TYPE_SELECTION = _Paths.USER_TYPE_SELECTION;
   static const INDIVIDUAL_LOGIN = _Paths.INDIVIDUAL_LOGIN;
+  static const INDIVIDUAL_DRAWER = _Paths.INDIVIDUAL_DRAWER;
 }
 
 abstract class _Paths {
@@ -65,4 +66,5 @@ abstract class _Paths {
   static const INDIVIDUAL_OTP = '/individual-otp';
   static const USER_TYPE_SELECTION = '/user-type-selection';
   static const INDIVIDUAL_LOGIN = '/individual-login';
+  static const INDIVIDUAL_DRAWER = '/individual-drawer';
 }
